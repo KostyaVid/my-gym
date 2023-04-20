@@ -1,20 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import Home from "./pages/Home/Home";
+import DailyHome from "./pages/DailyHome/DailyHome";
+import Else from "./pages/Else/Else";
+import { useEffect } from "react";
 
-export default function App() {
+import ProgrammsHome from "./pages/ProgrammsHome/ProgrammsHome";
+import { RootStoreContext, rootStore } from "./store/rootStore.store";
+import { RootStackParamList } from "./types";
+
+const Tab = createMaterialBottomTabNavigator<RootStackParamList>();
+
+const App = () => {
+  useEffect(() => {
+    rootStore.currentProgramm.programmAsyncStorage();
+    rootStore.exercisesResults.loadExerciseStore();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <RootStoreContext.Provider value={rootStore}>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{ tabBarLabel: "Главная" }}
+          />
+          <Tab.Screen
+            name="DailyHome"
+            component={DailyHome}
+            options={{ tabBarLabel: "Дневник" }}
+          />
+          <Tab.Screen
+            name="ProgrammsHome"
+            component={ProgrammsHome}
+            options={{ tabBarLabel: "Программы" }}
+          />
+          <Tab.Screen
+            name="Else"
+            component={Else}
+            options={{ tabBarLabel: "Ещё" }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </RootStoreContext.Provider>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
