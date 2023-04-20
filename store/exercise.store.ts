@@ -10,7 +10,7 @@ export type Set = {
   count: number;
 };
 
-export type ExerciseSession = Set[];
+export type ExerciseSession = { sessionID: number; sets: Set[] };
 
 export type ExerciseResults = ExerciseID & {
   results: ExerciseSession[];
@@ -57,7 +57,11 @@ export default class ExerciseStore {
     }
   }
 
-  *addFirstExerciseResultInSession(exersiseID: string, set: Set) {
+  *addFirstExerciseResultInSession(
+    exersiseID: string,
+    sessionID: number,
+    set: Set
+  ) {
     let exercise = this.exercises.find(({ id }) => id === exersiseID);
     if (!exercise) {
       exercise = {
@@ -65,7 +69,7 @@ export default class ExerciseStore {
         results: [],
       };
     }
-    exercise.results.push([set]);
+    exercise.results.push({ sessionID: sessionID, sets: [set] });
     this.state = "pending";
     const data = JSON.stringify(exercise);
     try {
@@ -77,10 +81,10 @@ export default class ExerciseStore {
     }
   }
 
-  *addExerciseResultInSession(exersiseID: string, set: Set) {
+  *addExerciseResultInSession(exersiseID: string, sessionID: number, set: Set) {
     let exercise = this.exercises.find(({ id }) => id === exersiseID);
     if (exercise) {
-      exercise.results[exercise.results.length - 1].push(set);
+      exercise.results[exercise.results.length - 1].sets.push(set);
       this.state = "pending";
       const data = JSON.stringify(exercise);
       try {
@@ -95,7 +99,7 @@ export default class ExerciseStore {
         id: exersiseID,
         results: [],
       };
-      exercise.results.push([set]);
+      exercise.results.push({ sessionID: sessionID, sets: [set] });
       this.state = "pending";
       const data = JSON.stringify(exercise);
       try {

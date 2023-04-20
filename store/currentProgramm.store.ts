@@ -74,7 +74,7 @@ export default class CurrentProgrammStore {
     this.state = "done";
   }
 
-  *programmAsyncStorage() {
+  *loadCurrentProgramm() {
     this.state = "pending";
     try {
       const data: string | null = yield AsyncStorage.getItem(

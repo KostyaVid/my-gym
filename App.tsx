@@ -12,11 +12,6 @@ import { RootStackParamList } from "./types";
 const Tab = createMaterialBottomTabNavigator<RootStackParamList>();
 
 const App = () => {
-  useEffect(() => {
-    rootStore.currentProgramm.programmAsyncStorage();
-    rootStore.exercisesResults.loadExerciseStore();
-  }, []);
-
   return (
     <RootStoreContext.Provider value={rootStore}>
       <NavigationContainer>

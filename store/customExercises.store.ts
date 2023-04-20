@@ -11,7 +11,7 @@ export default class CustomExerciseStore {
     makeAutoObservable(this);
   }
 
-  *customExercisesAsyncSorage() {
+  *loadCustomExercises() {
     this.state = "pending";
     try {
       const data: string | null = yield AsyncStorage.getItem(
