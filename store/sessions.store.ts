@@ -7,7 +7,7 @@ export type Session = {
   sessionID: string;
   programmID: string;
   dateStart: number;
-  dateEnd: number;
+  dateEnd: number | undefined;
 };
 
 export type Sessions = Session[];
@@ -39,9 +39,28 @@ export default class SessionStore {
     }
   }
 
-  *addSession(session: Session) {}
+  *addSession(session: Session) {
+    this.sessions.push(session);
+    yield this.saveSAsyncStore();
+  }
+
+  *finishLastSession() {
+    this.sessions[this.sessions.length - 1].dateEnd = Date.now();
+    yield this.saveSAsyncStore();
+  }
 
   getSession(sessionID: string) {
     return this.sessions.find((item) => item.sessionID === sessionID);
+  }
+
+  async saveSAsyncStore() {
+    try {
+      this.state = "pending";
+      await AsyncStorage.setItem("@Sessions", JSON.stringify(this.sessions));
+      this.state = "done";
+    } catch (error) {
+      console.log(error);
+      this.state = "error";
+    }
   }
 }

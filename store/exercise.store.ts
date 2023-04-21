@@ -8,9 +8,14 @@ export type Set = {
   date: number;
   weight: number;
   count: number;
+  comment: string;
 };
 
-export type ExerciseSession = { sessionID: number; sets: Set[] };
+export type ExerciseSession = {
+  sessionID: string;
+  sets: Set[];
+  isFinish: boolean;
+};
 
 export type ExerciseResults = ExerciseID & {
   results: ExerciseSession[];
@@ -58,57 +63,93 @@ export default class ExerciseStore {
   }
 
   *addFirstExerciseResultInSession(
-    exersiseID: string,
-    sessionID: number,
+    exerciseID: string,
+    sessionID: string,
     set: Set
   ) {
-    let exercise = this.exercises.find(({ id }) => id === exersiseID);
+    let exercise = this.exercises.find(({ id }) => id === exerciseID);
     if (!exercise) {
       exercise = {
-        id: exersiseID,
+        id: exerciseID,
         results: [],
       };
     }
-    exercise.results.push({ sessionID: sessionID, sets: [set] });
-    this.state = "pending";
-    const data = JSON.stringify(exercise);
-    try {
-      yield AsyncStorage.setItem("@Result_" + exersiseID, data);
-      this.state = "done";
-    } catch (error) {
-      console.log(error);
-      this.state = "error";
+    exercise.results.push({
+      sessionID: sessionID,
+      sets: [set],
+      isFinish: false,
+    });
+    yield this.saveStore(exerciseID, exercise);
+  }
+
+  *addExerciseResultInSession(exerciseID: string, sessionID: string, set: Set) {
+    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    if (exercise) {
+      exercise.results[exercise.results.length - 1].sets.push(set);
+      yield this.saveStore(exerciseID, exercise);
+    } else {
+      exercise = {
+        id: exerciseID,
+        results: [],
+      };
+      exercise.results.push({
+        sessionID: sessionID,
+        sets: [set],
+        isFinish: false,
+      });
+      yield this.saveStore(exerciseID, exercise);
     }
   }
 
-  *addExerciseResultInSession(exersiseID: string, sessionID: number, set: Set) {
-    let exercise = this.exercises.find(({ id }) => id === exersiseID);
+  *finishSetsBySessionID(exerciseID: string, sessionID: string) {
+    let exercise = this.exercises.find(({ id }) => id === exerciseID);
     if (exercise) {
-      exercise.results[exercise.results.length - 1].sets.push(set);
-      this.state = "pending";
-      const data = JSON.stringify(exercise);
-      try {
-        yield AsyncStorage.setItem("@Result_" + exersiseID, data);
-        this.state = "done";
-      } catch (error) {
-        console.log(error);
-        this.state = "error";
+      const sessionSests = exercise.results.find(
+        (item) => item.sessionID === sessionID
+      );
+      if (sessionSests) {
+        sessionSests.isFinish = true;
+        yield this.saveStore(exerciseID, exercise);
       }
-    } else {
-      exercise = {
-        id: exersiseID,
-        results: [],
-      };
-      exercise.results.push({ sessionID: sessionID, sets: [set] });
+    }
+  }
+
+  *finishSestsLastInTheArray(exerciseID: string) {
+    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    if (exercise) {
+      const sessionSestsLast = exercise.results[exercise.results.length - 1];
+      if (sessionSestsLast) {
+        sessionSestsLast.isFinish = true;
+        yield this.saveStore(exerciseID, exercise);
+      }
+    }
+  }
+
+  async saveStore(exerciseID: string, exercise: ExerciseResults) {
+    const data = JSON.stringify(exercise);
+    if (data) {
       this.state = "pending";
-      const data = JSON.stringify(exercise);
       try {
-        yield AsyncStorage.setItem("@Result_" + exersiseID, data);
+        await AsyncStorage.setItem("@Result_" + exerciseID, data);
         this.state = "done";
       } catch (error) {
         console.log(error);
         this.state = "error";
       }
     }
+  }
+
+  getValueWork(exerciseID: string, sessionID: string, numberSet: number) {
+    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    if (exercise) {
+      const sessionSests = exercise.results.find(
+        (item) => item.sessionID === sessionID
+      );
+      if (sessionSests) {
+        const set = sessionSests.sets[numberSet];
+        return set.weight * set.count;
+      }
+    }
+    return 0;
   }
 }
