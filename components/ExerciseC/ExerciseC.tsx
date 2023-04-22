@@ -33,7 +33,7 @@ export type ExerciseSecondaryProps = {
   exerciseType?: ExerciseType;
 };
 
-const Exercise: React.FC<ExerciseProps> = observer(({ name }) => {
+const ExerciseC: React.FC<ExerciseProps> = observer(({ name }) => {
   return (
     <View>
       <Text>{name}</Text>
@@ -41,4 +41,4 @@ const Exercise: React.FC<ExerciseProps> = observer(({ name }) => {
   );
 });
 
-export default Exercise;
+export default ExerciseC;

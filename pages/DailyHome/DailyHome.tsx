@@ -5,6 +5,7 @@ import Training from "./Training/Training";
 import Dimension from "./Dimension/Dimension";
 import { DailyStackList } from "../../types";
 import Session from "./Session/Session";
+import Exercise from "./Exercise/Exercise";
 
 const Stack = createNativeStackNavigator<DailyStackList>();
 
@@ -20,7 +21,12 @@ export default function DailyHome() {
       <Stack.Screen
         name="Session"
         component={Session}
-        initialParams={{ trainingID: "0" }}
+        initialParams={{ sessionID: "0" }}
+      />
+      <Stack.Screen
+        name="Exercise"
+        component={Exercise}
+        initialParams={{ exerciseID: "e0", sessionID: "s0_0" }}
       />
       <Stack.Screen name="Dimension" component={Dimension} />
     </Stack.Navigator>

@@ -91,6 +91,10 @@ export default class CurrentProgrammStore {
     }
   }
 
+  *addNewSession(sessionID: string) {
+    this.currentProgramm?.session.push();
+  }
+
   async saveStore() {
     try {
       await AsyncStorage.setItem(

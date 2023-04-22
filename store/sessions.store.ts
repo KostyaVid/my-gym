@@ -7,7 +7,7 @@ export type Session = {
   sessionID: string;
   programmID: string;
   dateStart: number;
-  dateEnd: number | undefined;
+  dateEnd?: number;
 };
 
 export type Sessions = Session[];
@@ -19,7 +19,7 @@ export default class SessionStore {
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
-    makeAutoObservable(this, { getSession: computed });
+    makeAutoObservable(this);
   }
 
   *loadSessionStorage() {

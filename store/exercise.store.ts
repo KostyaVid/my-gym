@@ -1,14 +1,15 @@
-import { ExerciseID } from "./../components/Exercise/Exercise";
+import { ExerciseID } from "../components/ExerciseC/ExerciseC";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { makeAutoObservable, runInAction } from "mobx";
+import { computed, makeAutoObservable, runInAction } from "mobx";
 import { State } from "../types";
 import RootStore from "./rootStore.store";
 
 export type Set = {
+  id: string;
   date: number;
   weight: number;
   count: number;
-  comment: string;
+  comment?: string;
 };
 
 export type ExerciseSession = {
@@ -149,6 +150,17 @@ export default class ExerciseStore {
         const set = sessionSests.sets[numberSet];
         return set.weight * set.count;
       }
+    }
+    return 0;
+  }
+
+  getValueWorkSestsLastSession(exerciseID: string) {
+    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    if (exercise) {
+      return exercise.results[exercise.results.length - 1].sets.reduce(
+        (prev, curr) => prev + curr.weight * curr.count,
+        0
+      );
     }
     return 0;
   }

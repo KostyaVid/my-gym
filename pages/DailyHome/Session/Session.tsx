@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, TouchableHighlight } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -16,21 +16,32 @@ type Props = {
   route: RouteProp<DailyStackList, "Session">;
 };
 
-const Session = observer(({ route }: Props) => {
-  const trainingID = route.params.trainingID;
+const Session = observer(({ navigation, route }: Props) => {
+  const sessionID = route.params.sessionID;
   const store = useStore();
-  const training = store.currentProgramm.currentProgramm?.session.find(
-    ({ id }) => (id = trainingID)
+  const session = store.currentProgramm.currentProgramm?.session.find(
+    ({ id }) => (id = sessionID)
   );
 
-  if (training)
+  if (session)
     return (
       <View>
-        <Text>Тренировка: {training.name}</Text>
+        <Text>Тренировка: {session.name}</Text>
         <FlatList
-          data={training.exerciseIDs}
+          data={session.exerciseIDs}
           keyExtractor={(item) => item}
-          renderItem={({ item }) => <Text>{item}</Text>}
+          renderItem={({ item, index }) => (
+            <TouchableHighlight
+              onPress={() => {
+                navigation.navigate("DailyHome", {
+                  screen: "Exercise",
+                  params: { exerciseID: item, sessionID: sessionID },
+                });
+              }}
+            >
+              <Text>{(index + 1).toString() + ". " + item}</Text>
+            </TouchableHighlight>
+          )}
         />
       </View>
     );

@@ -3,6 +3,7 @@ import CurrentProgrammStore from "./currentProgramm.store";
 import CustomExercisesStore from "./customExercises.store";
 import ExerciseStore from "./exercise.store";
 import SessionStore from "./sessions.store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class RootStore {
   currentProgramm: CurrentProgrammStore;
@@ -14,6 +15,10 @@ export default class RootStore {
     this.customExercises = new CustomExercisesStore();
     this.exercisesResults = new ExerciseStore(this);
     this.sessions = new SessionStore(this);
+    this.init();
+  }
+  async init() {
+    if (__DEV__) await AsyncStorage.clear();
     this.currentProgramm.loadCurrentProgramm();
     this.customExercises.loadCustomExercises();
     this.exercisesResults.loadExerciseStore();

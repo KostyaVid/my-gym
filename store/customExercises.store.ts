@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import {} from "../components/Exercise/Exercise";
+import {} from "../components/ExerciseC/ExerciseC";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ExerciseFullProps, exerciseData } from "../data/exercises";
 import { State } from "../types";

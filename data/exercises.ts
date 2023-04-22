@@ -1,7 +1,7 @@
 import {
   ExerciseProps,
   ExerciseSecondaryProps,
-} from "../components/Exercise/Exercise";
+} from "../components/ExerciseC/ExerciseC";
 
 export type ExerciseFullProps = ExerciseProps & ExerciseSecondaryProps;
 
