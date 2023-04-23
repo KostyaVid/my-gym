@@ -80,6 +80,8 @@ export default class ExerciseStore {
       sets: [set],
       isFinish: false,
     });
+    this.exercises.push(exercise);
+
     yield this.saveStore(exerciseID, exercise);
   }
 
@@ -115,7 +117,7 @@ export default class ExerciseStore {
     }
   }
 
-  *finishSestsLastInTheArray(exerciseID: string) {
+  *finishSetsLastInTheArray(exerciseID: string) {
     let exercise = this.exercises.find(({ id }) => id === exerciseID);
     if (exercise) {
       const sessionSestsLast = exercise.results[exercise.results.length - 1];

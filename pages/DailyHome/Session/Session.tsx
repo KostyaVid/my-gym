@@ -1,10 +1,11 @@
-import { View, Text, FlatList, TouchableHighlight } from "react-native";
+import { View, Text, FlatList, TouchableHighlight, Button } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
+import TimeCounter from "../../../components/TimeCounter/TimeCounter";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -23,10 +24,19 @@ const Session = observer(({ navigation, route }: Props) => {
     ({ id }) => (id = sessionID)
   );
 
-  if (session)
+  if (session && store.currentProgramm.currentSessionID) {
+    const currentSession = store.sessions.getSession(
+      store.currentProgramm.currentSessionID
+    );
     return (
       <View>
         <Text>Тренировка: {session.name}</Text>
+        <Text>Время тренировки:</Text>
+        <TimeCounter
+          date={
+            currentSession?.dateStart ? currentSession.dateStart : Date.now()
+          }
+        />
         <FlatList
           data={session.exerciseIDs}
           keyExtractor={(item) => item}
@@ -35,7 +45,7 @@ const Session = observer(({ navigation, route }: Props) => {
               onPress={() => {
                 navigation.navigate("DailyHome", {
                   screen: "Exercise",
-                  params: { exerciseID: item, sessionID: sessionID },
+                  params: { exerciseID: item, sessionID: session.id },
                 });
               }}
             >
@@ -43,8 +53,16 @@ const Session = observer(({ navigation, route }: Props) => {
             </TouchableHighlight>
           )}
         />
+        <Button
+          title="Завершить тренировку"
+          onPress={() => {
+            store.currentProgramm.endCurrentSession();
+            navigation.navigate("DailyHome", { screen: "Daily" });
+          }}
+        />
       </View>
     );
+  }
 
   return (
     <View>

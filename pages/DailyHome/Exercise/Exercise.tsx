@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, Button } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -16,7 +16,7 @@ type Props = {
   route: RouteProp<DailyStackList, "Exercise">;
 };
 
-const Exercise = observer(({ route }: Props) => {
+const Exercise = observer(({ navigation, route }: Props) => {
   const exerciseID = route.params.exerciseID;
   const sessionID = route.params.sessionID;
   const store = useStore();
@@ -27,22 +27,47 @@ const Exercise = observer(({ route }: Props) => {
   const exerciseSession = exercise?.results.findLast(
     (item) => item.sessionID === sessionID
   );
-  if (typeof exerciseSession === "undefined")
-    return <Text>Добавить подход</Text>;
+
   return (
     <View>
-      <FlatList
-        data={exerciseSession.sets}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View>
-            <View style={style.set}>
-              <Text>{item.weight}</Text>
-              <Text>{item.count}</Text>
+      {exerciseSession ? (
+        <FlatList
+          data={exerciseSession.sets}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View>
+              <View style={style.set}>
+                <Text>{item.weight}</Text>
+                <Text>{item.count}</Text>
+              </View>
+              {item.comment && <Text>{item.comment}</Text>}
             </View>
-            {item.comment && <Text>{item.comment}</Text>}
-          </View>
-        )}
+          )}
+        />
+      ) : (
+        <Text>Добавить подход</Text>
+      )}
+      <Button
+        title="+"
+        onPress={() => {
+          navigation.navigate("DailyHome", {
+            screen: "NewSet",
+            params: {
+              exerciseID: exerciseID,
+              sessionID: sessionID,
+            },
+          });
+        }}
+      />
+      <Button
+        title="Завершить"
+        onPress={() => {
+          store.exercisesResults.finishSetsBySessionID(exerciseID, sessionID);
+          navigation.navigate("DailyHome", {
+            screen: "Session",
+            params: { sessionID },
+          });
+        }}
       />
     </View>
   );

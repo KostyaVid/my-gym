@@ -5,9 +5,11 @@ import { programmsData } from "../data/programms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { State } from "../types";
 import RootStore from "./rootStore.store";
+import { Session } from "./sessions.store";
 
 export default class CurrentProgrammStore {
   currentProgramm: ProgrammDataProps | null = null;
+  currentSessionID: string | null = null;
   state: State = null;
   rootStore: RootStore;
 
@@ -46,9 +48,7 @@ export default class CurrentProgrammStore {
         ...session.exerciseIDs.slice(position),
       ];
     }
-    this.state = "pending";
     yield this.saveStore();
-    this.state = "done";
   }
 
   *deleteExerciseInTheProgramm(sessionID: string, exerceseID: string) {
@@ -59,19 +59,15 @@ export default class CurrentProgrammStore {
     if (!session) return;
 
     session.exerciseIDs = session.exerciseIDs.filter((id) => id !== exerceseID);
-    this.state = "pending";
     yield this.saveStore();
-    this.state = "done";
   }
 
   *deleteSessionInTheProgramm(sessionID: string) {
     if (!this.currentProgramm) return;
-    this.state = "pending";
     this.currentProgramm.session = this.currentProgramm.session.filter(
       ({ id }) => id !== sessionID
     );
     yield this.saveStore();
-    this.state = "done";
   }
 
   *loadCurrentProgramm() {
@@ -91,17 +87,43 @@ export default class CurrentProgrammStore {
     }
   }
 
-  *addNewSession(sessionID: string) {
-    this.currentProgramm?.session.push();
+  // *addNewSession(sessionID: string) {
+  //   this.currentProgramm?.session.push();
+  // }
+
+  *startSession(sessionID: string) {
+    if (this.currentProgramm) {
+      const session: Session = {
+        sessionID: sessionID,
+        programmID: this.currentProgramm?.id,
+        dateStart: Date.now(),
+      };
+      this.rootStore.sessions.addSession(session);
+      this.currentSessionID = sessionID;
+      yield this.saveStore();
+    } else {
+      console.log("there is not current programm");
+    }
+  }
+
+  *endCurrentSession() {
+    if (this.currentSessionID) {
+      this.rootStore.sessions.setEndDateSession(this.currentSessionID);
+      this.currentSessionID = null;
+      yield this.saveStore();
+    }
   }
 
   async saveStore() {
+    this.state = "pending";
     try {
       await AsyncStorage.setItem(
         "@CurrentProgramm",
         JSON.stringify(this.currentProgramm)
       );
+      this.state = "done";
     } catch (error) {
+      this.state = "error";
       console.log(error);
     }
   }
