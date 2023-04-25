@@ -5,6 +5,7 @@ import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
+import { exerciseData } from "../../../data/exercises";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -20,16 +21,21 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const exerciseID = route.params.exerciseID;
   const sessionID = route.params.sessionID;
   const store = useStore();
-  const exercise = store.exercisesResults.exercises.find(
+  const exerciseResult = store.exercisesResults.exercises.find(
     (item) => item.id === exerciseID
   );
 
-  const exerciseSession = exercise?.results.findLast(
+  const exerciseSession = exerciseResult?.results.findLast(
     (item) => item.sessionID === sessionID
   );
 
+  let exercise = exerciseData.find((item) => item.id === exerciseID);
+  if (!exercise)
+    exercise = store.customExercises.exercises.find((item) => item.id);
+
   return (
     <View>
+      {exercise && <Text>{exercise.name}</Text>}
       {exerciseSession ? (
         <FlatList
           data={exerciseSession.sets}

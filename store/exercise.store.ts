@@ -106,6 +106,7 @@ export default class ExerciseStore {
 
   *finishSetsBySessionID(exerciseID: string, sessionID: string) {
     let exercise = this.exercises.find(({ id }) => id === exerciseID);
+
     if (exercise) {
       const sessionSests = exercise.results.find(
         (item) => item.sessionID === sessionID

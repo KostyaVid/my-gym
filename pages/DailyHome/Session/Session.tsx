@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
+import { ExerciseFullProps, exerciseData } from "../../../data/exercises";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -28,6 +29,19 @@ const Session = observer(({ navigation, route }: Props) => {
     const currentSession = store.sessions.getSession(
       store.currentProgramm.currentSessionID
     );
+    const exercisesResult = store.exercisesResults.exercises.filter((item) =>
+      session.exerciseIDs.includes(item.id)
+    );
+
+    const exercisesResultInSession = exercisesResult?.map((item) => {
+      return {
+        results: item.results.find(
+          (elem) => elem.sessionID === sessionID && elem.isFinish
+        ),
+        id: item.id,
+      };
+    });
+
     return (
       <View>
         <Text>Тренировка: {session.name}</Text>
@@ -49,7 +63,15 @@ const Session = observer(({ navigation, route }: Props) => {
                 });
               }}
             >
-              <Text>{(index + 1).toString() + ". " + item}</Text>
+              <View>
+                <Text>
+                  {(index + 1).toString() +
+                    ". " +
+                    exerciseData.find((ex) => ex.id === item)?.name}
+                </Text>
+                {exercisesResultInSession.find((elem) => elem.id === item)
+                  ?.results !== undefined && <Text>Завершено</Text>}
+              </View>
             </TouchableHighlight>
           )}
         />
