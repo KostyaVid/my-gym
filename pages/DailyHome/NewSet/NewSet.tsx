@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Button, TextInput } from "react-native";
+import { View, Text, Button, TextInput } from "react-native";
 import React, { useState } from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -22,11 +22,10 @@ const NewSet = observer(({ navigation, route }: Props) => {
   const [count, setCount] = useState("0");
 
   const exerciseID = route.params.exerciseID;
-  const sessionID = route.params.sessionID;
+  const newSessionID = route.params.newSessionID;
+  const trainingID = route.params.trainingID;
   const store = useStore();
-  const exercise = store.exercisesResults.exercises.find(
-    (item) => item.id === exerciseID
-  );
+  const exercise = store.exercisesResults.getExercise(exerciseID);
 
   return (
     <View>
@@ -57,20 +56,20 @@ const NewSet = observer(({ navigation, route }: Props) => {
           if (exercise) {
             store.exercisesResults.addExerciseResultInSession(
               exerciseID,
-              sessionID,
+              newSessionID,
               set
             );
           } else {
             store.exercisesResults.addFirstExerciseResultInSession(
               exerciseID,
-              sessionID,
+              newSessionID,
               set
             );
           }
 
           navigation.navigate("DailyHome", {
             screen: "Exercise",
-            params: { exerciseID, sessionID },
+            params: { exerciseID, newSessionID, trainingID },
           });
         }}
       />

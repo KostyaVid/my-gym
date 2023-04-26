@@ -1,6 +1,6 @@
 import { ExerciseID } from "../components/ExerciseC/ExerciseC";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { computed, makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { State } from "../types";
 import RootStore from "./rootStore.store";
 
@@ -30,6 +30,10 @@ export default class ExerciseStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+  }
+
+  getExercise(exerciseID: string) {
+    return this.exercises.findLast((item) => item.id === exerciseID);
   }
 
   async loadExerciseStore() {
@@ -68,7 +72,7 @@ export default class ExerciseStore {
     sessionID: string,
     set: Set
   ) {
-    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    let exercise = this.getExercise(exerciseID);
     if (!exercise) {
       exercise = {
         id: exerciseID,
@@ -86,7 +90,7 @@ export default class ExerciseStore {
   }
 
   *addExerciseResultInSession(exerciseID: string, sessionID: string, set: Set) {
-    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    let exercise = this.getExercise(exerciseID);
     if (exercise) {
       exercise.results[exercise.results.length - 1].sets.push(set);
       yield this.saveStore(exerciseID, exercise);
@@ -104,8 +108,16 @@ export default class ExerciseStore {
     }
   }
 
+  getExerciseSession(exerciseID: string, sessionID: string) {
+    let exercise = this.getExercise(exerciseID);
+
+    if (exercise) {
+      return exercise.results.find((item) => item.sessionID === sessionID);
+    }
+  }
+
   *finishSetsBySessionID(exerciseID: string, sessionID: string) {
-    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    let exercise = this.getExercise(exerciseID);
 
     if (exercise) {
       const sessionSests = exercise.results.find(
@@ -119,7 +131,7 @@ export default class ExerciseStore {
   }
 
   *finishSetsLastInTheArray(exerciseID: string) {
-    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    let exercise = this.getExercise(exerciseID);
     if (exercise) {
       const sessionSestsLast = exercise.results[exercise.results.length - 1];
       if (sessionSestsLast) {
@@ -144,7 +156,7 @@ export default class ExerciseStore {
   }
 
   getValueWork(exerciseID: string, sessionID: string, numberSet: number) {
-    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+    let exercise = this.getExercise(exerciseID);
     if (exercise) {
       const sessionSests = exercise.results.find(
         (item) => item.sessionID === sessionID
@@ -157,12 +169,30 @@ export default class ExerciseStore {
     return 0;
   }
 
-  getValueWorkSestsLastSession(exerciseID: string) {
-    let exercise = this.exercises.find(({ id }) => id === exerciseID);
+  getValueWorkSetsLastSession(exerciseID: string) {
+    let exercise = this.getExercise(exerciseID);
     if (exercise) {
-      return exercise.results[exercise.results.length - 1].sets.reduce(
-        (prev, curr) => prev + curr.weight * curr.count,
-        0
+      if (exercise.results.length < 2) return 0;
+      const exerciseResult = exercise.results[exercise.results.length - 2].sets;
+      return (
+        exerciseResult.reduce(
+          (prev, curr) => prev + curr.weight * curr.count,
+          0
+        ) / exerciseResult.length
+      );
+    }
+    return 0;
+  }
+
+  getValueWorkSetsCurrentSession(exerciseID: string) {
+    let exercise = this.getExercise(exerciseID);
+    if (exercise) {
+      const exerciseResult = exercise.results[exercise.results.length - 1].sets;
+      return (
+        exerciseResult.reduce(
+          (prev, curr) => prev + curr.weight * curr.count,
+          0
+        ) / exerciseResult.length
       );
     }
     return 0;

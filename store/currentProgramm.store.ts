@@ -10,12 +10,17 @@ import { Session } from "./sessions.store";
 export default class CurrentProgrammStore {
   currentProgramm: ProgrammDataProps | null = null;
   currentSessionID: string | null = null;
+  currentTargetID: string | null = null;
   state: State = null;
   rootStore: RootStore;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+  }
+
+  getTraining(trainingID: string) {
+    return this.currentProgramm?.session.find((item) => item.id === trainingID);
   }
 
   setProgrammByID(programmID: string) {
@@ -28,44 +33,64 @@ export default class CurrentProgrammStore {
   }
 
   *addExerciseInTheProgramm(
-    sessionID: string,
-    exerceseID: string,
+    trainingID: string,
+    exerciseID: string,
     position?: number
   ) {
     if (!this.currentProgramm) return;
 
     const session = this.currentProgramm?.session.find(
-      (item) => item.id === sessionID
+      (item) => item.id === trainingID
     );
     if (!session) return;
 
     if (position === undefined) {
-      session.exerciseIDs.push(exerceseID);
+      session.exerciseIDs.push(exerciseID);
     } else {
       session.exerciseIDs = [
         ...session.exerciseIDs.slice(0, position - 1),
-        exerceseID,
+        exerciseID,
         ...session.exerciseIDs.slice(position),
       ];
     }
     yield this.saveStore();
   }
 
-  *deleteExerciseInTheProgramm(sessionID: string, exerceseID: string) {
+  *addExerciseInTheCurrentProgramm(exerciseID: string, position?: number) {
     if (!this.currentProgramm) return;
+
     const session = this.currentProgramm?.session.find(
-      (item) => item.id === sessionID
+      (item) => item.id === this.currentSessionID
     );
     if (!session) return;
 
-    session.exerciseIDs = session.exerciseIDs.filter((id) => id !== exerceseID);
+    if (position === undefined) {
+      session.exerciseIDs.push(exerciseID);
+    } else {
+      session.exerciseIDs = [
+        ...session.exerciseIDs.slice(0, position - 1),
+        exerciseID,
+        ...session.exerciseIDs.slice(position),
+      ];
+    }
     yield this.saveStore();
   }
 
-  *deleteSessionInTheProgramm(sessionID: string) {
+  *deleteExerciseInTheProgramm(trainingID: string, exerciseID: string) {
+    if (!this.currentProgramm) return;
+    const session = this.currentProgramm?.session.find(
+      (item) => item.id === trainingID
+    );
+    if (!session) return;
+
+    session.exerciseIDs = session.exerciseIDs.filter((id) => id !== exerciseID);
+    yield this.saveStore();
+  }
+
+  *deleteTrainingInTheProgramm(trainingID: string) {
     if (!this.currentProgramm) return;
     this.currentProgramm.session = this.currentProgramm.session.filter(
-      ({ id }) => id !== sessionID
+      ({ id }) => id !== trainingID
     );
     yield this.saveStore();
   }
@@ -91,7 +116,7 @@ export default class CurrentProgrammStore {
   //   this.currentProgramm?.session.push();
   // }
 
-  *startSession(sessionID: string) {
+  *startSession(sessionID: string, trainingID: string) {
     if (this.currentProgramm) {
       const session: Session = {
         sessionID: sessionID,

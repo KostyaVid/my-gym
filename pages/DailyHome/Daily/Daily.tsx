@@ -68,10 +68,13 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                   title="Начать"
                   onPress={() => {
                     const newSessionID = createSessionID(programm);
-                    store.currentProgramm.startSession(newSessionID);
+                    store.currentProgramm.startSession(newSessionID, item.id);
                     navigation.navigate("DailyHome", {
                       screen: "Session",
-                      params: { sessionID: newSessionID },
+                      params: {
+                        newSessionID: newSessionID,
+                        trainingID: item.id,
+                      },
                     });
                   }}
                 />

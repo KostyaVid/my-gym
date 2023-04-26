@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
-import { ExerciseFullProps, exerciseData } from "../../../data/exercises";
+import { exerciseData } from "../../../data/exercises";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -19,32 +19,19 @@ type Props = {
 };
 
 const Session = observer(({ navigation, route }: Props) => {
-  const sessionID = route.params.sessionID;
+  const trainingID = route.params.trainingID;
+  const newSessionID = route.params.newSessionID;
   const store = useStore();
-  const session = store.currentProgramm.currentProgramm?.session.find(
-    ({ id }) => (id = sessionID)
-  );
+  const training = store.currentProgramm.getTraining(trainingID);
+  console.log("training: ", training);
+  console.log("currSess: ", store.currentProgramm.currentSessionID);
 
-  if (session && store.currentProgramm.currentSessionID) {
-    const currentSession = store.sessions.getSession(
-      store.currentProgramm.currentSessionID
-    );
-    const exercisesResult = store.exercisesResults.exercises.filter((item) =>
-      session.exerciseIDs.includes(item.id)
-    );
-
-    const exercisesResultInSession = exercisesResult?.map((item) => {
-      return {
-        results: item.results.find(
-          (elem) => elem.sessionID === sessionID && elem.isFinish
-        ),
-        id: item.id,
-      };
-    });
+  if (training && store.currentProgramm.currentSessionID) {
+    const currentSession = store.sessions.getSession(newSessionID);
 
     return (
       <View>
-        <Text>Тренировка: {session.name}</Text>
+        <Text>Тренировка: {training.name}</Text>
         <Text>Время тренировки:</Text>
         <TimeCounter
           date={
@@ -52,14 +39,18 @@ const Session = observer(({ navigation, route }: Props) => {
           }
         />
         <FlatList
-          data={session.exerciseIDs}
+          data={training.exerciseIDs}
           keyExtractor={(item) => item}
           renderItem={({ item, index }) => (
             <TouchableHighlight
               onPress={() => {
                 navigation.navigate("DailyHome", {
                   screen: "Exercise",
-                  params: { exerciseID: item, sessionID: session.id },
+                  params: {
+                    exerciseID: item,
+                    trainingID: training.id,
+                    newSessionID,
+                  },
                 });
               }}
             >
@@ -69,11 +60,20 @@ const Session = observer(({ navigation, route }: Props) => {
                     ". " +
                     exerciseData.find((ex) => ex.id === item)?.name}
                 </Text>
-                {exercisesResultInSession.find((elem) => elem.id === item)
-                  ?.results !== undefined && <Text>Завершено</Text>}
+                {store.exercisesResults.getExerciseSession(item, trainingID)
+                  ?.isFinish && <Text>Завершено</Text>}
               </View>
             </TouchableHighlight>
           )}
+        />
+        <Button
+          title="Добавить упражнение"
+          onPress={() => {
+            navigation.navigate("DailyHome", {
+              screen: "AddExercise",
+              params: { sessionID: trainingID, newSessionID },
+            });
+          }}
         />
         <Button
           title="Завершить тренировку"

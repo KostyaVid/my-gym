@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import {} from "../components/ExerciseC/ExerciseC";
+import { Muscle } from "../components/ExerciseC/ExerciseC";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ExerciseFullProps, exerciseData } from "../data/exercises";
 import { State } from "../types";
@@ -10,6 +10,26 @@ export default class CustomExerciseStore {
   constructor() {
     makeAutoObservable(this);
   }
+
+  get getAllExercisesData() {
+    return exerciseData.concat(this.exercises);
+  }
+
+  get getAllExercisesSorted() {
+    return this.getAllExercisesData.sort((a, b) =>
+      b.mainMuscle.localeCompare(a.mainMuscle)
+    );
+  }
+
+  getAllExerciseDataFilter(muscle: Muscle) {
+    return this.getAllExercisesData.filter(
+      (item) => item.mainMuscle === muscle
+    );
+  }
+
+  getExercise = (exerciseID: string) => {
+    return this.exercises.find((item) => item.id === exerciseID);
+  };
 
   *loadCustomExercises() {
     this.state = "pending";

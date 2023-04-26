@@ -15,7 +15,8 @@ export type Muscle =
   | "trapezoids"
   | "quadriceps"
   | "bicepsFemoris"
-  | "gastrocnemius";
+  | "gastrocnemius"
+  | "none";
 
 export type Muscles = Record<Muscle, MuscleInvolve>;
 export type ExerciseType = "cardio" | "stretch" | "weight" | "static";
@@ -29,6 +30,7 @@ export type ExerciseProps = ExerciseID & {
 };
 export type ExerciseSecondaryProps = {
   description?: string;
+  mainMuscle: Muscle;
   muscles?: Muscles;
   exerciseType?: ExerciseType;
 };

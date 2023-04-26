@@ -18,8 +18,9 @@ export type ProgrammStackList = {
 export type DailyStackList = {
   Daily: undefined;
   Training: { trainingID: string };
-  Session: { sessionID: string };
-  Exercise: { exerciseID: string; sessionID: string };
-  NewSet: { exerciseID: string; sessionID: string };
+  Session: { newSessionID: string; trainingID: string };
+  Exercise: { exerciseID: string; trainingID: string; newSessionID: string };
+  NewSet: { exerciseID: string; trainingID: string; newSessionID: string };
+  AddExercise: { sessionID: string; newSessionID: string };
   Dimension: undefined;
 };

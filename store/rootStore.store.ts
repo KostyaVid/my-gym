@@ -4,6 +4,7 @@ import CustomExercisesStore from "./customExercises.store";
 import ExerciseStore from "./exercise.store";
 import SessionStore from "./sessions.store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { exerciseData } from "../data/exercises";
 
 export default class RootStore {
   currentProgramm: CurrentProgrammStore;

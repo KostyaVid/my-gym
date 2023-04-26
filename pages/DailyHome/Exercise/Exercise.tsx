@@ -18,20 +18,17 @@ type Props = {
 };
 
 const Exercise = observer(({ navigation, route }: Props) => {
+  const newSessionID = route.params.newSessionID;
   const exerciseID = route.params.exerciseID;
-  const sessionID = route.params.sessionID;
+  const trainingID = route.params.trainingID;
   const store = useStore();
-  const exerciseResult = store.exercisesResults.exercises.find(
-    (item) => item.id === exerciseID
-  );
-
+  const exerciseResult = store.exercisesResults.getExercise(exerciseID);
   const exerciseSession = exerciseResult?.results.findLast(
-    (item) => item.sessionID === sessionID
+    (item) => item.sessionID === newSessionID
   );
 
   let exercise = exerciseData.find((item) => item.id === exerciseID);
-  if (!exercise)
-    exercise = store.customExercises.exercises.find((item) => item.id);
+  if (!exercise) exercise = store.customExercises.getExercise(exerciseID);
 
   return (
     <View>
@@ -59,22 +56,32 @@ const Exercise = observer(({ navigation, route }: Props) => {
           navigation.navigate("DailyHome", {
             screen: "NewSet",
             params: {
-              exerciseID: exerciseID,
-              sessionID: sessionID,
+              exerciseID,
+              trainingID,
+              newSessionID,
             },
           });
         }}
       />
-      <Button
-        title="Завершить"
-        onPress={() => {
-          store.exercisesResults.finishSetsBySessionID(exerciseID, sessionID);
-          navigation.navigate("DailyHome", {
-            screen: "Session",
-            params: { sessionID },
-          });
-        }}
-      />
+      {exerciseSession?.isFinish || (
+        <Button
+          title="Завершить"
+          onPress={() => {
+            store.exercisesResults.finishSetsBySessionID(
+              exerciseID,
+              newSessionID
+            );
+            navigation.navigate("DailyHome", {
+              screen: "Session",
+              params: { trainingID: trainingID, newSessionID },
+            });
+          }}
+        />
+      )}
+      <Text>
+        Средняя предыдущая интенсивность:
+        {store.exercisesResults.getValueWorkSetsLastSession(exerciseID)}
+      </Text>
     </View>
   );
 });
