@@ -25,6 +25,7 @@ const Session = observer(({ navigation, route }: Props) => {
   const training = store.currentProgramm.getTraining(trainingID);
   console.log("training: ", training);
   console.log("currSess: ", store.currentProgramm.currentSessionID);
+  console.log("currTrain: ", store.currentProgramm.currentTrainingID);
 
   if (training && store.currentProgramm.currentSessionID) {
     const currentSession = store.sessions.getSession(newSessionID);

@@ -10,7 +10,7 @@ import { Session } from "./sessions.store";
 export default class CurrentProgrammStore {
   currentProgramm: ProgrammDataProps | null = null;
   currentSessionID: string | null = null;
-  currentTargetID: string | null = null;
+  currentTrainingID: string | null = null;
   state: State = null;
   rootStore: RootStore;
 
@@ -20,7 +20,9 @@ export default class CurrentProgrammStore {
   }
 
   getTraining(trainingID: string) {
-    return this.currentProgramm?.session.find((item) => item.id === trainingID);
+    return this.currentProgramm?.trainings.find(
+      (item) => item.id === trainingID
+    );
   }
 
   setProgrammByID(programmID: string) {
@@ -39,7 +41,7 @@ export default class CurrentProgrammStore {
   ) {
     if (!this.currentProgramm) return;
 
-    const session = this.currentProgramm?.session.find(
+    const session = this.currentProgramm?.trainings.find(
       (item) => item.id === trainingID
     );
     if (!session) return;
@@ -59,18 +61,18 @@ export default class CurrentProgrammStore {
   *addExerciseInTheCurrentProgramm(exerciseID: string, position?: number) {
     if (!this.currentProgramm) return;
 
-    const session = this.currentProgramm?.session.find(
-      (item) => item.id === this.currentSessionID
+    const training = this.currentProgramm?.trainings.find(
+      (item) => item.id === this.currentTrainingID
     );
-    if (!session) return;
+    if (!training) return;
 
     if (position === undefined) {
-      session.exerciseIDs.push(exerciseID);
+      training.exerciseIDs.push(exerciseID);
     } else {
-      session.exerciseIDs = [
-        ...session.exerciseIDs.slice(0, position - 1),
+      training.exerciseIDs = [
+        ...training.exerciseIDs.slice(0, position - 1),
         exerciseID,
-        ...session.exerciseIDs.slice(position),
+        ...training.exerciseIDs.slice(position),
       ];
     }
     yield this.saveStore();
@@ -78,7 +80,7 @@ export default class CurrentProgrammStore {
 
   *deleteExerciseInTheProgramm(trainingID: string, exerciseID: string) {
     if (!this.currentProgramm) return;
-    const session = this.currentProgramm?.session.find(
+    const session = this.currentProgramm?.trainings.find(
       (item) => item.id === trainingID
     );
     if (!session) return;
@@ -89,7 +91,7 @@ export default class CurrentProgrammStore {
 
   *deleteTrainingInTheProgramm(trainingID: string) {
     if (!this.currentProgramm) return;
-    this.currentProgramm.session = this.currentProgramm.session.filter(
+    this.currentProgramm.trainings = this.currentProgramm.trainings.filter(
       ({ id }) => id !== trainingID
     );
     yield this.saveStore();
@@ -125,6 +127,7 @@ export default class CurrentProgrammStore {
       };
       this.rootStore.sessions.addSession(session);
       this.currentSessionID = sessionID;
+      this.currentTrainingID = trainingID;
       yield this.saveStore();
     } else {
       console.log("there is not current programm");
@@ -135,6 +138,7 @@ export default class CurrentProgrammStore {
     if (this.currentSessionID) {
       this.rootStore.sessions.setEndDateSession(this.currentSessionID);
       this.currentSessionID = null;
+      this.currentTrainingID = null;
       yield this.saveStore();
     }
   }

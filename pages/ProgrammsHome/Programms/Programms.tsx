@@ -22,7 +22,7 @@ type Props = {
 };
 
 const data = programmsData.map((elem) => {
-  return { title: elem.name, id: elem.id, data: elem.session };
+  return { title: elem.name, id: elem.id, data: elem.trainings };
 });
 
 const Programms = ({ navigation }: Props) => {

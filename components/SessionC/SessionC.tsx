@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { SessionDataProps, programmsData } from "../../data/programms";
+import { TrainingDataProps, programmsData } from "../../data/programms";
 import { observer } from "mobx-react-lite";
 
 export type SessionProps = {
@@ -10,9 +10,9 @@ export type SessionProps = {
 };
 
 const SessionC: React.FC<SessionProps> = observer(({ id }) => {
-  let data: undefined | SessionDataProps;
+  let data: undefined | TrainingDataProps;
   for (let i = 0; i < programmsData.length; i++) {
-    data = programmsData[i].session.find((elem) => elem.id === id);
+    data = programmsData[i].trainings.find((elem) => elem.id === id);
     if (data) break;
   }
 

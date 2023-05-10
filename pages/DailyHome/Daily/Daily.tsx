@@ -14,7 +14,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
 import { useStore } from "../../../store/rootStore.store";
-import { ProgrammDataProps, SessionDataProps } from "../../../data/programms";
+import { ProgrammDataProps } from "../../../data/programms";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -50,7 +50,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
         <View>
           <Text>Текущая программа: {programm.name}</Text>
           <FlatList
-            data={programm.session}
+            data={programm.trainings}
             renderItem={({ item }) => (
               <View style={style.session}>
                 <TouchableHighlight

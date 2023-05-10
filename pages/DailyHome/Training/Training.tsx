@@ -19,7 +19,7 @@ type TrainingProps = {
 const Training = observer(({ route }: TrainingProps) => {
   const programm = useStore().currentProgramm.currentProgramm;
   const id = route.params.trainingID;
-  const training = programm?.session.find((item) => item.id === id);
+  const training = programm?.trainings.find((item) => item.id === id);
   return (
     <SafeAreaView>
       <StatusBar />
