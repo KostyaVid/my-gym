@@ -24,7 +24,8 @@ type Props = {
 };
 
 const AddExercise = observer(({ navigation, route }: Props) => {
-  const newSessionID = route.params.newSessionID;
+  const sessionID = route.params.sessionID;
+  const trainingID = route.params.trainingID;
   const store = useStore();
   return (
     <View>
@@ -42,7 +43,7 @@ const AddExercise = observer(({ navigation, route }: Props) => {
                 store.currentProgramm.addExerciseInTheCurrentProgramm(item.id);
                 navigation.navigate("DailyHome", {
                   screen: "Session",
-                  params: { trainingID: route.params.sessionID, newSessionID },
+                  params: { trainingID, sessionID },
                 });
               }}
             />

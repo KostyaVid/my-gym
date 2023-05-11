@@ -22,7 +22,7 @@ const NewSet = observer(({ navigation, route }: Props) => {
   const [count, setCount] = useState("0");
 
   const exerciseID = route.params.exerciseID;
-  const newSessionID = route.params.newSessionID;
+  const sessionID = route.params.sessionID;
   const trainingID = route.params.trainingID;
   const store = useStore();
   const exercise = store.exercisesResults.getExercise(exerciseID);
@@ -56,20 +56,20 @@ const NewSet = observer(({ navigation, route }: Props) => {
           if (exercise) {
             store.exercisesResults.addExerciseResultInSession(
               exerciseID,
-              newSessionID,
+              sessionID,
               set
             );
           } else {
             store.exercisesResults.addFirstExerciseResultInSession(
               exerciseID,
-              newSessionID,
+              sessionID,
               set
             );
           }
 
           navigation.navigate("DailyHome", {
             screen: "Exercise",
-            params: { exerciseID, newSessionID, trainingID },
+            params: { exerciseID, sessionID, trainingID },
           });
         }}
       />

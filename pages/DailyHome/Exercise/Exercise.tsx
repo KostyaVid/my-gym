@@ -18,13 +18,13 @@ type Props = {
 };
 
 const Exercise = observer(({ navigation, route }: Props) => {
-  const newSessionID = route.params.newSessionID;
+  const sessionID = route.params.sessionID;
   const exerciseID = route.params.exerciseID;
   const trainingID = route.params.trainingID;
   const store = useStore();
   const exerciseResult = store.exercisesResults.getExercise(exerciseID);
   const exerciseSession = exerciseResult?.results.findLast(
-    (item) => item.sessionID === newSessionID
+    (item) => item.sessionID === sessionID
   );
 
   let exercise = exerciseData.find((item) => item.id === exerciseID);
@@ -58,7 +58,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
             params: {
               exerciseID,
               trainingID,
-              newSessionID,
+              sessionID,
             },
           });
         }}
@@ -67,13 +67,10 @@ const Exercise = observer(({ navigation, route }: Props) => {
         <Button
           title="Завершить"
           onPress={() => {
-            store.exercisesResults.finishSetsBySessionID(
-              exerciseID,
-              newSessionID
-            );
+            store.exercisesResults.finishSetsBySessionID(exerciseID, sessionID);
             navigation.navigate("DailyHome", {
               screen: "Session",
-              params: { trainingID: trainingID, newSessionID },
+              params: { trainingID, sessionID },
             });
           }}
         />

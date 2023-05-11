@@ -114,12 +114,22 @@ export default class CurrentProgrammStore {
     }
   }
 
-  // *addNewSession(sessionID: string) {
-  //   this.currentProgramm?.session.push();
-  // }
+  createSessionID = () => {
+    let lastSessionID = this.rootStore.sessions.sessions.findLast(
+      (item) => item.programmID === this.currentProgramm?.id
+    )?.sessionID;
+    if (!lastSessionID) lastSessionID = "s" + this.currentProgramm?.id + "_0";
 
-  *startSession(sessionID: string, trainingID: string) {
+    return (
+      lastSessionID.split("_")[0] +
+      "_" +
+      (Number(lastSessionID.split("_")[1]) + 1).toString()
+    );
+  };
+
+  *startSession(trainingID: string) {
     if (this.currentProgramm) {
+      const sessionID = this.createSessionID();
       const session: Session = {
         sessionID: sessionID,
         programmID: this.currentProgramm?.id,

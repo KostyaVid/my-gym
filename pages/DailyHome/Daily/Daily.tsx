@@ -30,19 +30,6 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
   const store = useStore();
   const programm = store.currentProgramm.currentProgramm;
 
-  const createSessionID = (currentProgramm: ProgrammDataProps) => {
-    let lastSessionID = store.sessions.sessions.findLast(
-      (item) => item.programmID === currentProgramm.id
-    )?.sessionID;
-    if (!lastSessionID) lastSessionID = "s" + currentProgramm.id + "_0";
-
-    return (
-      lastSessionID.split("_")[0] +
-      "_" +
-      (Number(lastSessionID.split("_")[1]) + 1).toString()
-    );
-  };
-
   if (programm)
     return (
       <SafeAreaView>
@@ -67,15 +54,15 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                 <Button
                   title="Начать"
                   onPress={() => {
-                    const newSessionID = createSessionID(programm);
-                    store.currentProgramm.startSession(newSessionID, item.id);
-                    navigation.navigate("DailyHome", {
-                      screen: "Session",
-                      params: {
-                        newSessionID: newSessionID,
-                        trainingID: item.id,
-                      },
-                    });
+                    store.currentProgramm.startSession(item.id);
+                    if (store.currentProgramm.currentSessionID)
+                      navigation.navigate("DailyHome", {
+                        screen: "Session",
+                        params: {
+                          sessionID: store.currentProgramm.currentSessionID,
+                          trainingID: item.id,
+                        },
+                      });
                   }}
                 />
               </View>

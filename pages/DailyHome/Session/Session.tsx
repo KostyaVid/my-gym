@@ -20,24 +20,19 @@ type Props = {
 
 const Session = observer(({ navigation, route }: Props) => {
   const trainingID = route.params.trainingID;
-  const newSessionID = route.params.newSessionID;
+  const sessionID = route.params.sessionID;
   const store = useStore();
   const training = store.currentProgramm.getTraining(trainingID);
-  console.log("training: ", training);
-  console.log("currSess: ", store.currentProgramm.currentSessionID);
-  console.log("currTrain: ", store.currentProgramm.currentTrainingID);
 
   if (training && store.currentProgramm.currentSessionID) {
-    const currentSession = store.sessions.getSession(newSessionID);
+    const session = store.sessions.getSession(sessionID);
 
     return (
       <View>
         <Text>Тренировка: {training.name}</Text>
         <Text>Время тренировки:</Text>
         <TimeCounter
-          date={
-            currentSession?.dateStart ? currentSession.dateStart : Date.now()
-          }
+          date={session?.dateStart ? session.dateStart : Date.now()}
         />
         <FlatList
           data={training.exerciseIDs}
@@ -50,7 +45,7 @@ const Session = observer(({ navigation, route }: Props) => {
                   params: {
                     exerciseID: item,
                     trainingID: training.id,
-                    newSessionID,
+                    sessionID,
                   },
                 });
               }}
@@ -61,7 +56,7 @@ const Session = observer(({ navigation, route }: Props) => {
                     ". " +
                     exerciseData.find((ex) => ex.id === item)?.name}
                 </Text>
-                {store.exercisesResults.getExerciseSession(item, trainingID)
+                {store.exercisesResults.getExerciseSession(item, sessionID)
                   ?.isFinish && <Text>Завершено</Text>}
               </View>
             </TouchableHighlight>
@@ -72,7 +67,7 @@ const Session = observer(({ navigation, route }: Props) => {
           onPress={() => {
             navigation.navigate("DailyHome", {
               screen: "AddExercise",
-              params: { sessionID: trainingID, newSessionID },
+              params: { trainingID, sessionID },
             });
           }}
         />
