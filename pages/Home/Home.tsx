@@ -11,7 +11,9 @@ const Home = observer(() => {
       <StatusBar />
       <View>
         <Calendar />
-        <Text>Программа: {state.currentProgramm.currentProgramm?.name}</Text>
+        <Text>
+          Выбранная программа: {state.currentProgramm.currentProgramm?.name}
+        </Text>
       </View>
     </SafeAreaView>
   );

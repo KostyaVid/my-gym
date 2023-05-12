@@ -8,6 +8,7 @@ import Session from "./Session/Session";
 import Exercise from "./Exercise/Exercise";
 import NewSet from "./NewSet/NewSet";
 import AddExercise from "./AddExercise/AddExercise";
+import ChooseSession from "./ChooseSession/ChooseSession";
 
 const Stack = createNativeStackNavigator<DailyStackList>();
 
@@ -32,6 +33,12 @@ export default function DailyHome() {
         options={{ title: "Тренировка" }}
       />
       <Stack.Screen
+        name="ChooseSession"
+        component={ChooseSession}
+        initialParams={{ date: new Date().toString() }}
+        options={{ title: "Тренировки" }}
+      />
+      <Stack.Screen
         name="Exercise"
         component={Exercise}
         initialParams={{ exerciseID: "e0", trainingID: "s0_0" }}
@@ -40,7 +47,7 @@ export default function DailyHome() {
       <Stack.Screen
         name="NewSet"
         component={NewSet}
-        initialParams={{ exerciseID: "e0", newSessionID: "s0_0" }}
+        initialParams={{ exerciseID: "e0", sessionID: "s0_0" }}
         options={{ presentation: "modal", title: "Новый подход" }}
       />
       <Stack.Screen

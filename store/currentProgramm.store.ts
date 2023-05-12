@@ -132,6 +132,7 @@ export default class CurrentProgrammStore {
       const sessionID = this.createSessionID();
       const session: Session = {
         sessionID: sessionID,
+        trainingID,
         programmID: this.currentProgramm?.id,
         dateStart: Date.now(),
       };

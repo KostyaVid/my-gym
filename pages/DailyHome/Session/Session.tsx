@@ -24,16 +24,23 @@ const Session = observer(({ navigation, route }: Props) => {
   const store = useStore();
   const training = store.currentProgramm.getTraining(trainingID);
 
-  if (training && store.currentProgramm.currentSessionID) {
+  if (training) {
     const session = store.sessions.getSession(sessionID);
 
     return (
       <View>
         <Text>Тренировка: {training.name}</Text>
-        <Text>Время тренировки:</Text>
-        <TimeCounter
-          date={session?.dateStart ? session.dateStart : Date.now()}
-        />
+        {session?.dateEnd ? (
+          <Text>"Завершена"</Text>
+        ) : (
+          <View>
+            <Text>Время тренировки:</Text>
+            <TimeCounter
+              date={session?.dateStart ? session.dateStart : Date.now()}
+            />
+          </View>
+        )}
+
         <FlatList
           data={training.exerciseIDs}
           keyExtractor={(item) => item}
@@ -71,13 +78,17 @@ const Session = observer(({ navigation, route }: Props) => {
             });
           }}
         />
-        <Button
-          title="Завершить тренировку"
-          onPress={() => {
-            store.currentProgramm.endCurrentSession();
-            navigation.navigate("DailyHome", { screen: "Daily" });
-          }}
-        />
+        {session?.dateEnd ? (
+          ""
+        ) : (
+          <Button
+            title="Завершить тренировку"
+            onPress={() => {
+              store.currentProgramm.endCurrentSession();
+              navigation.navigate("DailyHome", { screen: "Daily" });
+            }}
+          />
+        )}
       </View>
     );
   }

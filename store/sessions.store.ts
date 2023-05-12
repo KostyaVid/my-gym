@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export type Session = {
   sessionID: string;
   programmID: string;
+  trainingID: string;
   dateStart: number;
   dateEnd?: number;
 };

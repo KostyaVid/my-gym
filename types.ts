@@ -19,6 +19,7 @@ export type DailyStackList = {
   Daily: undefined;
   Training: { trainingID: string };
   Session: { sessionID: string; trainingID: string };
+  ChooseSession: { date: number };
   Exercise: { exerciseID: string; trainingID: string; sessionID: string };
   NewSet: { exerciseID: string; trainingID: string; sessionID: string };
   AddExercise: { trainingID: string; sessionID: string };
