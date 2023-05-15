@@ -25,6 +25,12 @@ export default class RootStore {
     this.exercisesResults.loadExerciseStore();
     this.sessions.loadSessionStorage();
   }
+
+  getExercise(exerciseID: string) {
+    let exercise = exerciseData.find((item) => item.id === exerciseID);
+    if (!exercise) exercise = this.customExercises.getExercise(exerciseID);
+    return exercise;
+  }
 }
 
 export const RootStoreContext = createContext<RootStore | null>(null);

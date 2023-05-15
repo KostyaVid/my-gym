@@ -51,6 +51,12 @@ const AddExercise = observer(({ navigation, route }: Props) => {
         )}
         keyExtractor={(item) => item.id}
       />
+      <Button
+        title="Создать новое"
+        onPress={() => {
+          navigation.navigate("DailyHome", { screen: "NewExercise" });
+        }}
+      />
     </View>
   );
 });

@@ -5,7 +5,6 @@ import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
-import { exerciseData } from "../../../data/exercises";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -27,8 +26,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
     (item) => item.sessionID === sessionID
   );
 
-  let exercise = exerciseData.find((item) => item.id === exerciseID);
-  if (!exercise) exercise = store.customExercises.getExercise(exerciseID);
+  let exercise = store.getExercise(exerciseID);
 
   return (
     <View>
