@@ -12,6 +12,7 @@ import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
+import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -53,6 +54,11 @@ const AddExercise = observer(({ navigation, route }: Props) => {
       />
       <Button
         title="Создать новое"
+        onPress={() => {
+          navigation.navigate("DailyHome", { screen: "NewExercise" });
+        }}
+      />
+      <PlusButton
         onPress={() => {
           navigation.navigate("DailyHome", { screen: "NewExercise" });
         }}

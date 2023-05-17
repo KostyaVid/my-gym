@@ -5,6 +5,7 @@ import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
+import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,7 +30,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
   let exercise = store.getExercise(exerciseID);
 
   return (
-    <View>
+    <View style={style.container}>
       {exercise && <Text>{exercise.name}</Text>}
       {exerciseSession ? (
         <FlatList
@@ -46,21 +47,9 @@ const Exercise = observer(({ navigation, route }: Props) => {
           )}
         />
       ) : (
-        <Text>Добавить подход</Text>
+        <Text>Еще не выполнялось</Text>
       )}
-      <Button
-        title="+"
-        onPress={() => {
-          navigation.navigate("DailyHome", {
-            screen: "NewSet",
-            params: {
-              exerciseID,
-              trainingID,
-              sessionID,
-            },
-          });
-        }}
-      />
+
       {exerciseSession?.isFinish || (
         <Button
           title="Завершить"
@@ -77,15 +66,30 @@ const Exercise = observer(({ navigation, route }: Props) => {
         Средняя предыдущая интенсивность:
         {store.exercisesResults.getValueWorkSetsLastSession(exerciseID)}
       </Text>
+      <PlusButton
+        onPress={() => {
+          navigation.navigate("DailyHome", {
+            screen: "NewSet",
+            params: {
+              exerciseID,
+              trainingID,
+              sessionID,
+            },
+          });
+        }}
+      />
     </View>
   );
 });
 
 const style = StyleSheet.create({
-  set: {
+  container: {
     flex: 1,
+  },
+  set: {
     flexDirection: "row",
     justifyContent: "space-around",
+    borderWidth: 1,
   },
 });
 
