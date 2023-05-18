@@ -23,7 +23,7 @@ export default class SessionStore {
     makeAutoObservable(this);
   }
 
-  *loadSessionStorage() {
+  *loadStorage() {
     this.state = "pending";
     try {
       const res: string | null = yield AsyncStorage.getItem("@Sessions");
@@ -66,7 +66,7 @@ export default class SessionStore {
     return this.sessions.find((item) => item.sessionID === sessionID);
   }
 
-  async saveStore() {
+  private async saveStore() {
     try {
       this.state = "pending";
       await AsyncStorage.setItem("@Sessions", JSON.stringify(this.sessions));

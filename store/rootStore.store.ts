@@ -5,25 +5,29 @@ import ExerciseStore from "./exercise.store";
 import SessionStore from "./sessions.store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { exerciseData } from "../data/exercises";
+import ThemeStore from "./theme.store";
 
 export default class RootStore {
   currentProgramm: CurrentProgrammStore;
   customExercises: CustomExercisesStore;
   exercisesResults: ExerciseStore;
   sessions: SessionStore;
+  theme: ThemeStore;
   constructor() {
     this.currentProgramm = new CurrentProgrammStore(this);
     this.customExercises = new CustomExercisesStore();
     this.exercisesResults = new ExerciseStore(this);
     this.sessions = new SessionStore(this);
+    this.theme = new ThemeStore();
     this.init();
   }
   async init() {
     if (__DEV__) await AsyncStorage.clear();
-    this.currentProgramm.loadCurrentProgramm();
-    this.customExercises.loadCustomExercises();
-    this.exercisesResults.loadExerciseStore();
-    this.sessions.loadSessionStorage();
+    this.theme.loadStorage();
+    this.currentProgramm.loadStorage();
+    this.customExercises.loadStorage();
+    this.exercisesResults.loadStorage();
+    this.sessions.loadStorage();
   }
 
   getExercise(exerciseID: string) {

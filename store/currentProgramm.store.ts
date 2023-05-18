@@ -97,7 +97,7 @@ export default class CurrentProgrammStore {
     yield this.saveStore();
   }
 
-  *loadCurrentProgramm() {
+  *loadStorage() {
     this.state = "pending";
     try {
       const data: string | null = yield AsyncStorage.getItem(
@@ -154,7 +154,7 @@ export default class CurrentProgrammStore {
     }
   }
 
-  async saveStore() {
+  private async saveStore() {
     this.state = "pending";
     try {
       await AsyncStorage.setItem(

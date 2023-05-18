@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { observer } from "mobx-react-lite";
 import { RouteProp } from "@react-navigation/native";
 import { DailyStackList, RootStackParamList } from "../../../types";
@@ -21,12 +21,9 @@ const Training = observer(({ route }: TrainingProps) => {
   const id = route.params.trainingID;
   const training = programm?.trainings.find((item) => item.id === id);
   return (
-    <SafeAreaView>
-      <StatusBar />
-      <View>
-        <Text>Тренировка: {training?.name}</Text>
-      </View>
-    </SafeAreaView>
+    <View>
+      <Text>Тренировка: {training?.name}</Text>
+    </View>
   );
 });
 

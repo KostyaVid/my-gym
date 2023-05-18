@@ -6,7 +6,7 @@ export type RootStackParamList = {
   Home: undefined;
   DailyHome: NavigatorScreenParams<DailyStackList>;
   ProgrammsHome: NavigatorScreenParams<ProgrammStackList>;
-  Else: undefined;
+  ElseHome: NavigatorScreenParams<ElseStackList>;
 };
 
 export type ProgrammStackList = {
@@ -25,4 +25,9 @@ export type DailyStackList = {
   AddExercise: { trainingID: string; sessionID: string };
   NewExercise: undefined;
   Dimension: undefined;
+};
+
+export type ElseStackList = {
+  Else: undefined;
+  Settings: undefined;
 };

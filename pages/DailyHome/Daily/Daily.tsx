@@ -1,8 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   FlatList,
-  SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -32,54 +30,51 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
 
   if (programm)
     return (
-      <SafeAreaView>
-        <StatusBar />
-        <View>
-          <Text>Текущая программа: {programm.name}</Text>
-          <FlatList
-            data={programm.trainings}
-            renderItem={({ item }) => (
-              <View style={style.session}>
-                <TouchableHighlight
-                  activeOpacity={0.6}
-                  onPress={() => {
+      <View>
+        <Text>Текущая программа: {programm.name}</Text>
+        <FlatList
+          data={programm.trainings}
+          renderItem={({ item }) => (
+            <View style={style.session}>
+              <TouchableHighlight
+                activeOpacity={0.6}
+                onPress={() => {
+                  navigation.navigate("DailyHome", {
+                    screen: "Training",
+                    params: { trainingID: item.id },
+                  });
+                }}
+              >
+                <Text>{item.name}</Text>
+              </TouchableHighlight>
+              <Button
+                title="Начать"
+                onPress={() => {
+                  store.currentProgramm.startSession(item.id);
+                  if (store.currentProgramm.currentSessionID)
                     navigation.navigate("DailyHome", {
-                      screen: "Training",
-                      params: { trainingID: item.id },
+                      screen: "Session",
+                      params: {
+                        sessionID: store.currentProgramm.currentSessionID,
+                        trainingID: item.id,
+                      },
                     });
-                  }}
-                >
-                  <Text>{item.name}</Text>
-                </TouchableHighlight>
-                <Button
-                  title="Начать"
-                  onPress={() => {
-                    store.currentProgramm.startSession(item.id);
-                    if (store.currentProgramm.currentSessionID)
-                      navigation.navigate("DailyHome", {
-                        screen: "Session",
-                        params: {
-                          sessionID: store.currentProgramm.currentSessionID,
-                          trainingID: item.id,
-                        },
-                      });
-                  }}
-                />
-              </View>
-            )}
-            keyExtractor={(item) => item.id}
-          ></FlatList>
-          <View>
-            <Text>Замеры </Text>
-            <Button
-              title="Замеры"
-              onPress={() => {
-                navigation.navigate("DailyHome", { screen: "Dimension" });
-              }}
-            />
-          </View>
+                }}
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+        ></FlatList>
+        <View>
+          <Text>Замеры </Text>
+          <Button
+            title="Замеры"
+            onPress={() => {
+              navigation.navigate("DailyHome", { screen: "Dimension" });
+            }}
+          />
         </View>
-      </SafeAreaView>
+      </View>
     );
   return <Text>Do not choose programm</Text>;
 });

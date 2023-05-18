@@ -31,7 +31,7 @@ export default class CustomExerciseStore {
     return this.exercises.find((item) => item.id === exerciseID);
   };
 
-  *loadCustomExercises() {
+  *loadStorage() {
     this.state = "pending";
     try {
       const data: string | null = yield AsyncStorage.getItem(
@@ -75,7 +75,7 @@ export default class CustomExerciseStore {
     this.state = "done";
   }
 
-  async saveStore() {
+  private async saveStore() {
     try {
       await AsyncStorage.setItem(
         "@CustomExercises",

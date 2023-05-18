@@ -36,7 +36,7 @@ export default class ExerciseStore {
     return this.exercises.findLast((item) => item.id === exerciseID);
   }
 
-  async loadExerciseStore() {
+  async loadStorage() {
     this.state = "pending";
 
     try {
@@ -141,7 +141,7 @@ export default class ExerciseStore {
     }
   }
 
-  async saveStore(exerciseID: string, exercise: ExerciseResults) {
+  private async saveStore(exerciseID: string, exercise: ExerciseResults) {
     const data = JSON.stringify(exercise);
     if (data) {
       this.state = "pending";
