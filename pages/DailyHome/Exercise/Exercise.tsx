@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
+import P from "../../../components/P/P";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -31,7 +32,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
 
   return (
     <View style={style.container}>
-      {exercise && <Text>{exercise.name}</Text>}
+      {exercise && <P>{exercise.name}</P>}
       {exerciseSession ? (
         <FlatList
           data={exerciseSession.sets}
@@ -39,10 +40,10 @@ const Exercise = observer(({ navigation, route }: Props) => {
           renderItem={({ item }) => (
             <View>
               <View style={style.set}>
-                <Text>{item.weight}</Text>
-                <Text>{item.count}</Text>
+                <P>{item.weight}</P>
+                <P>{item.count}</P>
               </View>
-              {item.comment && <Text>{item.comment}</Text>}
+              {item.comment && <P>{item.comment}</P>}
             </View>
           )}
         />
@@ -62,10 +63,10 @@ const Exercise = observer(({ navigation, route }: Props) => {
           }}
         />
       )}
-      <Text>
+      <P>
         Средняя предыдущая интенсивность:
         {store.exercisesResults.getValueWorkSetsLastSession(exerciseID)}
-      </Text>
+      </P>
       <PlusButton
         onPress={() => {
           navigation.navigate("DailyHome", {

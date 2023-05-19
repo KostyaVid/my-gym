@@ -11,6 +11,7 @@ import { programmsData } from "../../../data/programms";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../types";
 import { useStore } from "../../../store/rootStore.store";
+import P from "../../../components/P/P";
 
 type ProgrammsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,7 +30,7 @@ const Programms = ({ navigation }: Props) => {
   const currentProgramm = useStore().currentProgramm;
   return (
     <View>
-      <Text>Programms:</Text>
+      <P>Programms:</P>
       <SectionList
         sections={data}
         renderItem={({ item }) => (
@@ -42,7 +43,7 @@ const Programms = ({ navigation }: Props) => {
               });
             }}
           >
-            <Text>{item.name}</Text>
+            <P>{item.name}</P>
           </TouchableHighlight>
         )}
         renderSectionHeader={({ section }) => (
@@ -56,7 +57,7 @@ const Programms = ({ navigation }: Props) => {
                 });
               }}
             >
-              <Text>{section.title}</Text>
+              <P>{section.title}</P>
             </TouchableHighlight>
             <Button
               title="Применить"

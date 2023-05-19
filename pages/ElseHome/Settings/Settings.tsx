@@ -2,22 +2,28 @@ import { View, StyleSheet, Text, Switch } from "react-native";
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
+import P from "../../../components/P/P";
 
 const Settings = observer(() => {
-  const [myScheme, setMyScheme] = useState(false);
-  const toggleMyScheme = () => setMyScheme((previousState) => !previousState);
-
-  const [scheme, setScheme] = useState(false);
-  const toggleScheme = () => setScheme((previousState) => !previousState);
-
   const store = useStore();
+
+  const toggleMyScheme = (value: boolean) => {
+    store.theme.setScheme(value ? "light" : "default");
+  };
+
+  const toggleScheme = (value: boolean) => {
+    store.theme.setScheme(value ? "dark" : "light");
+  };
+
+  const myScheme = store.theme.scheme === "default" ? false : true;
+  const scheme = store.theme.scheme === "dark" ? true : false;
 
   return (
     <View style={style.container}>
       <View>
-        <Text>Цветовая тема:</Text>
+        <P>Цветовая тема:</P>
         <View style={style.line}>
-          <Text>Тема устройства</Text>
+          <P>Тема устройства</P>
           <Switch
             trackColor={{ false: "#767577", true: "#81b0ff" }}
             thumbColor={"#f4f3f4"}
@@ -25,11 +31,11 @@ const Settings = observer(() => {
             value={myScheme}
             onValueChange={toggleMyScheme}
           />
-          <Text>Своя</Text>
+          <P>Своя</P>
         </View>
         {myScheme && (
           <View style={style.line}>
-            <Text>Светлая</Text>
+            <P>Светлая</P>
             <Switch
               trackColor={{ false: "#767577", true: "#81b0ff" }}
               thumbColor={"#f4f3f4"}
@@ -37,7 +43,7 @@ const Settings = observer(() => {
               value={scheme}
               onValueChange={toggleScheme}
             />
-            <Text>Темная</Text>
+            <P>Темная</P>
           </View>
         )}
       </View>

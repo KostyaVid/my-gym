@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import { Set } from "../../../store/exercise.store";
+import P from "../../../components/P/P";
 
 type NewSetScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,13 +30,13 @@ const NewSet = observer(({ navigation, route }: Props) => {
 
   return (
     <View>
-      <Text>Вес:</Text>
+      <P>Вес:</P>
       <TextInput
         keyboardType="numeric"
         value={weight}
         onChangeText={setWeight}
       />
-      <Text>Количество:</Text>
+      <P>Количество:</P>
       <TextInput keyboardType="numeric" value={count} onChangeText={setCount} />
       <Button
         title="Отмена"

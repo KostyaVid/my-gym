@@ -1,6 +1,7 @@
 import { View, Text, ImageSourcePropType } from "react-native";
 import React from "react";
 import { observer } from "mobx-react-lite";
+import P from "../P/P";
 
 export type MuscleInvolve = "none" | "maximum" | "average" | "minimum";
 export type Muscle =
@@ -37,7 +38,7 @@ export type ExerciseSecondaryProps = {
 const ExerciseC: React.FC<ExerciseProps> = observer(({ name }) => {
   return (
     <View>
-      <Text>{name}</Text>
+      <P>{name}</P>
     </View>
   );
 });

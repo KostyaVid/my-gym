@@ -5,6 +5,7 @@ import { RouteProp } from "@react-navigation/native";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useStore } from "../../../store/rootStore.store";
+import P from "../../../components/P/P";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -22,7 +23,7 @@ const Training = observer(({ route }: TrainingProps) => {
   const training = programm?.trainings.find((item) => item.id === id);
   return (
     <View>
-      <Text>Тренировка: {training?.name}</Text>
+      <P>Тренировка: {training?.name}</P>
     </View>
   );
 });

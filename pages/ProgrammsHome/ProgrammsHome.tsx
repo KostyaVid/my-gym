@@ -4,12 +4,13 @@ import Programms from "./Programms/Programms";
 import Programm from "./Programm/Programm";
 import Session from "./Session/Session";
 import { ProgrammStackList } from "../../types";
+import NestingStackNavigator from "../../components/NestingStackNavigator/NestingStackNavigator";
 
 const Stack = createNativeStackNavigator<ProgrammStackList>();
 
 export default function ProgrammsHome() {
   return (
-    <Stack.Navigator initialRouteName="Programms">
+    <NestingStackNavigator Stack={Stack}>
       <Stack.Screen
         name="Programms"
         component={Programms}
@@ -35,6 +36,6 @@ export default function ProgrammsHome() {
         }}
         options={{ title: "Тренировка" }}
       />
-    </Stack.Navigator>
+    </NestingStackNavigator>
   );
 }

@@ -1,5 +1,6 @@
 import { Text } from "react-native";
 import React, { useEffect, useState } from "react";
+import P from "../P/P";
 
 type Props = {
   date: number;
@@ -21,9 +22,9 @@ const TimeCounter = ({ date }: Props) => {
     };
   }, []);
   return (
-    <Text>
+    <P>
       {hours}:{minuts}:{seconds}
-    </Text>
+    </P>
   );
 };
 

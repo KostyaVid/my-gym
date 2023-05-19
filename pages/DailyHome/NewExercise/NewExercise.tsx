@@ -16,6 +16,7 @@ import { useStore } from "../../../store/rootStore.store";
 import SelectDropdown from "react-native-select-dropdown";
 import { ExerciseType } from "../../../components/ExerciseC/ExerciseC";
 import { ExerciseFullProps } from "../../../data/exercises";
+import P from "../../../components/P/P";
 
 const exerciseTypeData: ExerciseType[] = [
   "cardio",
@@ -46,7 +47,7 @@ const NewExercise = observer(({ navigation, route }: Props) => {
   return (
     <View>
       <View style={style.label}>
-        <Text>Название: </Text>
+        <P>Название: </P>
         <TextInput
           placeholder="Упражнение 1"
           onChangeText={nameHandle}
@@ -54,7 +55,7 @@ const NewExercise = observer(({ navigation, route }: Props) => {
         />
       </View>
       <View style={style.label}>
-        <Text>Вид: </Text>
+        <P>Вид: </P>
         <SelectDropdown
           data={exerciseTypeData}
           defaultButtonText="Не выбран"

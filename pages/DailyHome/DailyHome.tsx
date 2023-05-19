@@ -10,12 +10,13 @@ import NewSet from "./NewSet/NewSet";
 import AddExercise from "./AddExercise/AddExercise";
 import ChooseSession from "./ChooseSession/ChooseSession";
 import NewExercise from "./NewExercise/NewExercise";
+import NestingStackNavigator from "../../components/NestingStackNavigator/NestingStackNavigator";
 
 const Stack = createNativeStackNavigator<DailyStackList>();
 
 export default function DailyHome() {
   return (
-    <Stack.Navigator>
+    <NestingStackNavigator Stack={Stack}>
       <Stack.Screen
         name="Daily"
         component={Daily}
@@ -63,6 +64,6 @@ export default function DailyHome() {
       />
 
       <Stack.Screen name="Dimension" component={Dimension} />
-    </Stack.Navigator>
+    </NestingStackNavigator>
   );
 }

@@ -15,6 +15,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
 import { exerciseData } from "../../../data/exercises";
+import P from "../../../components/P/P";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -61,7 +62,7 @@ const Session = observer(({ navigation, route }: Props) => {
                 style={{ width: 60, height: 60, borderRadius: 30 }}
               />
             )}
-            <Text>{(index + 1).toString() + ". " + exercise?.name}</Text>
+            <P>{(index + 1).toString() + ". " + exercise?.name}</P>
             {store.exercisesResults.getExerciseSession(item, sessionID)
               ?.isFinish && <Text>Завершено</Text>}
           </View>
@@ -73,12 +74,12 @@ const Session = observer(({ navigation, route }: Props) => {
 
     return (
       <View>
-        <Text>Тренировка: {training.name}</Text>
+        <P>Тренировка: {training.name}</P>
         {session?.dateEnd ? (
-          <Text>"Завершена"</Text>
+          <P>"Завершена"</P>
         ) : (
           <View>
-            <Text>Время тренировки:</Text>
+            <P>Время тренировки:</P>
             <TimeCounter
               date={session?.dateStart ? session.dateStart : Date.now()}
             />
@@ -116,7 +117,7 @@ const Session = observer(({ navigation, route }: Props) => {
 
   return (
     <View>
-      <Text>Oops</Text>
+      <P>Oops</P>
     </View>
   );
 });

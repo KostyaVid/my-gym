@@ -13,6 +13,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
+import P from "../../../components/P/P";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,7 +37,7 @@ const AddExercise = observer(({ navigation, route }: Props) => {
         renderItem={({ item }) => (
           <View>
             <TouchableHighlight>
-              <Text>{item.name}</Text>
+              <P>{item.name}</P>
             </TouchableHighlight>
             <Button
               title="Добавить"

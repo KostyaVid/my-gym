@@ -13,6 +13,7 @@ import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
 import { useStore } from "../../../store/rootStore.store";
 import { ProgrammDataProps } from "../../../data/programms";
+import P from "../../../components/P/P";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -45,7 +46,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                   });
                 }}
               >
-                <Text>{item.name}</Text>
+                <P>{item.name}</P>
               </TouchableHighlight>
               <Button
                 title="Начать"
@@ -66,7 +67,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
           keyExtractor={(item) => item.id}
         ></FlatList>
         <View>
-          <Text>Замеры </Text>
+          <P>Замеры </P>
           <Button
             title="Замеры"
             onPress={() => {
@@ -76,7 +77,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
         </View>
       </View>
     );
-  return <Text>Do not choose programm</Text>;
+  return <P>Do not choose programm</P>;
 });
 
 const style = StyleSheet.create({

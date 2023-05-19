@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import moment from "moment";
+import P from "../../../components/P/P";
 
 type ChooseSessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -23,7 +24,7 @@ const ChooseSession = observer(({ navigation, route }: Props) => {
   const sessions = store.sessions.sessions.filter((sess) =>
     moment(sess.dateStart).startOf("day").isSame(date)
   );
-  if (!sessions) return <Text>В данный день не найдены тренировки</Text>;
+  if (!sessions) return <P>В данный день не найдены тренировки</P>;
   return (
     <FlatList
       data={sessions}
@@ -40,7 +41,7 @@ const ChooseSession = observer(({ navigation, route }: Props) => {
             });
           }}
         >
-          <Text>{item.trainingID}</Text>
+          <P>{item.trainingID}</P>
         </TouchableHighlight>
       )}
     />

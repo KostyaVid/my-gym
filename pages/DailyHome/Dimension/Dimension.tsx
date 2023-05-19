@@ -1,10 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
+import P from "../../../components/P/P";
 
 const Dimension = () => {
   return (
     <View>
-      <Text>Dimension</Text>
+      <P>Dimension</P>
     </View>
   );
 };

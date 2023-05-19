@@ -6,13 +6,11 @@ import Else from "./pages/ElseHome/Else/Else";
 
 import ProgrammsHome from "./pages/ProgrammsHome/ProgrammsHome";
 import { RootStoreContext, rootStore } from "./store/rootStore.store";
-import { StatusBar } from "react-native";
 import Navigation from "./Navigation";
 
 const App = () => {
   return (
     <RootStoreContext.Provider value={rootStore}>
-      <StatusBar animated={true} hidden={false} />
       <Navigation />
     </RootStoreContext.Provider>
   );
