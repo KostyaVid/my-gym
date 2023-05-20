@@ -11,8 +11,9 @@ export type RootStackParamList = {
 
 export type ProgrammStackList = {
   Programms: undefined;
-  Programm: { id: string };
-  Session: { id: string };
+  Programm: { programmID: string };
+  Training: { programmID: string; trainingID: string };
+  Exercise: { exerciseID: string };
 };
 
 export type DailyStackList = {

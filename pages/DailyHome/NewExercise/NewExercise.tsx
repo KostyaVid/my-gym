@@ -1,12 +1,4 @@
-import {
-  Button,
-  NativeSyntheticEvent,
-  StyleSheet,
-  Text,
-  TextInput,
-  TextInputChangeEventData,
-  View,
-} from "react-native";
+import { Button, StyleSheet, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -14,9 +6,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import SelectDropdown from "react-native-select-dropdown";
-import { ExerciseType } from "../../../components/ExerciseC/ExerciseC";
-import { ExerciseFullProps } from "../../../data/exercises";
+import { ExerciseFullProps, ExerciseType } from "../../../data/exercises";
 import P from "../../../components/P/P";
+import globalStyle from "../../../utils/styles";
 
 const exerciseTypeData: ExerciseType[] = [
   "cardio",
@@ -45,7 +37,7 @@ const NewExercise = observer(({ navigation, route }: Props) => {
   };
 
   return (
-    <View>
+    <View style={globalStyle.container}>
       <View style={style.label}>
         <P>Название: </P>
         <TextInput

@@ -1,4 +1,4 @@
-import { View, Text, Button, TextInput } from "react-native";
+import { View, Button, TextInput } from "react-native";
 import React, { useState } from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import { Set } from "../../../store/exercise.store";
 import P from "../../../components/P/P";
+import globalStyle from "../../../utils/styles";
 
 type NewSetScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,7 +30,7 @@ const NewSet = observer(({ navigation, route }: Props) => {
   const exercise = store.exercisesResults.getExercise(exerciseID);
 
   return (
-    <View>
+    <View style={globalStyle.container}>
       <P>Вес:</P>
       <TextInput
         keyboardType="numeric"

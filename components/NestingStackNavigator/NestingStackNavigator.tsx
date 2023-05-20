@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React, { ReactNode } from "react";
 import { useTheme } from "@react-navigation/native";
 

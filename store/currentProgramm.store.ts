@@ -139,7 +139,7 @@ export default class CurrentProgrammStore {
       this.rootStore.sessions.addSession(session);
       this.currentSessionID = sessionID;
       this.currentTrainingID = trainingID;
-      yield this.saveStore();
+      this.saveStore();
     } else {
       console.log("there is not current programm");
     }

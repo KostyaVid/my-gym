@@ -1,7 +1,6 @@
 import { makeAutoObservable } from "mobx";
-import { Muscle } from "../components/ExerciseC/ExerciseC";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ExerciseFullProps, exerciseData } from "../data/exercises";
+import { ExerciseFullProps, Muscle, exerciseData } from "../data/exercises";
 import { State } from "../types";
 
 export default class CustomExerciseStore {

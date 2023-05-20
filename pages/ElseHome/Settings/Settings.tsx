@@ -1,8 +1,9 @@
-import { View, StyleSheet, Text, Switch } from "react-native";
-import React, { useState } from "react";
+import { View, StyleSheet, Switch } from "react-native";
+import React from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import P from "../../../components/P/P";
+import globalStyle from "../../../utils/styles";
 
 const Settings = observer(() => {
   const store = useStore();
@@ -19,7 +20,7 @@ const Settings = observer(() => {
   const scheme = store.theme.scheme === "dark" ? true : false;
 
   return (
-    <View style={style.container}>
+    <View style={globalStyle.container}>
       <View>
         <P>Цветовая тема:</P>
         <View style={style.line}>
@@ -52,9 +53,6 @@ const Settings = observer(() => {
 });
 
 const style = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   line: {
     flexDirection: "row",
     alignItems: "center",

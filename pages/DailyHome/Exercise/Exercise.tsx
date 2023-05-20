@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet, Button } from "react-native";
+import { View, FlatList, StyleSheet, Button } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
 import P from "../../../components/P/P";
+import globalStyle from "../../../utils/styles";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -31,7 +32,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
   let exercise = store.getExercise(exerciseID);
 
   return (
-    <View style={style.container}>
+    <View style={globalStyle.container}>
       {exercise && <P>{exercise.name}</P>}
       {exerciseSession ? (
         <FlatList
@@ -48,7 +49,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
           )}
         />
       ) : (
-        <Text>Еще не выполнялось</Text>
+        <P>Еще не выполнялось</P>
       )}
 
       {exerciseSession?.isFinish || (
@@ -84,9 +85,6 @@ const Exercise = observer(({ navigation, route }: Props) => {
 });
 
 const style = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   set: {
     flexDirection: "row",
     justifyContent: "space-around",

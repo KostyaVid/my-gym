@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableHighlight,
-  Button,
-  Image,
-  ListRenderItem,
-} from "react-native";
+import { View, FlatList, Button, ListRenderItem } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -14,8 +6,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
-import { exerciseData } from "../../../data/exercises";
 import P from "../../../components/P/P";
+import ExerciseView from "../../../components/ExerciseView/ExerciseView";
+import globalStyle from "../../../utils/styles";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -35,10 +28,11 @@ const Session = observer(({ navigation, route }: Props) => {
 
   if (training) {
     const renderExersice: ListRenderItem<string> = ({ item, index }) => {
-      const exercise = store.getExercise(item);
-
       return (
-        <TouchableHighlight
+        <ExerciseView
+          order={index + 1}
+          sessionID={sessionID}
+          exerciseID={item}
           onPress={() => {
             navigation.navigate("DailyHome", {
               screen: "Exercise",
@@ -49,31 +43,14 @@ const Session = observer(({ navigation, route }: Props) => {
               },
             });
           }}
-        >
-          <View>
-            {exercise?.thumbImg ? (
-              <Image
-                source={exercise.thumbImg}
-                style={{ width: 60, height: 60, borderRadius: 30 }}
-              />
-            ) : (
-              <Image
-                source={require("./../../../data/imgExercises/none.jpg")}
-                style={{ width: 60, height: 60, borderRadius: 30 }}
-              />
-            )}
-            <P>{(index + 1).toString() + ". " + exercise?.name}</P>
-            {store.exercisesResults.getExerciseSession(item, sessionID)
-              ?.isFinish && <Text>Завершено</Text>}
-          </View>
-        </TouchableHighlight>
+        />
       );
     };
 
     const session = store.sessions.getSession(sessionID);
 
     return (
-      <View>
+      <View style={globalStyle.container}>
         <P>Тренировка: {training.name}</P>
         {session?.dateEnd ? (
           <P>"Завершена"</P>

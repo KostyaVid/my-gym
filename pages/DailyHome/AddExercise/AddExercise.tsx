@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  Button,
-  TouchableHighlight,
-} from "react-native";
+import { View, FlatList, StyleSheet, Button } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -13,6 +6,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
+import ExerciseView from "../../../components/ExerciseView/ExerciseView";
+import globalStyle from "../../../utils/styles";
 import P from "../../../components/P/P";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
@@ -30,15 +25,17 @@ const AddExercise = observer(({ navigation, route }: Props) => {
   const trainingID = route.params.trainingID;
   const store = useStore();
   return (
-    <View>
-      <Text>Выберите упражнение</Text>
+    <View style={globalStyle.container}>
+      <P>Выберите упражнение</P>
       <FlatList
         data={store.customExercises.getAllExercisesSorted}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View>
-            <TouchableHighlight>
-              <P>{item.name}</P>
-            </TouchableHighlight>
+            <ExerciseView
+              order={index + 1}
+              sessionID={sessionID}
+              exerciseID={item.id}
+            />
             <Button
               title="Добавить"
               onPress={() => {

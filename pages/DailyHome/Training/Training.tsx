@@ -1,11 +1,12 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { observer } from "mobx-react-lite";
 import { RouteProp } from "@react-navigation/native";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useStore } from "../../../store/rootStore.store";
 import P from "../../../components/P/P";
+import globalStyle from "../../../utils/styles";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -22,7 +23,7 @@ const Training = observer(({ route }: TrainingProps) => {
   const id = route.params.trainingID;
   const training = programm?.trainings.find((item) => item.id === id);
   return (
-    <View>
+    <View style={globalStyle.container}>
       <P>Тренировка: {training?.name}</P>
     </View>
   );

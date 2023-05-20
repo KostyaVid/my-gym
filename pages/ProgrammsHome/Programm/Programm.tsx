@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import ProgrammC from "../../../components/ProgrammC/ProgrammC";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ProgrammStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
+import globalStyle from "../../../utils/styles";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -16,7 +17,11 @@ type Props = {
 };
 
 const Programm = ({ route }: Props) => {
-  return <ProgrammC id={route.params.id} />;
+  return (
+    <View style={globalStyle.container}>
+      <ProgrammC id={route.params.programmID} />
+    </View>
+  );
 };
 
 export default Programm;

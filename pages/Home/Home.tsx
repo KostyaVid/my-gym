@@ -1,19 +1,44 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Text, View } from "react-native";
+import { TouchableHighlight, View } from "react-native";
 import { useStore } from "../../store/rootStore.store";
 import Calendar from "../../components/Calendar/Calendar";
-import { useTheme } from "@react-navigation/native";
 import P from "../../components/P/P";
+import globalStyle from "../../utils/styles";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../types";
+import { RouteProp } from "@react-navigation/native";
 
-const Home = observer(() => {
-  const state = useStore();
-  const theme = useTheme();
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
+
+type Props = {
+  navigation: HomeScreenNavigationProp;
+};
+
+const Home: React.FC<Props> = observer(({ navigation }) => {
+  const store = useStore();
+  const currentProgramm = store.currentProgramm.currentProgramm;
 
   return (
-    <View style={{ backgroundColor: theme.colors.background }}>
+    <View style={globalStyle.container}>
       <Calendar />
-      <P>Выбранная программа: {state.currentProgramm.currentProgramm?.name}</P>
+      <P>Выбранная программа:</P>
+      {currentProgramm ? (
+        <TouchableHighlight
+          onPress={() => {
+            navigation.navigate("DailyHome", {
+              screen: "Daily",
+            });
+          }}
+        >
+          <P>{currentProgramm.name}</P>
+        </TouchableHighlight>
+      ) : (
+        <P>Не выбрана</P>
+      )}
     </View>
   );
 });

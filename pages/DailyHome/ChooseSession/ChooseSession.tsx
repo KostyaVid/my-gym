@@ -1,4 +1,4 @@
-import { FlatList, Text, TouchableHighlight, View } from "react-native";
+import { FlatList, TouchableHighlight, View } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import moment from "moment";
 import P from "../../../components/P/P";
+import globalStyle from "../../../utils/styles";
 
 type ChooseSessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -26,25 +27,27 @@ const ChooseSession = observer(({ navigation, route }: Props) => {
   );
   if (!sessions) return <P>В данный день не найдены тренировки</P>;
   return (
-    <FlatList
-      data={sessions}
-      keyExtractor={(item) => item.sessionID}
-      renderItem={({ item }) => (
-        <TouchableHighlight
-          onPress={() => {
-            navigation.navigate("DailyHome", {
-              screen: "Session",
-              params: {
-                sessionID: item.sessionID,
-                trainingID: item.trainingID,
-              },
-            });
-          }}
-        >
-          <P>{item.trainingID}</P>
-        </TouchableHighlight>
-      )}
-    />
+    <View style={globalStyle.container}>
+      <FlatList
+        data={sessions}
+        keyExtractor={(item) => item.sessionID}
+        renderItem={({ item }) => (
+          <TouchableHighlight
+            onPress={() => {
+              navigation.navigate("DailyHome", {
+                screen: "Session",
+                params: {
+                  sessionID: item.sessionID,
+                  trainingID: item.trainingID,
+                },
+              });
+            }}
+          >
+            <P>{item.trainingID}</P>
+          </TouchableHighlight>
+        )}
+      />
+    </View>
   );
 });
 

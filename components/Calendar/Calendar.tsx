@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet } from "react-native";
 import CalendarPicker, { CustomDateStyle } from "react-native-calendar-picker";
 import React from "react";
 import { useStore } from "../../store/rootStore.store";

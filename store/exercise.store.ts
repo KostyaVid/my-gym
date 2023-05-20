@@ -1,8 +1,8 @@
-import { ExerciseID } from "../components/ExerciseC/ExerciseC";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { makeAutoObservable, runInAction } from "mobx";
 import { State } from "../types";
 import RootStore from "./rootStore.store";
+import { ExerciseID } from "../data/exercises";
 
 export type Set = {
   id: string;

@@ -2,7 +2,6 @@ import {
   Button,
   SectionList,
   StyleSheet,
-  Text,
   TouchableHighlight,
   View,
 } from "react-native";
@@ -12,6 +11,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../types";
 import { useStore } from "../../../store/rootStore.store";
 import P from "../../../components/P/P";
+import globalStyle from "../../../utils/styles";
 
 type ProgrammsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,17 +29,17 @@ const data = programmsData.map((elem) => {
 const Programms = ({ navigation }: Props) => {
   const currentProgramm = useStore().currentProgramm;
   return (
-    <View>
+    <View style={globalStyle.container}>
       <P>Programms:</P>
       <SectionList
         sections={data}
-        renderItem={({ item }) => (
+        renderItem={({ item, section }) => (
           <TouchableHighlight
             activeOpacity={0.6}
             onPress={() => {
               navigation.navigate("ProgrammsHome", {
-                screen: "Session",
-                params: { id: item.id },
+                screen: "Training",
+                params: { trainingID: item.id, programmID: section.id },
               });
             }}
           >
@@ -53,7 +53,7 @@ const Programms = ({ navigation }: Props) => {
               onPress={() => {
                 navigation.navigate("ProgrammsHome", {
                   screen: "Programm",
-                  params: { id: section.id },
+                  params: { programmID: section.id },
                 });
               }}
             >
