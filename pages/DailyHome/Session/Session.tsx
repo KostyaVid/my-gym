@@ -9,6 +9,7 @@ import TimeCounter from "../../../components/TimeCounter/TimeCounter";
 import P from "../../../components/P/P";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import globalStyle from "../../../utils/styles";
+import Card from "../../../components/Card/Card";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -62,12 +63,13 @@ const Session = observer(({ navigation, route }: Props) => {
             />
           </View>
         )}
-
-        <FlatList
-          data={training.exerciseIDs}
-          keyExtractor={(item, index) => item + index}
-          renderItem={renderExersice}
-        />
+        <Card>
+          <FlatList
+            data={training.exerciseIDs}
+            keyExtractor={(item, index) => item + index}
+            renderItem={renderExersice}
+          />
+        </Card>
         <Button
           title="Добавить упражнение"
           onPress={() => {

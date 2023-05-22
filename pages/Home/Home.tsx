@@ -7,7 +7,8 @@ import P from "../../components/P/P";
 import globalStyle from "../../utils/styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { RouteProp } from "@react-navigation/native";
+import Card from "../../components/Card/Card";
+import Container from "../../components/Container/Container";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -25,20 +26,24 @@ const Home: React.FC<Props> = observer(({ navigation }) => {
   return (
     <View style={globalStyle.container}>
       <Calendar />
-      <P>Выбранная программа:</P>
-      {currentProgramm ? (
-        <TouchableHighlight
-          onPress={() => {
-            navigation.navigate("DailyHome", {
-              screen: "Daily",
-            });
-          }}
-        >
-          <P>{currentProgramm.name}</P>
-        </TouchableHighlight>
-      ) : (
-        <P>Не выбрана</P>
-      )}
+      <Card>
+        <Container>
+          <P>Выбранная программа:</P>
+          {currentProgramm ? (
+            <TouchableHighlight
+              onPress={() => {
+                navigation.navigate("DailyHome", {
+                  screen: "Daily",
+                });
+              }}
+            >
+              <P>{currentProgramm.name}</P>
+            </TouchableHighlight>
+          ) : (
+            <P>Не выбрана</P>
+          )}
+        </Container>
+      </Card>
     </View>
   );
 });

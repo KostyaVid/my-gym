@@ -6,7 +6,7 @@ import Else from "./pages/ElseHome/Else/Else";
 
 import ProgrammsHome from "./pages/ProgrammsHome/ProgrammsHome";
 import { RootStoreContext, rootStore } from "./store/rootStore.store";
-import Navigation from "./Navigation";
+import Navigation from "./route/Navigation";
 
 const App = () => {
   return (

@@ -6,7 +6,9 @@ export const GymDefaultTheme: Theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: "rgb(60,60,60)",
+    card: "rgb(245, 245, 245)",
     background: "#ffffff",
+    notification: "rgb(150, 69, 58)",
   },
 };
 export const GymDarkTheme: Theme = {
@@ -14,9 +16,9 @@ export const GymDarkTheme: Theme = {
   colors: {
     primary: "rgb(255, 45, 85)",
     background: "rgb(0, 0, 0)",
-    card: "rgb(200, 200, 200)",
+    card: "rgb(20, 20, 20)",
     text: "rgb(255, 255, 255)",
     border: "rgb(100, 100, 100)",
-    notification: "rgb(255, 69, 58)",
+    notification: "rgb(150, 69, 58)",
   },
 };

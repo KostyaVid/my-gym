@@ -37,6 +37,15 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
 
     const styles: StyleProp<ViewStyle> = [style.container];
     if (isFinish) styles.push(style.disable);
+    if (order === 1)
+      return (
+        <TouchableHighlight onPress={onPress}>
+          <View style={styles}>
+            <ExerciseThumb thumbImg={exercise.thumbImg} />
+            <P>{order.toString() + ". " + exercise?.name}</P>
+          </View>
+        </TouchableHighlight>
+      );
     return (
       <TouchableHighlight onPress={onPress}>
         <View style={[style.border, { borderColor: colors.border }]}>
