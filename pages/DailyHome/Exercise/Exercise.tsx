@@ -8,6 +8,7 @@ import { useStore } from "../../../store/rootStore.store";
 import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
 import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
+import ExerciseResultByData from "../../../components/ExerciseResultByData/ExerciseResultByData";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -80,6 +81,15 @@ const Exercise = observer(({ navigation, route }: Props) => {
           });
         }}
       />
+      {exerciseResult && (
+        <>
+          <ExerciseResultByData exerciseID={exerciseID} order={1} />
+          <ExerciseResultByData exerciseID={exerciseID} order={2} />
+          <ExerciseResultByData exerciseID={exerciseID} order={3} />
+          <ExerciseResultByData exerciseID={exerciseID} order={4} />
+          <ExerciseResultByData exerciseID={exerciseID} order={5} />
+        </>
+      )}
     </View>
   );
 });
