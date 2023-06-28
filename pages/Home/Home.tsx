@@ -22,27 +22,32 @@ type Props = {
 const Home: React.FC<Props> = observer(({ navigation }) => {
   const store = useStore();
   const currentProgramm = store.currentProgramm.currentProgramm;
+  function goToProgramm() {
+    navigation.navigate("DailyHome", {
+      screen: "Daily",
+    });
+  }
+
+  function goToChooseProgramm() {
+    navigation.navigate("ProgrammsHome", { screen: "Programms" });
+  }
 
   return (
     <View style={globalStyle.container}>
       <Calendar />
       <Card>
-        <Container>
-          <P>Выбранная программа:</P>
-          {currentProgramm ? (
-            <TouchableHighlight
-              onPress={() => {
-                navigation.navigate("DailyHome", {
-                  screen: "Daily",
-                });
-              }}
-            >
+        <TouchableHighlight
+          onPress={currentProgramm ? goToProgramm : goToChooseProgramm}
+        >
+          <Container>
+            <P>Выбранная программа:</P>
+            {currentProgramm ? (
               <P>{currentProgramm.name}</P>
-            </TouchableHighlight>
-          ) : (
-            <P>Не выбрана</P>
-          )}
-        </Container>
+            ) : (
+              <P>Не выбрана</P>
+            )}
+          </Container>
+        </TouchableHighlight>
       </Card>
     </View>
   );

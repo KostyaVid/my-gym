@@ -11,6 +11,7 @@ import AddExercise from "./AddExercise/AddExercise";
 import ChooseSession from "./ChooseSession/ChooseSession";
 import NewExercise from "./NewExercise/NewExercise";
 import NestingStackNavigator from "../../components/NestingStackNavigator/NestingStackNavigator";
+import AllResults from "./AllResults/AllResults";
 
 const Stack = createNativeStackNavigator<DailyStackList>();
 
@@ -56,6 +57,12 @@ export default function DailyHome() {
         name="AddExercise"
         component={AddExercise}
         options={{ presentation: "modal", title: "Добавить упражнение" }}
+      />
+      <Stack.Screen
+        name="AllResults"
+        component={AllResults}
+        initialParams={{ exerciseID: "e0" }}
+        options={{ presentation: "modal", title: "Все результаты" }}
       />
       <Stack.Screen
         name="NewExercise"

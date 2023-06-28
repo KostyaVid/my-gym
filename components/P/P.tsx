@@ -6,11 +6,12 @@ import { StyleProp } from "react-native";
 type PProps = {
   children: ReactNode;
   disable?: boolean;
+  style?: StyleProp<TextStyle>;
 };
 
-const P: React.FC<PProps> = ({ children, disable }) => {
+const P: React.FC<PProps> = ({ children, disable, style }) => {
   const { colors } = useTheme();
-  const style = StyleSheet.create({
+  const styleCommon = StyleSheet.create({
     p: {
       color: colors.text,
     },
@@ -19,8 +20,9 @@ const P: React.FC<PProps> = ({ children, disable }) => {
     },
   });
 
-  const styles: StyleProp<TextStyle> = [style.p];
-  if (disable) styles.push(style.disable);
+  const styles: StyleProp<TextStyle> = [styleCommon.p];
+  if (disable) styles.push(styleCommon.disable);
+  if (style) styles.push(style);
 
   return <Text style={styles}>{children}</Text>;
 };

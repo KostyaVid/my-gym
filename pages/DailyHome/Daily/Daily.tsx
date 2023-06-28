@@ -31,7 +31,6 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
   const store = useStore();
   const programm = store.currentProgramm.currentProgramm;
   const currentTrainingID = store.currentProgramm.currentTrainingID;
-  const currentSessionID = store.currentProgramm.currentSessionID;
 
   if (programm)
     return (
@@ -63,15 +62,16 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                   >
                     <P>{item.name}</P>
                   </TouchableHighlight>
-                  {currentTrainingID === item.id && currentSessionID ? (
+                  {currentTrainingID === item.id &&
+                  store.currentProgramm.currentSessionID ? (
                     <Button
                       title="Продолжить"
                       onPress={() => {
-                        if (currentSessionID)
+                        if (store.currentProgramm.currentSessionID)
                           navigation.navigate("DailyHome", {
                             screen: "Session",
                             params: {
-                              sessionID: currentSessionID,
+                              sessionID: store.currentProgramm.currentSessionID,
                               trainingID: item.id,
                             },
                           });
@@ -81,7 +81,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                     <Button
                       title="Начать"
                       onPress={() => {
-                        if (currentSessionID) {
+                        if (store.currentProgramm.currentSessionID) {
                           Alert.alert(
                             "Начать",
                             "Завершить прошлую тренировку?",
@@ -91,13 +91,16 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                                 text: "Перейти на прошлую",
                                 style: "destructive",
                                 onPress: () => {
-                                  navigation.navigate("DailyHome", {
-                                    screen: "Session",
-                                    params: {
-                                      sessionID: currentSessionID,
-                                      trainingID: item.id,
-                                    },
-                                  });
+                                  if (store.currentProgramm.currentSessionID)
+                                    navigation.navigate("DailyHome", {
+                                      screen: "Session",
+                                      params: {
+                                        sessionID:
+                                          store.currentProgramm
+                                            .currentSessionID,
+                                        trainingID: item.id,
+                                      },
+                                    });
                                 },
                               },
                               {
@@ -105,11 +108,13 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                                 style: "default",
                                 onPress: () => {
                                   store.currentProgramm.startSession(item.id);
-                                  if (currentSessionID)
+                                  if (store.currentProgramm.currentSessionID)
                                     navigation.navigate("DailyHome", {
                                       screen: "Session",
                                       params: {
-                                        sessionID: currentSessionID,
+                                        sessionID:
+                                          store.currentProgramm
+                                            .currentSessionID,
                                         trainingID: item.id,
                                       },
                                     });
@@ -119,7 +124,6 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                           );
                         } else {
                           store.currentProgramm.startSession(item.id);
-
                           if (store.currentProgramm.currentSessionID)
                             navigation.navigate("DailyHome", {
                               screen: "Session",

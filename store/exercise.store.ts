@@ -92,8 +92,17 @@ export default class ExerciseStore {
   *addExerciseResultInSession(exerciseID: string, sessionID: string, set: Set) {
     let exercise = this.getExercise(exerciseID);
     if (exercise) {
-      exercise.results[exercise.results.length - 1].sets.push(set);
-      yield this.saveStore(exerciseID, exercise);
+      if (
+        exercise.results[exercise.results.length - 1].sessionID === sessionID
+      ) {
+        exercise.results[exercise.results.length - 1].sets.push(set);
+      } else {
+        exercise.results.push({
+          sessionID: sessionID,
+          sets: [set],
+          isFinish: false,
+        });
+      }
     } else {
       exercise = {
         id: exerciseID,
@@ -104,8 +113,8 @@ export default class ExerciseStore {
         sets: [set],
         isFinish: false,
       });
-      yield this.saveStore(exerciseID, exercise);
     }
+    yield this.saveStore(exerciseID, exercise);
   }
 
   getExerciseSession(exerciseID: string, sessionID: string) {

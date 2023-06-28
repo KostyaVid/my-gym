@@ -26,6 +26,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const trainingID = route.params.trainingID;
   const store = useStore();
   const exerciseResult = store.exercisesResults.getExercise(exerciseID);
+
   const exerciseSession = exerciseResult?.results.findLast(
     (item) => item.sessionID === sessionID
   );
@@ -86,8 +87,15 @@ const Exercise = observer(({ navigation, route }: Props) => {
           <ExerciseResultByData exerciseID={exerciseID} order={1} />
           <ExerciseResultByData exerciseID={exerciseID} order={2} />
           <ExerciseResultByData exerciseID={exerciseID} order={3} />
-          <ExerciseResultByData exerciseID={exerciseID} order={4} />
-          <ExerciseResultByData exerciseID={exerciseID} order={5} />
+          <Button
+            title="Посмотреть все результаты"
+            onPress={() => {
+              navigation.navigate("DailyHome", {
+                screen: "AllResults",
+                params: { exerciseID },
+              });
+            }}
+          />
         </>
       )}
     </View>

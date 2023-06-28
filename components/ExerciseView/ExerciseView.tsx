@@ -13,7 +13,7 @@ import { useTheme } from "@react-navigation/native";
 import ExerciseThumb from "../ExerciseThumb/ExerciseThumb";
 
 type ExerciseViewProps = {
-  order: number;
+  order?: number;
   exerciseID: string;
   sessionID?: string;
   onPress?: () => void;
@@ -37,12 +37,12 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
 
     const styles: StyleProp<ViewStyle> = [style.container];
     if (isFinish) styles.push(style.disable);
-    if (order === 1)
+    if (order === 1 || order === undefined)
       return (
         <TouchableHighlight onPress={onPress}>
           <View style={styles}>
             <ExerciseThumb thumbImg={exercise.thumbImg} />
-            <P>{order.toString() + ". " + exercise?.name}</P>
+            <P>{(order ? order.toString() + ". " : "") + exercise?.name}</P>
           </View>
         </TouchableHighlight>
       );

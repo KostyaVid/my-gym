@@ -8,6 +8,7 @@ import { useStore } from "../../../store/rootStore.store";
 import { Set } from "../../../store/exercise.store";
 import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
+import InputNumber from "../../../components/InputNumber/InputNumber";
 
 type NewSetScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -31,14 +32,13 @@ const NewSet = observer(({ navigation, route }: Props) => {
 
   return (
     <View style={globalStyle.container}>
-      <P>Вес:</P>
-      <TextInput
-        keyboardType="numeric"
-        value={weight}
-        onChangeText={setWeight}
+      <InputNumber title="Вес:" value={weight} setValue={setWeight} />
+      <InputNumber
+        title="Количество:"
+        value={count}
+        setValue={setCount}
+        isInteger={true}
       />
-      <P>Количество:</P>
-      <TextInput keyboardType="numeric" value={count} onChangeText={setCount} />
       <Button
         title="Отмена"
         onPress={() => {
@@ -52,8 +52,8 @@ const NewSet = observer(({ navigation, route }: Props) => {
           const set: Set = {
             id: "p" + date,
             date: date,
-            weight: Number(weight),
-            count: Number(count),
+            weight: Number(weight.length === 0 ? "0" : weight),
+            count: Number(count.length === 0 ? "0" : count),
           };
           if (exercise) {
             store.exercisesResults.addExerciseResultInSession(
