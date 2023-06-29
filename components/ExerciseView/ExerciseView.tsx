@@ -2,6 +2,7 @@ import {
   StyleProp,
   StyleSheet,
   TouchableHighlight,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
@@ -39,7 +40,11 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
     if (isFinish) styles.push(style.disable);
     if (order === 1 || order === undefined)
       return (
-        <TouchableHighlight onPress={onPress}>
+        <TouchableHighlight
+          onPress={onPress}
+          activeOpacity={0.6}
+          underlayColor="rgba(90,90,90,0.5)"
+        >
           <View style={styles}>
             <ExerciseThumb thumbImg={exercise.thumbImg} />
             <P>{(order ? order.toString() + ". " : "") + exercise?.name}</P>
@@ -47,7 +52,11 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
         </TouchableHighlight>
       );
     return (
-      <TouchableHighlight onPress={onPress}>
+      <TouchableHighlight
+        onPress={onPress}
+        activeOpacity={0.6}
+        underlayColor="rgba(90,90,90,0.5)"
+      >
         <View style={[style.border, { borderColor: colors.border }]}>
           <View style={styles}>
             <ExerciseThumb thumbImg={exercise.thumbImg} />

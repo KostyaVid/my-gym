@@ -1,9 +1,16 @@
-import { StyleProp, StyleSheet, TextInput, TextStyle } from "react-native";
+import {
+  StyleProp,
+  StyleSheet,
+  TextInput,
+  TextStyle,
+  View,
+} from "react-native";
 import React, { useCallback } from "react";
 import P from "../P/P";
 import Container from "../Container/Container";
 import { observer } from "mobx-react-lite";
 import { useTheme } from "@react-navigation/native";
+import IncButton from "../Buttons/IncButton/IncButton";
 
 type InputNumberProps = {
   title: string;
@@ -13,6 +20,17 @@ type InputNumberProps = {
 };
 
 const buttonsValues = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
+
+const inc = (text: string) => {
+  const number = parseInt(text);
+  if (isNaN(number)) return text;
+  return (number + 1).toString();
+};
+const dec = (text: string) => {
+  const number = parseInt(text);
+  if (isNaN(number) || number - 1 < 0) return text;
+  return (number - 1).toString();
+};
 
 const InputNumber: React.FC<InputNumberProps> = observer(
   ({ title, value, setValue, isInteger = false }) => {
@@ -33,16 +51,29 @@ const InputNumber: React.FC<InputNumberProps> = observer(
       },
       [setValue, isInteger]
     );
+
+    const handleInc = useCallback(() => {
+      setValue((value) => inc(value));
+    }, [setValue]);
+
+    const handleDec = useCallback(() => {
+      setValue((value) => dec(value));
+    }, [setValue]);
+
     return (
       <Container style={styles.container}>
-        <P style={styles.title}>{title}</P>
-        <TextInput
-          style={inputStyle}
-          keyboardType="numeric"
-          value={value}
-          onChangeText={handleValue}
-          maxLength={8}
-        />
+        <P>{title}</P>
+        <View style={styles.containerButtons}>
+          <IncButton type="decrement" onPress={handleDec} />
+          <TextInput
+            style={inputStyle}
+            keyboardType="numeric"
+            value={value}
+            onChangeText={handleValue}
+            maxLength={8}
+          />
+          <IncButton type="increment" onPress={handleInc} />
+        </View>
       </Container>
     );
   }
@@ -58,9 +89,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     padding: 10,
-    marginTop: 10,
     textAlign: "center",
     fontSize: 30,
   },
-  title: {},
+  containerButtons: {
+    marginTop: 10,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
 });

@@ -9,6 +9,8 @@ export const programmsData: ProgrammDataProps[] = [
   {
     id: "0",
     name: "Базовая1",
+    description:
+      "Программа предназначенна исключительно для нужд тестирования приложения для разработчиков",
     trainings: [
       { id: "t0_0", name: "Тренировка 1", exerciseIDs: ["e0", "e1", "e2"] },
       { id: "t0_1", name: "Тренировка 2", exerciseIDs: ["e2", "e3"] },
@@ -18,6 +20,8 @@ export const programmsData: ProgrammDataProps[] = [
   {
     id: "1",
     name: "Базовая2",
+    description:
+      "Другая программа предназначенна исключительно для нужд тестирования приложения для разработчиков",
     trainings: [
       { id: "t1_0", name: "Тренировка 1", exerciseIDs: ["e0", "e1", "e2"] },
       { id: "t1_1", name: "Тренировка 2", exerciseIDs: ["e0", "e1", "e2"] },
@@ -31,6 +35,17 @@ export const programmsData: ProgrammDataProps[] = [
       { id: "t2_1", name: "Тренировка 2", exerciseIDs: ["e0", "e1", "e2"] },
       { id: "t2_0", name: "Тренировка 1", exerciseIDs: ["e0", "e1", "e2"] },
       { id: "t2_2", name: "Тренировка 3", exerciseIDs: ["e0", "e1", "e2"] },
+    ],
+  },
+  {
+    id: "3",
+    name: "Базовая4",
+    description:
+      "Другая программа предназначенна исключительно для нужд тестирования приложения для разработчиков",
+    trainings: [
+      { id: "t3_1", name: "Тренировка 2", exerciseIDs: ["e0", "e1", "e2"] },
+      { id: "t3_0", name: "Тренировка 1", exerciseIDs: ["e0", "e1", "e2"] },
+      { id: "t3_2", name: "Тренировка 3", exerciseIDs: ["e0", "e1", "e2"] },
     ],
   },
 ];

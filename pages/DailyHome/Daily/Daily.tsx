@@ -3,9 +3,8 @@ import {
   FlatList,
   StyleSheet,
   View,
-  TouchableHighlight,
-  Button,
   Alert,
+  ListRenderItem,
 } from "react-native";
 import { observer } from "mobx-react-lite";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -16,6 +15,9 @@ import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
 import Card from "../../../components/Card/Card";
 import Container from "../../../components/Container/Container";
+import { TrainingDataProps } from "../../../data/programms";
+import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
+import { TouchableOpacity } from "react-native";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,120 +34,89 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
   const programm = store.currentProgramm.currentProgramm;
   const currentTrainingID = store.currentProgramm.currentTrainingID;
 
+  const renderItem: ListRenderItem<TrainingDataProps> | null | undefined = ({
+    item,
+    index,
+  }) => {
+    const goSessionPage = () => {
+      if (store.currentProgramm.currentSessionID)
+        navigation.navigate("DailyHome", {
+          screen: "Session",
+          params: {
+            sessionID: store.currentProgramm.currentSessionID,
+            trainingID: item.id,
+          },
+        });
+    };
+
+    return (
+      <View
+        style={index === 0 ? [style.session, { marginTop: 0 }] : style.session}
+      >
+        <TouchableOpacity
+          style={style.training}
+          onPress={() => {
+            navigation.navigate("DailyHome", {
+              screen: "Training",
+              params: { trainingID: item.id },
+            });
+          }}
+        >
+          <P>{item.name}</P>
+        </TouchableOpacity>
+        {currentTrainingID === item.id &&
+        store.currentProgramm.currentSessionID ? (
+          <BasicButton title="Продолжить" onPress={goSessionPage} />
+        ) : (
+          <BasicButton
+            title="Начать"
+            onPress={() => {
+              if (store.currentProgramm.currentSessionID) {
+                Alert.alert("Начать", "Завершить прошлую тренировку?", [
+                  { text: "Отмена", style: "cancel" },
+                  {
+                    text: "Перейти на прошлую",
+                    style: "destructive",
+                    onPress: goSessionPage,
+                  },
+                  {
+                    text: "Завершить",
+                    style: "default",
+                    onPress: () => {
+                      store.currentProgramm.startSession(item.id);
+                      goSessionPage();
+                    },
+                  },
+                ]);
+              } else {
+                store.currentProgramm.startSession(item.id);
+                goSessionPage();
+              }
+            }}
+          />
+        )}
+      </View>
+    );
+  };
+
   if (programm)
     return (
       <View style={globalStyle.container}>
         <Container>
-          <P>Текущая программа: {programm.name}</P>
+          <P size="h2">Текущая программа: {programm.name}</P>
         </Container>
-
         <Card>
           <Container>
             <FlatList
               data={programm.trainings}
-              renderItem={({ item, index }) => (
-                <View
-                  style={
-                    index === 0
-                      ? [style.session, { marginTop: 0 }]
-                      : style.session
-                  }
-                >
-                  <TouchableHighlight
-                    activeOpacity={0.6}
-                    onPress={() => {
-                      navigation.navigate("DailyHome", {
-                        screen: "Training",
-                        params: { trainingID: item.id },
-                      });
-                    }}
-                  >
-                    <P>{item.name}</P>
-                  </TouchableHighlight>
-                  {currentTrainingID === item.id &&
-                  store.currentProgramm.currentSessionID ? (
-                    <Button
-                      title="Продолжить"
-                      onPress={() => {
-                        if (store.currentProgramm.currentSessionID)
-                          navigation.navigate("DailyHome", {
-                            screen: "Session",
-                            params: {
-                              sessionID: store.currentProgramm.currentSessionID,
-                              trainingID: item.id,
-                            },
-                          });
-                      }}
-                    />
-                  ) : (
-                    <Button
-                      title="Начать"
-                      onPress={() => {
-                        if (store.currentProgramm.currentSessionID) {
-                          Alert.alert(
-                            "Начать",
-                            "Завершить прошлую тренировку?",
-                            [
-                              { text: "Отмена", style: "cancel" },
-                              {
-                                text: "Перейти на прошлую",
-                                style: "destructive",
-                                onPress: () => {
-                                  if (store.currentProgramm.currentSessionID)
-                                    navigation.navigate("DailyHome", {
-                                      screen: "Session",
-                                      params: {
-                                        sessionID:
-                                          store.currentProgramm
-                                            .currentSessionID,
-                                        trainingID: item.id,
-                                      },
-                                    });
-                                },
-                              },
-                              {
-                                text: "Завершить",
-                                style: "default",
-                                onPress: () => {
-                                  store.currentProgramm.startSession(item.id);
-                                  if (store.currentProgramm.currentSessionID)
-                                    navigation.navigate("DailyHome", {
-                                      screen: "Session",
-                                      params: {
-                                        sessionID:
-                                          store.currentProgramm
-                                            .currentSessionID,
-                                        trainingID: item.id,
-                                      },
-                                    });
-                                },
-                              },
-                            ]
-                          );
-                        } else {
-                          store.currentProgramm.startSession(item.id);
-                          if (store.currentProgramm.currentSessionID)
-                            navigation.navigate("DailyHome", {
-                              screen: "Session",
-                              params: {
-                                sessionID:
-                                  store.currentProgramm.currentSessionID,
-                                trainingID: item.id,
-                              },
-                            });
-                        }
-                      }}
-                    />
-                  )}
-                </View>
-              )}
+              renderItem={renderItem}
               keyExtractor={(item) => item.id}
             ></FlatList>
           </Container>
         </Card>
-        <View>
-          <P>Замеры </P>
-          <Button
+        <View style={style.dimension}>
+          <P size="h2">Замеры </P>
+          <BasicButton
             title="Замеры"
             onPress={() => {
               navigation.navigate("DailyHome", { screen: "Dimension" });
@@ -154,7 +125,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
         </View>
       </View>
     );
-  return <P>Do not choose programm</P>;
+  return <P>Не выбрана программа</P>;
 });
 
 const style = StyleSheet.create({
@@ -162,10 +133,16 @@ const style = StyleSheet.create({
     flex: 1,
   },
   session: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,
+    gap: 20,
+  },
+  dimension: {
+    marginTop: 20,
+  },
+  training: {
+    flexGrow: 1,
   },
 });
 

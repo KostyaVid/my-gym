@@ -1,4 +1,4 @@
-import { View, Button, TextInput } from "react-native";
+import { View, Button, TextInput, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -9,6 +9,8 @@ import { Set } from "../../../store/exercise.store";
 import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
 import InputNumber from "../../../components/InputNumber/InputNumber";
+import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
+import Container from "../../../components/Container/Container";
 
 type NewSetScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -39,44 +41,56 @@ const NewSet = observer(({ navigation, route }: Props) => {
         setValue={setCount}
         isInteger={true}
       />
-      <Button
-        title="Отмена"
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
-      <Button
-        title="ОК"
-        onPress={() => {
-          const date = Date.now();
-          const set: Set = {
-            id: "p" + date,
-            date: date,
-            weight: Number(weight.length === 0 ? "0" : weight),
-            count: Number(count.length === 0 ? "0" : count),
-          };
-          if (exercise) {
-            store.exercisesResults.addExerciseResultInSession(
-              exerciseID,
-              sessionID,
-              set
-            );
-          } else {
-            store.exercisesResults.addFirstExerciseResultInSession(
-              exerciseID,
-              sessionID,
-              set
-            );
-          }
+      <Container style={styles.buttons}>
+        <BasicButton
+          title="Отмена"
+          variant="danger"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <BasicButton
+          title="Добавить"
+          onPress={() => {
+            const date = Date.now();
+            const set: Set = {
+              id: "p" + date,
+              date: date,
+              weight: Number(weight.length === 0 ? "0" : weight),
+              count: Number(count.length === 0 ? "0" : count),
+            };
+            if (exercise) {
+              store.exercisesResults.addExerciseResultInSession(
+                exerciseID,
+                sessionID,
+                set
+              );
+            } else {
+              store.exercisesResults.addFirstExerciseResultInSession(
+                exerciseID,
+                sessionID,
+                set
+              );
+            }
 
-          navigation.navigate("DailyHome", {
-            screen: "Exercise",
-            params: { exerciseID, sessionID, trainingID },
-          });
-        }}
-      />
+            navigation.navigate("DailyHome", {
+              screen: "Exercise",
+              params: { exerciseID, sessionID, trainingID },
+            });
+          }}
+        />
+      </Container>
     </View>
   );
 });
 
 export default NewSet;
+
+const styles = StyleSheet.create({
+  buttons: {
+    marginTop: 50,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+});

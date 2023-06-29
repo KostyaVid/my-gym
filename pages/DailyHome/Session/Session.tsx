@@ -1,4 +1,4 @@
-import { View, FlatList, Button, ListRenderItem } from "react-native";
+import { View, FlatList, ListRenderItem, StyleSheet } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -10,6 +10,8 @@ import P from "../../../components/P/P";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import globalStyle from "../../../utils/styles";
 import Card from "../../../components/Card/Card";
+import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
+import Container from "../../../components/Container/Container";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -52,17 +54,19 @@ const Session = observer(({ navigation, route }: Props) => {
 
     return (
       <View style={globalStyle.container}>
-        <P>Тренировка: {training.name}</P>
-        {session?.dateEnd ? (
-          <P>"Завершена"</P>
-        ) : (
-          <View>
-            <P>Время тренировки:</P>
-            <TimeCounter
-              date={session?.dateStart ? session.dateStart : Date.now()}
-            />
-          </View>
-        )}
+        <Container>
+          <P size="h1">{training.name}</P>
+          {session?.dateEnd ? (
+            <P disable>"Завершена"</P>
+          ) : (
+            <View style={styles.time}>
+              <P>Время тренировки:</P>
+              <TimeCounter
+                date={session?.dateStart ? session.dateStart : Date.now()}
+              />
+            </View>
+          )}
+        </Container>
         <Card>
           <FlatList
             data={training.exerciseIDs}
@@ -70,26 +74,29 @@ const Session = observer(({ navigation, route }: Props) => {
             renderItem={renderExersice}
           />
         </Card>
-        <Button
-          title="Добавить упражнение"
-          onPress={() => {
-            navigation.navigate("DailyHome", {
-              screen: "AddExercise",
-              params: { trainingID, sessionID },
-            });
-          }}
-        />
-        {session?.dateEnd ? (
-          ""
-        ) : (
-          <Button
-            title="Завершить тренировку"
+        <Container style={styles.buttons}>
+          <BasicButton
+            title="Добавить упражнение"
             onPress={() => {
-              store.currentProgramm.endCurrentSession();
-              navigation.navigate("DailyHome", { screen: "Daily" });
+              navigation.navigate("DailyHome", {
+                screen: "AddExercise",
+                params: { trainingID, sessionID },
+              });
             }}
           />
-        )}
+          {session?.dateEnd ? (
+            ""
+          ) : (
+            <BasicButton
+              title="Завершить тренировку"
+              variant="danger"
+              onPress={() => {
+                store.currentProgramm.endCurrentSession();
+                navigation.navigate("DailyHome", { screen: "Daily" });
+              }}
+            />
+          )}
+        </Container>
       </View>
     );
   }
@@ -102,3 +109,17 @@ const Session = observer(({ navigation, route }: Props) => {
 });
 
 export default Session;
+
+const styles = StyleSheet.create({
+  time: {
+    marginTop: 5,
+    flexDirection: "row",
+    gap: 10,
+  },
+  buttons: {
+    marginTop: 10,
+    flex: 1,
+    justifyContent: "space-between",
+    gap: 20,
+  },
+});
