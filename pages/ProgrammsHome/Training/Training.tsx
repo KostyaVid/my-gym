@@ -22,19 +22,18 @@ type Props = {
 
 const Training = observer(({ navigation, route }: Props) => {
   const { trainingID, programmID } = route.params;
-  const store = useStore();
   const training = programmsData
     .find((programm) => programm.id === programmID)
     ?.trainings.find((train) => train.id === trainingID);
   if (!training)
     return (
       <View>
-        <P>Тренировка не найдена</P>
+        <P size="h2">Тренировка не найдена.</P>
       </View>
     );
   return (
     <View style={globalStyle.container}>
-      <P>{training.name}</P>
+      <P size="h1">{training.name}</P>
       <FlatList
         data={training.exerciseIDs}
         renderItem={({ item, index }) => (

@@ -52,12 +52,15 @@ const NewSet = observer(({ navigation, route }: Props) => {
         <BasicButton
           title="Добавить"
           onPress={() => {
+            const w = Number(weight.length ? weight : "0");
+            const c = Number(count.length ? count : "0");
+            if (!w || !c) return;
             const date = Date.now();
             const set: Set = {
               id: "p" + date,
               date: date,
-              weight: Number(weight.length === 0 ? "0" : weight),
-              count: Number(count.length === 0 ? "0" : count),
+              weight: w,
+              count: c,
             };
             if (exercise) {
               store.exercisesResults.addExerciseResultInSession(

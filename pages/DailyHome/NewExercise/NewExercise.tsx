@@ -1,4 +1,4 @@
-import { Button, StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -9,6 +9,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { ExerciseFullProps, ExerciseType } from "../../../data/exercises";
 import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
+import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 
 const exerciseTypeData: ExerciseType[] = [
   "cardio",
@@ -66,7 +67,7 @@ const NewExercise = observer(({ navigation, route }: Props) => {
           }}
         />
       </View>
-      <Button
+      <BasicButton
         title="Создать"
         onPress={() => {
           const exercise: ExerciseFullProps = {

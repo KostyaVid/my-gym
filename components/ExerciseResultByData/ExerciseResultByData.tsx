@@ -3,7 +3,6 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import P from "../P/P";
 import { useStore } from "../../store/rootStore.store";
-import Session from "../../pages/DailyHome/Session/Session";
 
 type Props = {
   exerciseID: string;
@@ -15,14 +14,10 @@ const ExerciseResultByData: React.FC<Props> = observer(
     const store = useStore();
     const exercise = store.exercisesResults.getExercise(exerciseID);
     if (!exercise) return <P>прошлых результатов не найдено</P>;
-    let position = exercise.results.length - order - 1;
+    let position = exercise.results.length - 1 - order;
     if (position < 0) return null;
 
-    console.log(position);
-
     const exerciseResult = exercise.results[position];
-    console.log(exerciseResult);
-
     const session = store.sessions.getSession(exerciseResult.sessionID);
     const date = session?.dateStart;
     return (

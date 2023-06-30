@@ -8,21 +8,11 @@ import { useStore } from "../../../store/rootStore.store";
 import globalStyle from "../../../utils/styles";
 import P from "../../../components/P/P";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
-import Card from "../../../components/Card/Card";
-import { Set } from "../../../store/exercise.store";
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
+import { LineChart } from "react-native-chart-kit";
+import Container from "../../../components/Container/Container";
 
-type AllResultsScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "DailyHome"
->;
+type AllResultsScreenNavigationProp =
+  NativeStackNavigationProp<RootStackParamList>;
 
 type Props = {
   navigation: AllResultsScreenNavigationProp;
@@ -44,80 +34,67 @@ const AllResults = observer(({ navigation, route }: Props) => {
     return { maxWeght, maxCount, date };
   });
 
-  if (!data) return <P>Результатов не найдено</P>;
+  if (!data) return <P size="h3">Результатов не найдено</P>;
+  data.push({ maxWeght: 10, maxCount: 6, date: "31.06.2023" });
+  data.push({ maxWeght: 8, maxCount: 6, date: "32.06.2023" });
+  data.push({ maxWeght: 25, maxCount: 6, date: "33.06.2023" });
 
   return (
     <View style={globalStyle.container}>
       <ExerciseView exerciseID={exerciseID} />
-      <Card>
-        <>
-          <LineChart
-            data={{
-              labels: data.map((item) => item.date),
-              datasets: [
-                {
-                  data: [
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                  ],
-                },
-              ],
-            }}
-            width={Dimensions.get("window").width} // from react-native
-            height={220}
-            yAxisLabel="$"
-            yAxisSuffix="k"
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: "#e26a00",
-              backgroundGradientFrom: "#fb8c00",
-              backgroundGradientTo: "#ffa726",
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#ffa726",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-          <FlatList
-            data={data}
-            keyExtractor={(item) => item.date.toString()}
-            renderItem={({ item, index }) => (
-              <View style={{ flexDirection: "row", padding: 10 }}>
-                <P style={style.cell}>
-                  {index + 1}. {item.date}
-                </P>
-                <P
-                  style={style.cell}
-                >{`${item.maxWeght} кг. X ${item.maxCount} раз`}</P>
-              </View>
-            )}
-          />
-        </>
-      </Card>
+      <Container>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.date.toString()}
+          renderItem={({ item, index }) => (
+            <View style={{ flexDirection: "row", padding: 10 }}>
+              <P>
+                {index + 1}. {item.date}
+              </P>
+              <P>{`${item.maxWeght} кг. X ${item.maxCount} раз`}</P>
+            </View>
+          )}
+        />
+      </Container>
+      <LineChart
+        data={{
+          labels: data.map((item) => item.date),
+          datasets: [
+            {
+              data: data.map((exer) => exer.maxWeght),
+            },
+          ],
+        }}
+        width={Dimensions.get("window").width}
+        height={Dimensions.get("window").height * 0.3}
+        yAxisSuffix="кг"
+        yAxisInterval={1} // optional, defaults to 1
+        chartConfig={{
+          backgroundColor: "#e26a00",
+          backgroundGradientFrom: "#fb8c00",
+          backgroundGradientTo: "#ffa726",
+          decimalPlaces: 2, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 16,
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726",
+          },
+        }}
+        bezier
+        style={{
+          marginVertical: 8,
+          borderRadius: 16,
+        }}
+      />
     </View>
   );
 });
 
-const style = StyleSheet.create({
-  cell: {
-    flex: 1,
-  },
-});
+const style = StyleSheet.create({});
 
 export default AllResults;

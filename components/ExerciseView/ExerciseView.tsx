@@ -1,17 +1,11 @@
-import {
-  StyleProp,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
 import P from "../P/P";
 import { useStore } from "../../store/rootStore.store";
 import { observer } from "mobx-react-lite";
 import { useTheme } from "@react-navigation/native";
 import ExerciseThumb from "../ExerciseThumb/ExerciseThumb";
+import Touch from "../Touch/Touch";
 
 type ExerciseViewProps = {
   order?: number;
@@ -40,30 +34,22 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
     if (isFinish) styles.push(style.disable);
     if (order === 1 || order === undefined)
       return (
-        <TouchableHighlight
-          onPress={onPress}
-          activeOpacity={0.6}
-          underlayColor="rgba(90,90,90,0.5)"
-        >
+        <Touch onPress={onPress} style={style.touch}>
           <View style={styles}>
             <ExerciseThumb thumbImg={exercise.thumbImg} />
             <P>{(order ? order.toString() + ". " : "") + exercise?.name}</P>
           </View>
-        </TouchableHighlight>
+        </Touch>
       );
     return (
-      <TouchableHighlight
-        onPress={onPress}
-        activeOpacity={0.6}
-        underlayColor="rgba(90,90,90,0.5)"
-      >
+      <Touch onPress={onPress} style={style.touch}>
         <View style={[style.border, { borderColor: colors.border }]}>
           <View style={styles}>
             <ExerciseThumb thumbImg={exercise.thumbImg} />
             <P>{order.toString() + ". " + exercise?.name}</P>
           </View>
         </View>
-      </TouchableHighlight>
+      </Touch>
     );
   }
 );
@@ -71,6 +57,10 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
 export default ExerciseView;
 
 const style = StyleSheet.create({
+  touch: {
+    flexShrink: 1,
+    flexGrow: 1,
+  },
   border: {
     borderTopWidth: 1,
   },

@@ -32,6 +32,8 @@ const P: React.FC<PProps> = ({ children, disable, style, size = "p" }) => {
     {
       color: colors.text,
       fontSize: parseSize(size),
+      flexGrow: 0,
+      flexShrink: 1,
     },
   ];
   if (disable) styles.push(styleCommon.disable);

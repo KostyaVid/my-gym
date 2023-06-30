@@ -1,9 +1,10 @@
-import { View, TouchableHighlight } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../types";
 import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
+import Touch from "../../../components/Touch/Touch";
 
 type ElseNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -17,13 +18,13 @@ type Props = {
 const Else: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={globalStyle.container}>
-      <TouchableHighlight
+      <Touch
         onPress={() => {
           navigation.navigate("ElseHome", { screen: "Settings" });
         }}
       >
         <P>Настройки</P>
-      </TouchableHighlight>
+      </Touch>
     </View>
   );
 };

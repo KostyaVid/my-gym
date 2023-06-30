@@ -8,6 +8,8 @@ import { useStore } from "../../../store/rootStore.store";
 import globalStyle from "../../../utils/styles";
 import P from "../../../components/P/P";
 import ExerciseThumb from "../../../components/ExerciseThumb/ExerciseThumb";
+import ExerciseView from "../../../components/ExerciseView/ExerciseView";
+import Container from "../../../components/Container/Container";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,10 +31,11 @@ const Exercise = observer(({ navigation, route }: Props) => {
 
   return (
     <View style={globalStyle.container}>
-      <ExerciseThumb thumbImg={exercise?.thumbImg} />
-      <P>{exercise?.name}</P>
-      {exercise?.description && <P>Описание: {exercise.description}</P>}
-      {exercise?.exerciseType && <P>Тип: {exercise.exerciseType}</P>}
+      <Container>
+        <ExerciseView exerciseID={exerciseID} />
+        {exercise?.description && <P>Описание: {exercise.description}</P>}
+        {exercise?.exerciseType && <P>Тип: {exercise.exerciseType}</P>}
+      </Container>
     </View>
   );
 });

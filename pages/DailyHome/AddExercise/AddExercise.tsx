@@ -1,4 +1,4 @@
-import { View, FlatList, StyleSheet, Button } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -9,11 +9,12 @@ import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import globalStyle from "../../../utils/styles";
 import P from "../../../components/P/P";
+import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
+import Container from "../../../components/Container/Container";
+import Touch from "../../../components/Touch/Touch";
 
-type ExerciseScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "DailyHome"
->;
+type ExerciseScreenNavigationProp =
+  NativeStackNavigationProp<RootStackParamList>;
 
 type Props = {
   navigation: ExerciseScreenNavigationProp;
@@ -26,18 +27,26 @@ const AddExercise = observer(({ navigation, route }: Props) => {
   const store = useStore();
   return (
     <View style={globalStyle.container}>
-      <P>Выберите упражнение</P>
+      <P size="h1">Выберите упражнение.</P>
       <FlatList
         data={store.customExercises.getAllExercisesSorted}
         renderItem={({ item, index }) => (
-          <View>
+          <Container style={style.item}>
             <ExerciseView
+              onPress={() => {
+                navigation.navigate("ProgrammsHome", {
+                  screen: "Exercise",
+                  params: {
+                    exerciseID: item.id,
+                  },
+                });
+              }}
               order={index + 1}
               sessionID={sessionID}
               exerciseID={item.id}
             />
-            <Button
-              title="Добавить"
+            <BasicButton
+              title="Доб."
               onPress={() => {
                 store.currentProgramm.addExerciseInTheCurrentProgramm(item.id);
                 navigation.navigate("DailyHome", {
@@ -46,15 +55,9 @@ const AddExercise = observer(({ navigation, route }: Props) => {
                 });
               }}
             />
-          </View>
+          </Container>
         )}
         keyExtractor={(item) => item.id}
-      />
-      <Button
-        title="Создать новое"
-        onPress={() => {
-          navigation.navigate("DailyHome", { screen: "NewExercise" });
-        }}
       />
       <PlusButton
         onPress={() => {
@@ -65,6 +68,15 @@ const AddExercise = observer(({ navigation, route }: Props) => {
   );
 });
 
-const style = StyleSheet.create({});
+const style = StyleSheet.create({
+  item: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15,
+  },
+  exercise: {
+    width: "60%",
+  },
+});
 
 export default AddExercise;

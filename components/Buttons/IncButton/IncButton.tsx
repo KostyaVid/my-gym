@@ -1,12 +1,9 @@
-import {
-  GestureResponderEvent,
-  StyleSheet,
-  TouchableHighlight,
-} from "react-native";
+import { GestureResponderEvent, StyleSheet } from "react-native";
 import React from "react";
 import P from "../../P/P";
 import { useTheme } from "@react-navigation/native";
 import { observer } from "mobx-react-lite";
+import Touch from "../../Touch/Touch";
 
 type IncButtonProps = {
   type: "increment" | "decrement";
@@ -16,12 +13,12 @@ type IncButtonProps = {
 const IncButton: React.FC<IncButtonProps> = observer(({ type, onPress }) => {
   const { colors } = useTheme();
   return (
-    <TouchableHighlight
+    <Touch
       style={[styles.button, { backgroundColor: colors.primary }]}
       onPress={onPress}
     >
       <P style={styles.icon}>{type === "increment" ? "+" : "-"}</P>
-    </TouchableHighlight>
+    </Touch>
   );
 });
 

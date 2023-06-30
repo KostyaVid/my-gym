@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { TouchableHighlight, View } from "react-native";
+import { View } from "react-native";
 import { useStore } from "../../store/rootStore.store";
 import Calendar from "../../components/Calendar/Calendar";
 import P from "../../components/P/P";
@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
 import Card from "../../components/Card/Card";
 import Container from "../../components/Container/Container";
+import Touch from "../../components/Touch/Touch";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,9 +37,7 @@ const Home: React.FC<Props> = observer(({ navigation }) => {
     <View style={globalStyle.container}>
       <Calendar />
       <Card>
-        <TouchableHighlight
-          onPress={currentProgramm ? goToProgramm : goToChooseProgramm}
-        >
+        <Touch onPress={currentProgramm ? goToProgramm : goToChooseProgramm}>
           <Container>
             <P>Выбранная программа:</P>
             {currentProgramm ? (
@@ -47,7 +46,7 @@ const Home: React.FC<Props> = observer(({ navigation }) => {
               <P>Не выбрана</P>
             )}
           </Container>
-        </TouchableHighlight>
+        </Touch>
       </Card>
     </View>
   );

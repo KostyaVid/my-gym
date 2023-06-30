@@ -10,19 +10,17 @@ import globalStyle from "../../../utils/styles";
 import Card from "../../../components/Card/Card";
 import { TrainingDataProps, programmsData } from "../../../data/programms";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
+import Container from "../../../components/Container/Container";
 
-type TrainingScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "DailyHome"
->;
+type TrainingScreenNavigationProp =
+  NativeStackNavigationProp<RootStackParamList>;
 
 type TrainingProps = {
   navigation: TrainingScreenNavigationProp;
   route: RouteProp<DailyStackList, "Training">;
 };
 
-const Training = observer(({ route }: TrainingProps) => {
-  const store = useStore();
+const Training = observer(({ route, navigation }: TrainingProps) => {
   const trainingID = route.params.trainingID;
   let training: TrainingDataProps | undefined;
   for (let i = 0; i < programmsData.length; i++) {
@@ -30,16 +28,27 @@ const Training = observer(({ route }: TrainingProps) => {
     if (training) break;
   }
 
-  if (!training) return <P>Такая тренировка не найдена</P>;
+  if (!training) return <P size="h3">Такая тренировка не найдена</P>;
 
   return (
     <View style={globalStyle.container}>
-      <P>Тренировка: {training.name}</P>
+      <Container>
+        <P size="h1">{training.name}</P>
+      </Container>
       <Card>
         <FlatList
           data={training.exerciseIDs}
           renderItem={({ item, index }) => (
-            <ExerciseView order={index + 1} exerciseID={item} />
+            <ExerciseView
+              order={index + 1}
+              exerciseID={item}
+              onPress={() => {
+                navigation.navigate("ProgrammsHome", {
+                  screen: "Exercise",
+                  params: { exerciseID: item },
+                });
+              }}
+            />
           )}
         />
       </Card>

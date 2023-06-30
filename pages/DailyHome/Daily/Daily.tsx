@@ -17,7 +17,7 @@ import Card from "../../../components/Card/Card";
 import Container from "../../../components/Container/Container";
 import { TrainingDataProps } from "../../../data/programms";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
-import { TouchableOpacity } from "react-native";
+import Touch from "../../../components/Touch/Touch";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -53,7 +53,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
       <View
         style={index === 0 ? [style.session, { marginTop: 0 }] : style.session}
       >
-        <TouchableOpacity
+        <Touch
           style={style.training}
           onPress={() => {
             navigation.navigate("DailyHome", {
@@ -63,7 +63,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
           }}
         >
           <P>{item.name}</P>
-        </TouchableOpacity>
+        </Touch>
         {currentTrainingID === item.id &&
         store.currentProgramm.currentSessionID ? (
           <BasicButton title="Продолжить" onPress={goSessionPage} />

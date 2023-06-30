@@ -37,7 +37,7 @@ export type ExerciseFullProps = ExerciseProps & ExerciseSecondaryProps;
 export const exerciseData: ExerciseFullProps[] = [
   {
     id: "e0",
-    name: "Приседания со штангой",
+    name: "Приседания со штангой и очень динное название, которое не влезает в одну строку",
     description:
       "Приседания со штангой на плечах для развития квдридрицепсов и ягодиц",
     thumbImg: require("./../data/imgExercises/close-up-on-man-doing-crossfit-workout.jpg"),

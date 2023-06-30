@@ -1,9 +1,4 @@
-import {
-  SectionList,
-  StyleSheet,
-  TouchableHighlight,
-  View,
-} from "react-native";
+import { SectionList, StyleSheet, View } from "react-native";
 import React from "react";
 import { programmsData } from "../../../data/programms";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -13,6 +8,7 @@ import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
+import Touch from "../../../components/Touch/Touch";
 
 type ProgrammsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -41,9 +37,8 @@ const Programms = ({ navigation }: Props) => {
         style={styles.sectionList}
         sections={data}
         renderItem={({ item, section }) => (
-          <TouchableHighlight
+          <Touch
             style={styles.training}
-            activeOpacity={0.6}
             onPress={() => {
               navigation.navigate("ProgrammsHome", {
                 screen: "Training",
@@ -52,14 +47,13 @@ const Programms = ({ navigation }: Props) => {
             }}
           >
             <P>{item.name}</P>
-          </TouchableHighlight>
+          </Touch>
         )}
         renderSectionHeader={({ section }) => (
           <View>
             <View style={styles.sectionHeader}>
-              <TouchableHighlight
+              <Touch
                 style={styles.nameProgramm}
-                activeOpacity={0.6}
                 onPress={() => {
                   navigation.navigate("ProgrammsHome", {
                     screen: "Programm",
@@ -68,7 +62,7 @@ const Programms = ({ navigation }: Props) => {
                 }}
               >
                 <P size="h2">{section.title}</P>
-              </TouchableHighlight>
+              </Touch>
               <BasicButton
                 title="Начать"
                 onPress={() => {
