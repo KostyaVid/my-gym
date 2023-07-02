@@ -17,6 +17,7 @@ type InputNumberProps = {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   isInteger?: boolean;
+  danger?: boolean;
 };
 
 const buttonsValues = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
@@ -33,11 +34,16 @@ const dec = (text: string) => {
 };
 
 const InputNumber: React.FC<InputNumberProps> = observer(
-  ({ title, value, setValue, isInteger = false }) => {
+  ({ title, value, setValue, isInteger = false, danger = false }) => {
     const { colors } = useTheme();
+
     const inputStyle: StyleProp<TextStyle> = [
       styles.input,
-      { borderColor: colors.border, color: colors.text },
+      {
+        borderColor: colors.border,
+        color: colors.text,
+        backgroundColor: danger ? colors.notification : colors.background,
+      },
     ];
 
     const handleValue = useCallback(
@@ -62,7 +68,9 @@ const InputNumber: React.FC<InputNumberProps> = observer(
 
     return (
       <Container style={styles.container}>
-        <P>{title}</P>
+        <P size="h2" weight="600">
+          {title}
+        </P>
         <View style={styles.containerButtons}>
           <IncButton type="decrement" onPress={handleDec} />
           <TextInput

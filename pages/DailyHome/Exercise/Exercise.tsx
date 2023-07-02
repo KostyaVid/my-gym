@@ -1,7 +1,7 @@
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, ViewStyle } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useTheme } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
@@ -12,6 +12,7 @@ import ExerciseResultByData from "../../../components/ExerciseResultByData/Exerc
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
+import { StyleProp } from "react-native";
 
 type ExerciseScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -31,6 +32,17 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const exerciseSession = exerciseResult?.results.findLast(
     (item) => item.sessionID === sessionID
   );
+  const { colors } = useTheme();
+
+  const styleRow: (index: number) => StyleProp<ViewStyle> = (index) => [
+    style.containerSet,
+    { borderColor: colors.border },
+    index % 2 === 1
+      ? { backgroundColor: colors.card }
+      : index === 0
+      ? { borderTopWidth: 1 }
+      : {},
+  ];
 
   return (
     <View style={globalStyle.container}>
@@ -51,25 +63,47 @@ const Exercise = observer(({ navigation, route }: Props) => {
       <Container style={style.results}>
         {exerciseSession ? (
           <>
-            <View style={style.set}>
-              <P>Вес (кг):</P>
-              <P>Количество:</P>
+            <P size="h1" textAlign="center">
+              Результаты:
+            </P>
+            <View style={[style.set, style.headerSet]}>
+              <View style={style.dataNumber}>
+                <P weight="500" textAlign="center">
+                  №:
+                </P>
+              </View>
+              <View style={style.data}>
+                <P weight="500" textAlign="center">
+                  Вес (кг):
+                </P>
+              </View>
+              <View style={style.data}>
+                <P weight="500" textAlign="center">
+                  Количество:
+                </P>
+              </View>
             </View>
             <FlatList
               data={exerciseSession.sets}
               keyExtractor={(item) => item.id}
               renderItem={({ item, index }) => (
-                <View
-                  style={[
-                    style.containerSet,
-                    index === 0 ? { borderTopWidth: 1 } : {},
-                  ]}
-                >
+                <View style={styleRow(index)}>
                   <View style={style.set}>
-                    <P>{item.weight}</P>
-                    <P>{item.count}</P>
+                    <View style={style.dataNumber}>
+                      <P textAlign="center">{index + 1}</P>
+                    </View>
+                    <View style={style.data}>
+                      <P textAlign="center">{item.weight} кг</P>
+                    </View>
+                    <View style={style.data}>
+                      <P textAlign="center">{item.count}</P>
+                    </View>
                   </View>
-                  {item.comment && <P>{item.comment}</P>}
+                  {item.comment && (
+                    <View style={style.comment}>
+                      <P disable>{item.comment}</P>
+                    </View>
+                  )}
                 </View>
               )}
             />
@@ -142,8 +176,18 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
+  headerSet: {
+    marginVertical: 10,
+  },
+  data: { flex: 1, padding: 5 },
+  dataNumber: { flex: 0.5, padding: 5 },
   results: {
     flex: 1,
+  },
+  comment: {
+    paddingHorizontal: 15,
+    paddingBottom: 5,
+    alignItems: "flex-end",
   },
 });
 

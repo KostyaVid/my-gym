@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     right: 50,
     bottom: 75,
     alignSelf: "flex-end",
+    opacity: 0.6,
   },
   button: {
     alignItems: "center",

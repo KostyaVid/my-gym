@@ -35,9 +35,6 @@ const AllResults = observer(({ navigation, route }: Props) => {
   });
 
   if (!data) return <P size="h3">Результатов не найдено</P>;
-  data.push({ maxWeght: 10, maxCount: 6, date: "31.06.2023" });
-  data.push({ maxWeght: 8, maxCount: 6, date: "32.06.2023" });
-  data.push({ maxWeght: 25, maxCount: 6, date: "33.06.2023" });
 
   return (
     <View style={globalStyle.container}>

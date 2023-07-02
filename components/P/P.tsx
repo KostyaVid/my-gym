@@ -2,6 +2,7 @@ import { StyleSheet, Text, TextStyle } from "react-native";
 import React, { ReactNode } from "react";
 import { useTheme } from "@react-navigation/native";
 import { StyleProp } from "react-native";
+import { observer } from "mobx-react-lite";
 
 type sizeP = "h1" | "h2" | "h3" | "p";
 
@@ -10,6 +11,17 @@ type PProps = {
   disable?: boolean;
   style?: StyleProp<TextStyle>;
   size?: sizeP;
+  textAlign?: "auto" | "left" | "right" | "center" | "justify";
+  weight?:
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
 };
 
 const parseSize = (size: sizeP) => {
@@ -25,22 +37,33 @@ const parseSize = (size: sizeP) => {
   }
 };
 
-const P: React.FC<PProps> = ({ children, disable, style, size = "p" }) => {
-  const { colors } = useTheme();
+const P: React.FC<PProps> = observer(
+  ({
+    children,
+    disable,
+    style,
+    size = "p",
+    weight = "400",
+    textAlign = "auto",
+  }) => {
+    const { colors } = useTheme();
 
-  const styles: StyleProp<TextStyle> = [
-    {
-      color: colors.text,
-      fontSize: parseSize(size),
-      flexGrow: 0,
-      flexShrink: 1,
-    },
-  ];
-  if (disable) styles.push(styleCommon.disable);
-  if (style) styles.push(style);
+    const styles: StyleProp<TextStyle> = [
+      {
+        color: colors.text,
+        fontSize: parseSize(size),
+        flexGrow: 0,
+        fontWeight: weight,
+        flexShrink: 1,
+        textAlign: textAlign,
+      },
+    ];
+    if (disable) styles.push(styleCommon.disable);
+    if (style) styles.push(style);
 
-  return <Text style={styles}>{children}</Text>;
-};
+    return <Text style={styles}>{children}</Text>;
+  }
+);
 
 export default P;
 const styleCommon = StyleSheet.create({
