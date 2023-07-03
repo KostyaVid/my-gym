@@ -1,5 +1,12 @@
-import { View, FlatList, ListRenderItem, StyleSheet } from "react-native";
-import React from "react";
+import {
+  View,
+  FlatList,
+  ListRenderItem,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState } from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -8,10 +15,13 @@ import { useStore } from "../../../store/rootStore.store";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
 import P from "../../../components/P/P";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
+import DragList, { DragListRenderItemInfo } from "react-native-draglist";
 import globalStyle from "../../../utils/styles";
 import Card from "../../../components/Card/Card";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
+import Touch from "../../../components/Touch/Touch";
+import GridTab from "../../../components/GridTab/GridTab";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,24 +39,44 @@ const Session = observer(({ navigation, route }: Props) => {
   const store = useStore();
   const training = store.currentProgramm.getTraining(trainingID);
 
-  if (training) {
-    const renderExersice: ListRenderItem<string> = ({ item, index }) => {
+  async function onReordered(fromIndex: number, toIndex: number) {
+    if (!training?.exerciseIDs) return;
+    const copy = [...training.exerciseIDs]; // Don't modify react data in-place
+    const removed = copy.splice(fromIndex, 1);
+
+    copy.splice(toIndex, 0, removed[0]); // Now insert at the new pos
+    store.currentProgramm.rewriteExerciseWithTraining(copy);
+  }
+
+  if (training && training.exerciseIDs) {
+    const renderExersice = (info: DragListRenderItemInfo<string>) => {
+      const { item, onDragStart, onDragEnd, isActive, index } = info;
       return (
-        <ExerciseView
-          order={index + 1}
-          sessionID={sessionID}
-          exerciseID={item}
-          onPress={() => {
-            navigation.navigate("DailyHome", {
-              screen: "Exercise",
-              params: {
-                exerciseID: item,
-                trainingID: training.id,
-                sessionID,
-              },
-            });
-          }}
-        />
+        <View style={styles.row}>
+          <ExerciseView
+            key={item}
+            order={index + 1}
+            sessionID={sessionID}
+            exerciseID={item}
+            onPress={() => {
+              navigation.navigate("DailyHome", {
+                screen: "Exercise",
+                params: {
+                  exerciseID: item,
+                  trainingID: training.id,
+                  sessionID,
+                },
+              });
+            }}
+          />
+          <Touch
+            onPressIn={onDragStart}
+            onPressOut={onDragEnd}
+            style={styles.grid}
+          >
+            <GridTab />
+          </Touch>
+        </View>
       );
     };
 
@@ -68,9 +98,10 @@ const Session = observer(({ navigation, route }: Props) => {
           )}
         </Container>
         <Card>
-          <FlatList
+          <DragList
             data={training.exerciseIDs}
-            keyExtractor={(item, index) => item + index}
+            onReordered={onReordered}
+            keyExtractor={(item: string) => item}
             renderItem={renderExersice}
           />
         </Card>
@@ -121,5 +152,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     gap: 20,
+  },
+  grid: { alignItems: "flex-end", justifyContent: "center" },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingRight: 10,
   },
 });

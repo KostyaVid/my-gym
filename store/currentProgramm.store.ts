@@ -34,6 +34,54 @@ export default class CurrentProgrammStore {
     }
   }
 
+  /**
+   *
+   * @param exerciseID exercise id
+   * @param newIndex new position in the array
+   * @param trainingID current training (default) or training id
+   * @returns panding save if all is ok
+   */
+
+  *changeOrderExerciseOne(
+    exerciseID: string,
+    newIndex: number,
+    trainingID?: string | null
+  ) {
+    if (!this.currentProgramm) return;
+    if (!trainingID) {
+      if (!this.currentTrainingID) return;
+      trainingID = this.currentTrainingID;
+    }
+    const training = this.currentProgramm.trainings.find(
+      (training) => training.id === trainingID
+    );
+    if (!training) return;
+    const exercises = training.exerciseIDs;
+    const oldIndex = exercises.findIndex((exercise) => exercise === exerciseID);
+    const temp = exercises[newIndex];
+    if (oldIndex === undefined || temp === undefined) return;
+    exercises[newIndex] = exercises[oldIndex];
+    exercises[oldIndex] = temp;
+    yield this.saveStore();
+  }
+
+  *rewriteExerciseWithTraining(
+    exercises: string[],
+    trainingID?: string | null
+  ) {
+    if (!this.currentProgramm) return;
+    if (!trainingID) {
+      if (!this.currentTrainingID) return;
+      trainingID = this.currentTrainingID;
+    }
+    const training = this.currentProgramm.trainings.find(
+      (training) => training.id === trainingID
+    );
+    if (!training) return;
+    training.exerciseIDs = exercises;
+    yield this.saveStore();
+  }
+
   *addExerciseInTheProgramm(
     trainingID: string,
     exerciseID: string,

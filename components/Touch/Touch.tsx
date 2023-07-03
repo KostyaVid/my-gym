@@ -11,9 +11,17 @@ type TouchProps = {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   onPress?: ((event: GestureResponderEvent) => void) | undefined;
+  onPressIn?: ((event: GestureResponderEvent) => void) | undefined;
+  onPressOut?: ((event: GestureResponderEvent) => void) | undefined;
 };
 
-const Touch: React.FC<TouchProps> = ({ onPress, style, children }) => {
+const Touch: React.FC<TouchProps> = ({
+  onPress,
+  style,
+  children,
+  onPressIn,
+  onPressOut,
+}) => {
   const { colors } = useTheme();
   return (
     <TouchableHighlight
@@ -21,6 +29,8 @@ const Touch: React.FC<TouchProps> = ({ onPress, style, children }) => {
       onPress={onPress}
       activeOpacity={0.7}
       underlayColor={colors.primary}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
     >
       {children}
     </TouchableHighlight>

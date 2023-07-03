@@ -21,9 +21,11 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
     const exercise = useStore().getExercise(exerciseID);
     if (!exercise)
       return (
-        <View>
-          <P>Упражнение не найдено</P>
-        </View>
+        <Touch onPress={onPress} style={style.touch}>
+          <View>
+            <P>Упражнение не найдено</P>
+          </View>
+        </Touch>
       );
 
     const isFinish: boolean | undefined = sessionID
