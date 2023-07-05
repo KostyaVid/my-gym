@@ -11,6 +11,7 @@ import Card from "../../../components/Card/Card";
 import { TrainingDataProps, programmsData } from "../../../data/programms";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
+import HR from "../../../components/HR/HR";
 
 type TrainingScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -50,6 +51,7 @@ const Training = observer(({ route, navigation }: TrainingProps) => {
               }}
             />
           )}
+          ItemSeparatorComponent={HR}
         />
       </Card>
     </View>

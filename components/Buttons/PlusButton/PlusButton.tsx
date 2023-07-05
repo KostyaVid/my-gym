@@ -1,5 +1,10 @@
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
-import React from "react";
+import {
+  Animated,
+  GestureResponderEvent,
+  StyleSheet,
+  View,
+} from "react-native";
+import React, { useEffect, useRef } from "react";
 import Svg, { Path } from "react-native-svg";
 import Touch from "../../Touch/Touch";
 
@@ -8,8 +13,19 @@ type PlusButtonProps = {
 };
 
 const PlusButton: React.FC<PlusButtonProps> = ({ onPress }) => {
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [scaleAnim]);
+
   return (
-    <View style={styles.container}>
+    <Animated.View
+      style={[styles.container, { transform: [{ scale: scaleAnim }] }]}
+    >
       <Touch style={styles.button} onPress={onPress}>
         <Svg style={styles.plus} viewBox="0 0 448 512">
           <Path
@@ -18,7 +34,7 @@ const PlusButton: React.FC<PlusButtonProps> = ({ onPress }) => {
           />
         </Svg>
       </Touch>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -28,7 +44,7 @@ const styles = StyleSheet.create({
     right: 50,
     bottom: 75,
     alignSelf: "flex-end",
-    opacity: 0.6,
+    opacity: 0.8,
   },
   button: {
     alignItems: "center",

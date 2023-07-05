@@ -12,6 +12,7 @@ import P from "../../../components/P/P";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
 import Touch from "../../../components/Touch/Touch";
+import HR from "../../../components/HR/HR";
 
 type ExerciseScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -27,38 +28,44 @@ const AddExercise = observer(({ navigation, route }: Props) => {
   const store = useStore();
   return (
     <View style={globalStyle.container}>
-      <P size="h1">Выберите упражнение.</P>
-      <FlatList
-        data={store.customExercises.getAllExercisesSorted}
-        renderItem={({ item, index }) => (
-          <Container style={style.item}>
-            <ExerciseView
-              onPress={() => {
-                navigation.navigate("ProgrammsHome", {
-                  screen: "Exercise",
-                  params: {
-                    exerciseID: item.id,
-                  },
-                });
-              }}
-              order={index + 1}
-              sessionID={sessionID}
-              exerciseID={item.id}
-            />
-            <BasicButton
-              title="Доб."
-              onPress={() => {
-                store.currentProgramm.addExerciseInTheCurrentProgramm(item.id);
-                navigation.navigate("DailyHome", {
-                  screen: "Session",
-                  params: { trainingID, sessionID },
-                });
-              }}
-            />
-          </Container>
-        )}
-        keyExtractor={(item) => item.id}
-      />
+      <Container>
+        <P size="h1">Выберите упражнение.</P>
+        <FlatList
+          data={store.customExercises.getAllExercisesSorted}
+          ItemSeparatorComponent={HR}
+          renderItem={({ item, index }) => (
+            <View style={style.item}>
+              <ExerciseView
+                onPress={() => {
+                  navigation.navigate("ProgrammsHome", {
+                    screen: "Exercise",
+                    params: {
+                      exerciseID: item.id,
+                    },
+                  });
+                }}
+                order={index + 1}
+                sessionID={sessionID}
+                exerciseID={item.id}
+              />
+              <BasicButton
+                title="Доб."
+                onPress={() => {
+                  store.currentProgramm.addExerciseInTheCurrentProgramm(
+                    item.id
+                  );
+                  navigation.navigate("DailyHome", {
+                    screen: "Session",
+                    params: { trainingID, sessionID },
+                  });
+                }}
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      </Container>
+
       <PlusButton
         onPress={() => {
           navigation.navigate("DailyHome", { screen: "NewExercise" });

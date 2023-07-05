@@ -10,6 +10,7 @@ import P from "../../../components/P/P";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import { LineChart } from "react-native-chart-kit";
 import Container from "../../../components/Container/Container";
+import HR from "../../../components/HR/HR";
 
 type AllResultsScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -38,7 +39,10 @@ const AllResults = observer(({ navigation, route }: Props) => {
 
   return (
     <View style={globalStyle.container}>
-      <ExerciseView exerciseID={exerciseID} />
+      <Container>
+        <ExerciseView exerciseID={exerciseID} />
+      </Container>
+      <HR />
       <Container>
         <FlatList
           data={data}
@@ -53,6 +57,7 @@ const AllResults = observer(({ navigation, route }: Props) => {
           )}
         />
       </Container>
+      <HR />
       <LineChart
         data={{
           labels: data.map((item) => item.date),

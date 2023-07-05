@@ -13,6 +13,7 @@ import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
 import { StyleProp } from "react-native";
+import HR from "../../../components/HR/HR";
 
 type ExerciseScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -59,7 +60,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
           }}
         />
       </Container>
-
+      <HR />
       <Container style={style.results}>
         {exerciseSession ? (
           <>

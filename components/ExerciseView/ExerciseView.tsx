@@ -17,7 +17,6 @@ type ExerciseViewProps = {
 const ExerciseView: React.FC<ExerciseViewProps> = observer(
   ({ order, sessionID, exerciseID, onPress }) => {
     const { exercisesResults } = useStore();
-    const { colors } = useTheme();
     const exercise = useStore().getExercise(exerciseID);
     if (!exercise)
       return (
@@ -34,22 +33,14 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
 
     const styles: StyleProp<ViewStyle> = [style.container];
     if (isFinish) styles.push(style.disable);
-    if (order === 1 || order === undefined)
-      return (
-        <Touch onPress={onPress} style={style.touch}>
-          <View style={styles}>
-            <ExerciseThumb thumbImg={exercise.thumbImg} />
-            <P>{(order ? order.toString() + ". " : "") + exercise?.name}</P>
-          </View>
-        </Touch>
-      );
     return (
       <Touch onPress={onPress} style={style.touch}>
-        <View style={[style.border, { borderColor: colors.border }]}>
-          <View style={styles}>
-            <ExerciseThumb thumbImg={exercise.thumbImg} />
-            <P>{order.toString() + ". " + exercise?.name}</P>
-          </View>
+        <View style={styles}>
+          <ExerciseThumb thumbImg={exercise.thumbImg} />
+          <P>
+            {(order !== undefined ? order.toString() + ". " : "") +
+              exercise?.name}
+          </P>
         </View>
       </Touch>
     );
@@ -62,9 +53,6 @@ const style = StyleSheet.create({
   touch: {
     flexShrink: 1,
     flexGrow: 1,
-  },
-  border: {
-    borderTopWidth: 1,
   },
   container: {
     flexDirection: "row",

@@ -11,6 +11,7 @@ import InputNumber from "../../../components/InputNumber/InputNumber";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
 import InputComment from "../../../components/InputComment/InputComment";
+import HR from "../../../components/HR/HR";
 
 type NewSetScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -66,6 +67,7 @@ const NewSet = observer(({ navigation, route }: Props) => {
         isInteger={true}
         danger={dangerCount}
       />
+      <HR />
       <InputComment
         value={comment}
         setValue={setComment}

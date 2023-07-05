@@ -18,6 +18,7 @@ import Container from "../../../components/Container/Container";
 import { TrainingDataProps } from "../../../data/programms";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Touch from "../../../components/Touch/Touch";
+import HR from "../../../components/HR/HR";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,7 +37,6 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
 
   const renderItem: ListRenderItem<TrainingDataProps> | null | undefined = ({
     item,
-    index,
   }) => {
     const goSessionPage = () => {
       if (store.currentProgramm.currentSessionID)
@@ -50,9 +50,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
     };
 
     return (
-      <View
-        style={index === 0 ? [style.session, { marginTop: 0 }] : style.session}
-      >
+      <View style={style.session}>
         <Touch
           style={style.training}
           onPress={() => {
@@ -111,6 +109,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
               data={programm.trainings}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}
+              ItemSeparatorComponent={HR}
             ></FlatList>
           </Container>
         </Card>
@@ -135,14 +134,14 @@ const style = StyleSheet.create({
   session: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 20,
-    gap: 20,
+    alignItems: "center",
   },
   dimension: {
     marginTop: 20,
   },
   training: {
     flexGrow: 1,
+    paddingVertical: 20,
   },
 });
 
