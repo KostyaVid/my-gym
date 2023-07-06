@@ -1,15 +1,14 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useStore } from "../../store/rootStore.store";
 import Calendar from "../../components/Calendar/Calendar";
-import P from "../../components/P/P";
 import globalStyle from "../../utils/styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import Card from "../../components/Card/Card";
-import Container from "../../components/Container/Container";
+import { Surface, Text } from "react-native-paper";
 import Touch from "../../components/Touch/Touch";
+import Container from "../../components/Container/Container";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,20 +35,23 @@ const Home: React.FC<Props> = observer(({ navigation }) => {
   return (
     <View style={globalStyle.container}>
       <Calendar />
-      <Card>
+      <Surface style={styles.card} elevation={3}>
         <Touch onPress={currentProgramm ? goToProgramm : goToChooseProgramm}>
           <Container>
-            <P>Выбранная программа:</P>
-            {currentProgramm ? (
-              <P>{currentProgramm.name}</P>
-            ) : (
-              <P>Не выбрана</P>
-            )}
+            <Text variant="titleLarge">Выбранная программа:</Text>
+            <Text variant="bodyMedium">
+              {currentProgramm ? currentProgramm.name : "Не выбрана"}
+            </Text>
           </Container>
         </Touch>
-      </Card>
+      </Surface>
     </View>
   );
 });
 
+const styles = StyleSheet.create({
+  card: {
+    marginTop: 20,
+  },
+});
 export default Home;

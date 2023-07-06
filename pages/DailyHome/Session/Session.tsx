@@ -10,11 +10,11 @@ import P from "../../../components/P/P";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import DragList, { DragListRenderItemInfo } from "react-native-draglist";
 import globalStyle from "../../../utils/styles";
-import Card from "../../../components/Card/Card";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
 import Touch from "../../../components/Touch/Touch";
 import GridTab from "../../../components/GridTab/GridTab";
+import { Card } from "react-native-paper";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,

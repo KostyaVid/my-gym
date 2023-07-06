@@ -4,14 +4,13 @@ import { observer } from "mobx-react-lite";
 import { RouteProp } from "@react-navigation/native";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useStore } from "../../../store/rootStore.store";
 import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
-import Card from "../../../components/Card/Card";
 import { TrainingDataProps, programmsData } from "../../../data/programms";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
 import HR from "../../../components/HR/HR";
+import { Card } from "react-native-paper";
 
 type TrainingScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;

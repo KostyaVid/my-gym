@@ -1,7 +1,7 @@
-import { ImageSourcePropType, Image } from "react-native";
+import { ImageSourcePropType } from "react-native";
 import React from "react";
-import { StyleSheet } from "react-native";
 import { observer } from "mobx-react-lite";
+import { Avatar } from "react-native-paper";
 
 type ExerciseThumbProps = {
   thumbImg: ImageSourcePropType | undefined;
@@ -9,23 +9,15 @@ type ExerciseThumbProps = {
 
 const ExerciseThumb: React.FC<ExerciseThumbProps> = observer(({ thumbImg }) => {
   if (thumbImg) {
-    return <Image source={thumbImg} style={style.img} />;
+    return <Avatar.Image size={60} source={thumbImg} />;
   } else {
     return (
-      <Image
+      <Avatar.Image
+        size={60}
         source={require("./../../data/imgExercises/none.jpg")}
-        style={style.img}
       />
     );
   }
 });
 
 export default ExerciseThumb;
-
-const style = StyleSheet.create({
-  img: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-  },
-});

@@ -13,12 +13,12 @@ import { RouteProp } from "@react-navigation/native";
 import { useStore } from "../../../store/rootStore.store";
 import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
-import Card from "../../../components/Card/Card";
 import Container from "../../../components/Container/Container";
 import { TrainingDataProps } from "../../../data/programms";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Touch from "../../../components/Touch/Touch";
 import HR from "../../../components/HR/HR";
+import { Card } from "react-native-paper";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,

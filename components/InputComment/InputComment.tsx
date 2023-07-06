@@ -1,7 +1,6 @@
 import { StyleSheet, TextInput, View } from "react-native";
 import React from "react";
 import P from "../P/P";
-import Card from "../Card/Card";
 import Container from "../Container/Container";
 import { useTheme } from "@react-navigation/native";
 

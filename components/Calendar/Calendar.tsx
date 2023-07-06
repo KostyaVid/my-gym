@@ -5,9 +5,10 @@ import { useStore } from "../../store/rootStore.store";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
 import { daysFormat, monthsFormat } from "../../utils/constants";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useTheme } from "react-native-paper";
 
 type CalendarNavigation = NativeStackNavigationProp<
   RootStackParamList,
@@ -17,7 +18,7 @@ type CalendarNavigation = NativeStackNavigationProp<
 const Calendar = observer(() => {
   const navigation = useNavigation<CalendarNavigation>();
   const store = useStore();
-  const { colors } = useTheme();
+  const theme = useTheme();
   const sessions = store.sessions.sessions;
   const daysSessions: CustomDateStyle[] = sessions.map((sess) => {
     return {
@@ -37,8 +38,8 @@ const Calendar = observer(() => {
         nextTitle={"Следующий"}
         customDatesStyles={daysSessions}
         maxDate={new Date()}
-        textStyle={{ color: colors.text }}
-        disabledDatesTextStyle={{ color: colors.border }}
+        textStyle={{ color: theme.colors.onBackground }}
+        disabledDatesTextStyle={{ color: theme.colors.outlineVariant }}
         todayBackgroundColor="#ff8888"
         selectedDayColor="#999933"
         onDateChange={(date) => {

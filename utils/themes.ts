@@ -1,24 +1,22 @@
-import { DefaultTheme } from "@react-navigation/native";
-import type { Theme } from "@react-navigation/native";
+import {
+  MD3LightTheme as DefaultTheme,
+  MD3Theme,
+  MD3DarkTheme,
+} from "react-native-paper";
 
-export const GymDefaultTheme: Theme = {
+export const GymDefaultTheme: MD3Theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
     primary: "rgb(120,120,120)",
-    card: "rgb(245, 245, 245)",
-    background: "#ffffff",
-    notification: "rgb(150, 69, 58)",
+    background: "#fff",
   },
 };
-export const GymDarkTheme: Theme = {
-  dark: false,
+
+export const GymDarkTheme: MD3Theme = {
+  ...MD3DarkTheme,
   colors: {
-    primary: "rgb(60, 60, 60)",
-    background: "rgb(0, 0, 0)",
-    card: "rgb(20, 20, 20)",
-    text: "rgb(255, 255, 255)",
-    border: "rgb(100, 100, 100)",
-    notification: "rgb(150, 69, 58)",
+    ...MD3DarkTheme.colors,
+    background: "#000",
   },
 };

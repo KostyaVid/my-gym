@@ -11,7 +11,6 @@ import globalStyle from "../../../utils/styles";
 import P from "../../../components/P/P";
 import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
-import Touch from "../../../components/Touch/Touch";
 import HR from "../../../components/HR/HR";
 
 type ExerciseScreenNavigationProp =
