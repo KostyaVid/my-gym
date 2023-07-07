@@ -8,10 +8,8 @@ import { useStore } from "../../../store/rootStore.store";
 import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import globalStyle from "../../../utils/styles";
-import P from "../../../components/P/P";
-import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
-import HR from "../../../components/HR/HR";
+import { Button, Divider, IconButton, Surface, Text } from "react-native-paper";
 
 type ExerciseScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -28,10 +26,13 @@ const AddExercise = observer(({ navigation, route }: Props) => {
   return (
     <View style={globalStyle.container}>
       <Container>
-        <P size="h1">Выберите упражнение.</P>
+        <Text variant="headlineMedium">Выберите упражнение.</Text>
+      </Container>
+
+      <Surface style={style.containerExercises}>
         <FlatList
           data={store.customExercises.getAllExercisesSorted}
-          ItemSeparatorComponent={HR}
+          ItemSeparatorComponent={Divider}
           renderItem={({ item, index }) => (
             <View style={style.item}>
               <ExerciseView
@@ -47,8 +48,10 @@ const AddExercise = observer(({ navigation, route }: Props) => {
                 sessionID={sessionID}
                 exerciseID={item.id}
               />
-              <BasicButton
-                title="Доб."
+              <IconButton
+                mode="contained-tonal"
+                icon="plus"
+                size={30}
                 onPress={() => {
                   store.currentProgramm.addExerciseInTheCurrentProgramm(
                     item.id
@@ -63,7 +66,7 @@ const AddExercise = observer(({ navigation, route }: Props) => {
           )}
           keyExtractor={(item) => item.id}
         />
-      </Container>
+      </Surface>
 
       <PlusButton
         onPress={() => {
@@ -79,10 +82,12 @@ const style = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 15,
+    paddingRight: 10,
   },
   exercise: {
     width: "60%",
   },
+  containerExercises: { marginTop: 20 },
 });
 
 export default AddExercise;

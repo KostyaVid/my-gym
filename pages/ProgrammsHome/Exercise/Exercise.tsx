@@ -6,10 +6,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import globalStyle from "../../../utils/styles";
-import P from "../../../components/P/P";
-import ExerciseThumb from "../../../components/ExerciseThumb/ExerciseThumb";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
+import { Text } from "react-native-paper";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -26,15 +25,15 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const exercise = useStore().getExercise(exerciseID);
   if (!exercise)
     <View style={globalStyle.container}>
-      <P>Упражнение не найдено</P>
+      <Text>Упражнение не найдено</Text>
     </View>;
 
   return (
     <View style={globalStyle.container}>
       <Container>
         <ExerciseView exerciseID={exerciseID} />
-        {exercise?.description && <P>Описание: {exercise.description}</P>}
-        {exercise?.exerciseType && <P>Тип: {exercise.exerciseType}</P>}
+        {exercise?.description && <Text>Описание: {exercise.description}</Text>}
+        {exercise?.exerciseType && <Text>Тип: {exercise.exerciseType}</Text>}
       </Container>
     </View>
   );

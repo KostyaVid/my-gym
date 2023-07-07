@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import P from "../P/P";
+import { Text } from "react-native-paper";
 
 type Props = {
   date: number;
@@ -21,9 +21,9 @@ const TimeCounter = ({ date }: Props) => {
     };
   }, []);
   return (
-    <P>
+    <Text>
       {hours}:{minuts}:{seconds}
-    </P>
+    </Text>
   );
 };
 

@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { programmsData } from "../../data/programms";
 import { observer } from "mobx-react-lite";
-import P from "../P/P";
+import { Text } from "react-native-paper";
 
 export type ProgrammProps = {
   id: string;
@@ -16,13 +16,13 @@ const ProgrammC: React.FC<ProgrammProps> = observer(({ id }) => {
   if (data) {
     return (
       <View>
-        <P>{data.name}</P>
+        <Text>{data.name}</Text>
       </View>
     );
   } else {
     return (
       <View>
-        <P>Training programm with id: {id} not found</P>
+        <Text>Training programm with id: {id} not found</Text>
       </View>
     );
   }

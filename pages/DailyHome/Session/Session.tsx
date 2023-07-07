@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -6,15 +6,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
-import P from "../../../components/P/P";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import DragList, { DragListRenderItemInfo } from "react-native-draglist";
 import globalStyle from "../../../utils/styles";
-import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
-import Touch from "../../../components/Touch/Touch";
-import GridTab from "../../../components/GridTab/GridTab";
-import { Card } from "react-native-paper";
+import { Button, Surface, Text, useTheme } from "react-native-paper";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import ButtonDanger from "../../../components/Buttons/ButtonDanger/ButtonDanger";
 
 type SessionScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -31,6 +29,7 @@ const Session = observer(({ navigation, route }: Props) => {
   const sessionID = route.params.sessionID;
   const store = useStore();
   const training = store.currentProgramm.getTraining(trainingID);
+  const { colors } = useTheme();
 
   async function onReordered(fromIndex: number, toIndex: number) {
     if (!training?.exerciseIDs) return;
@@ -62,13 +61,18 @@ const Session = observer(({ navigation, route }: Props) => {
               });
             }}
           />
-          <Touch
+
+          <Pressable
             onPressIn={onDragStart}
             onPressOut={onDragEnd}
             style={styles.grid}
           >
-            <GridTab />
-          </Touch>
+            <MaterialCommunityIcons
+              name="dots-grid"
+              color={colors.onSurfaceDisabled}
+              size={30}
+            />
+          </Pressable>
         </View>
       );
     };
@@ -78,47 +82,52 @@ const Session = observer(({ navigation, route }: Props) => {
     return (
       <View style={globalStyle.container}>
         <Container>
-          <P size="h1">{training.name}</P>
+          <Text variant="displaySmall">{training.name}</Text>
           {session?.dateEnd ? (
-            <P disable>"Завершена"</P>
+            <Text>"Завершена"</Text>
           ) : (
             <View style={styles.time}>
-              <P>Время тренировки:</P>
+              <Text>Время тренировки:</Text>
               <TimeCounter
                 date={session?.dateStart ? session.dateStart : Date.now()}
               />
             </View>
           )}
         </Container>
-        <Card>
+        <Surface style={styles.exercises}>
           <DragList
             data={training.exerciseIDs}
             onReordered={onReordered}
             keyExtractor={(item: string) => item}
             renderItem={renderExersice}
           />
-        </Card>
+        </Surface>
         <Container style={styles.buttons}>
-          <BasicButton
-            title="Добавить упражнение"
+          <Button
+            mode="contained-tonal"
+            icon="plus"
             onPress={() => {
               navigation.navigate("DailyHome", {
                 screen: "AddExercise",
                 params: { trainingID, sessionID },
               });
             }}
-          />
+          >
+            Добавить упражнение
+          </Button>
           {session?.dateEnd ? (
             ""
           ) : (
-            <BasicButton
-              title="Завершить тренировку"
-              variant="danger"
+            <ButtonDanger
+              icon="stop-circle-outline"
+              mode="contained"
               onPress={() => {
                 store.currentProgramm.endCurrentSession();
                 navigation.navigate("DailyHome", { screen: "Daily" });
               }}
-            />
+            >
+              Завершить тренировку
+            </ButtonDanger>
           )}
         </Container>
       </View>
@@ -127,7 +136,7 @@ const Session = observer(({ navigation, route }: Props) => {
 
   return (
     <View>
-      <P>Oops</P>
+      <Text>Oops</Text>
     </View>
   );
 });
@@ -141,10 +150,13 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   buttons: {
-    marginTop: 10,
+    marginTop: 20,
     flex: 1,
     justifyContent: "space-between",
     gap: 20,
+  },
+  exercises: {
+    marginTop: 20,
   },
   grid: { alignItems: "flex-end", justifyContent: "center" },
   row: {

@@ -4,13 +4,11 @@ import { observer } from "mobx-react-lite";
 import { RouteProp } from "@react-navigation/native";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
 import { TrainingDataProps, programmsData } from "../../../data/programms";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
-import HR from "../../../components/HR/HR";
-import { Card } from "react-native-paper";
+import { Divider, Surface, Text } from "react-native-paper";
 
 type TrainingScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -28,14 +26,15 @@ const Training = observer(({ route, navigation }: TrainingProps) => {
     if (training) break;
   }
 
-  if (!training) return <P size="h3">Такая тренировка не найдена</P>;
+  if (!training)
+    return <Text variant="headlineSmall">Такая тренировка не найдена</Text>;
 
   return (
     <View style={globalStyle.container}>
       <Container>
-        <P size="h1">{training.name}</P>
+        <Text variant="displaySmall">{training.name}</Text>
       </Container>
-      <Card>
+      <Surface>
         <FlatList
           data={training.exerciseIDs}
           renderItem={({ item, index }) => (
@@ -50,9 +49,9 @@ const Training = observer(({ route, navigation }: TrainingProps) => {
               }}
             />
           )}
-          ItemSeparatorComponent={HR}
+          ItemSeparatorComponent={Divider}
         />
-      </Card>
+      </Surface>
     </View>
   );
 });

@@ -1,4 +1,4 @@
-import { View, StyleSheet, TextInput } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -8,10 +8,8 @@ import { useStore } from "../../../store/rootStore.store";
 import { Set } from "../../../store/exercise.store";
 import globalStyle from "../../../utils/styles";
 import InputNumber from "../../../components/InputNumber/InputNumber";
-import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
-import InputComment from "../../../components/InputComment/InputComment";
-import HR from "../../../components/HR/HR";
+import { Divider, IconButton, TextInput } from "react-native-paper";
 
 type NewSetScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -67,23 +65,32 @@ const NewSet = observer(({ navigation, route }: Props) => {
         isInteger={true}
         danger={dangerCount}
       />
-      <HR />
-      <InputComment
-        value={comment}
-        setValue={setComment}
-        title="Комментарий:"
-        placeholder="Введите комментарий..."
-      />
+      <Divider />
+      <Container>
+        <TextInput
+          mode="outlined"
+          value={comment}
+          onChangeText={setComment}
+          label="Комментарий:"
+          placeholder="Введите комментарий..."
+          multiline={true}
+        />
+      </Container>
       <Container style={styles.buttons}>
-        <BasicButton
-          title="Отмена"
-          variant="danger"
+        <IconButton
+          iconColor="#cc0000"
+          size={60}
+          mode="outlined"
+          icon="keyboard-return"
           onPress={() => {
             navigation.goBack();
           }}
         />
-        <BasicButton
-          title="Добавить"
+        <IconButton
+          size={60}
+          mode="outlined"
+          icon="check-bold"
+          iconColor="green"
           onPress={() => {
             const w = Number(weight.length ? weight : "0");
             const c = Number(count.length ? count : "0");
@@ -133,5 +140,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
 });

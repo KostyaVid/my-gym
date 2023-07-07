@@ -11,19 +11,19 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { DailyStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
 import { useStore } from "../../../store/rootStore.store";
-import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
 import Container from "../../../components/Container/Container";
 import { TrainingDataProps } from "../../../data/programms";
-import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
-import Touch from "../../../components/Touch/Touch";
-import HR from "../../../components/HR/HR";
-import { Card } from "react-native-paper";
+import {
+  Button,
+  Divider,
+  Surface,
+  Text,
+  TouchableRipple,
+} from "react-native-paper";
 
-type TrainingScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "DailyHome"
->;
+type TrainingScreenNavigationProp =
+  NativeStackNavigationProp<RootStackParamList>;
 
 type Props = {
   navigation: TrainingScreenNavigationProp;
@@ -51,7 +51,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
 
     return (
       <View style={style.session}>
-        <Touch
+        <TouchableRipple
           style={style.training}
           onPress={() => {
             navigation.navigate("DailyHome", {
@@ -60,14 +60,21 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
             });
           }}
         >
-          <P>{item.name}</P>
-        </Touch>
+          <Text>{item.name}</Text>
+        </TouchableRipple>
         {currentTrainingID === item.id &&
         store.currentProgramm.currentSessionID ? (
-          <BasicButton title="Продолжить" onPress={goSessionPage} />
+          <Button
+            mode="contained-tonal"
+            icon="backup-restore"
+            onPress={goSessionPage}
+          >
+            Продолжить
+          </Button>
         ) : (
-          <BasicButton
-            title="Начать"
+          <Button
+            icon="plus"
+            mode="contained-tonal"
             onPress={() => {
               if (store.currentProgramm.currentSessionID) {
                 Alert.alert("Начать", "Завершить прошлую тренировку?", [
@@ -91,7 +98,9 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
                 goSessionPage();
               }
             }}
-          />
+          >
+            Начать
+          </Button>
         )}
       </View>
     );
@@ -101,35 +110,50 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
     return (
       <View style={globalStyle.container}>
         <Container>
-          <P size="h2">Текущая программа: {programm.name}</P>
+          <Text variant="titleLarge">Текущая программа: {programm.name}</Text>
         </Container>
-        <Card>
+        <Surface style={style.containerSessions}>
           <Container>
             <FlatList
               data={programm.trainings}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}
-              ItemSeparatorComponent={HR}
+              ItemSeparatorComponent={Divider}
             ></FlatList>
           </Container>
-        </Card>
+        </Surface>
         <View style={style.dimension}>
-          <P size="h2">Замеры </P>
-          <BasicButton
-            title="Замеры"
+          <Text variant="titleLarge">Замеры </Text>
+          <Button
+            mode="contained-tonal"
             onPress={() => {
               navigation.navigate("DailyHome", { screen: "Dimension" });
             }}
-          />
+          >
+            Замеры
+          </Button>
         </View>
       </View>
     );
-  return <P>Не выбрана программа</P>;
+  return (
+    <Container>
+      <Button
+        onPress={() => {
+          navigation.navigate("ProgrammsHome", { screen: "Programms" });
+        }}
+      >
+        Не выбрана программа
+      </Button>
+    </Container>
+  );
 });
 
 const style = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  containerSessions: {
+    marginTop: 20,
   },
   session: {
     flexDirection: "row",

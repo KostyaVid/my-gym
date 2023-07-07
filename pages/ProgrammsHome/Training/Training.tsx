@@ -1,14 +1,13 @@
-import { FlatList, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import React from "react";
 import { ProgrammStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
-import { useStore } from "../../../store/rootStore.store";
 import globalStyle from "../../../utils/styles";
-import P from "../../../components/P/P";
 import { programmsData } from "../../../data/programms";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
+import { Surface, Text } from "react-native-paper";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -28,29 +27,37 @@ const Training = observer(({ navigation, route }: Props) => {
   if (!training)
     return (
       <View>
-        <P size="h2">Тренировка не найдена.</P>
+        <Text variant="headlineSmall">Тренировка не найдена.</Text>
       </View>
     );
   return (
     <View style={globalStyle.container}>
-      <P size="h1">{training.name}</P>
-      <FlatList
-        data={training.exerciseIDs}
-        renderItem={({ item, index }) => (
-          <ExerciseView
-            order={index + 1}
-            exerciseID={item}
-            onPress={() => {
-              navigation.navigate("ProgrammsHome", {
-                screen: "Exercise",
-                params: { exerciseID: item },
-              });
-            }}
-          />
-        )}
-      />
+      <Text variant="displaySmall">{training.name}</Text>
+      <Surface style={styles.containerExercises}>
+        <FlatList
+          data={training.exerciseIDs}
+          renderItem={({ item, index }) => (
+            <ExerciseView
+              order={index + 1}
+              exerciseID={item}
+              onPress={() => {
+                navigation.navigate("ProgrammsHome", {
+                  screen: "Exercise",
+                  params: { exerciseID: item },
+                });
+              }}
+            />
+          )}
+        />
+      </Surface>
     </View>
   );
+});
+
+const styles = StyleSheet.create({
+  containerExercises: {
+    marginTop: 20,
+  },
 });
 
 export default Training;

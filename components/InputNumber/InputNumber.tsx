@@ -1,16 +1,9 @@
-import {
-  StyleProp,
-  StyleSheet,
-  TextInput,
-  TextStyle,
-  View,
-} from "react-native";
+import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 import React, { useCallback } from "react";
-import P from "../P/P";
 import Container from "../Container/Container";
 import { observer } from "mobx-react-lite";
 import { useTheme } from "@react-navigation/native";
-import IncButton from "../Buttons/IncButton/IncButton";
+import { IconButton, Text, TextInput } from "react-native-paper";
 
 type InputNumberProps = {
   title: string;
@@ -35,17 +28,6 @@ const dec = (text: string) => {
 
 const InputNumber: React.FC<InputNumberProps> = observer(
   ({ title, value, setValue, isInteger = false, danger = false }) => {
-    const { colors } = useTheme();
-
-    const inputStyle: StyleProp<TextStyle> = [
-      styles.input,
-      {
-        borderColor: colors.border,
-        color: colors.text,
-        backgroundColor: danger ? colors.notification : colors.background,
-      },
-    ];
-
     const handleValue = useCallback(
       (text: string) => {
         if (!text.length) setValue("");
@@ -68,19 +50,19 @@ const InputNumber: React.FC<InputNumberProps> = observer(
 
     return (
       <Container style={styles.container}>
-        <P size="h2" weight="600">
-          {title}
-        </P>
+        <Text variant="headlineLarge">{title}</Text>
         <View style={styles.containerButtons}>
-          <IncButton type="decrement" onPress={handleDec} />
+          <IconButton mode="contained-tonal" icon="minus" onPress={handleDec} />
           <TextInput
-            style={inputStyle}
+            style={styles.input}
+            mode="outlined"
             keyboardType="numeric"
             value={value}
             onChangeText={handleValue}
             maxLength={8}
+            error={danger}
           />
-          <IncButton type="increment" onPress={handleInc} />
+          <IconButton mode="contained-tonal" icon="plus" onPress={handleInc} />
         </View>
       </Container>
     );
@@ -94,9 +76,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    borderWidth: 1,
-    borderRadius: 6,
-    padding: 10,
+    padding: 5,
     textAlign: "center",
     fontSize: 30,
   },

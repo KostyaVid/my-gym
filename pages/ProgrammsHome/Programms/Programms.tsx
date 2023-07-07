@@ -4,11 +4,9 @@ import { programmsData } from "../../../data/programms";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../types";
 import { useStore } from "../../../store/rootStore.store";
-import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
-import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import Container from "../../../components/Container/Container";
-import Touch from "../../../components/Touch/Touch";
+import { Button, Text, TouchableRipple } from "react-native-paper";
 
 type ProgrammsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,12 +30,12 @@ const Programms = ({ navigation }: Props) => {
   const currentProgramm = useStore().currentProgramm;
   return (
     <Container style={globalStyle.container}>
-      <P size="h1">Выберите программу:</P>
+      <Text variant="headlineMedium">Выберите программу:</Text>
       <SectionList
         style={styles.sectionList}
         sections={data}
         renderItem={({ item, section }) => (
-          <Touch
+          <TouchableRipple
             style={styles.training}
             onPress={() => {
               navigation.navigate("ProgrammsHome", {
@@ -46,13 +44,13 @@ const Programms = ({ navigation }: Props) => {
               });
             }}
           >
-            <P>{item.name}</P>
-          </Touch>
+            <Text>{item.name}</Text>
+          </TouchableRipple>
         )}
         renderSectionHeader={({ section }) => (
           <View>
             <View style={styles.sectionHeader}>
-              <Touch
+              <TouchableRipple
                 style={styles.nameProgramm}
                 onPress={() => {
                   navigation.navigate("ProgrammsHome", {
@@ -61,20 +59,21 @@ const Programms = ({ navigation }: Props) => {
                   });
                 }}
               >
-                <P size="h2">{section.title}</P>
-              </Touch>
-              <BasicButton
-                title="Начать"
+                <Text variant="headlineSmall">{section.title}</Text>
+              </TouchableRipple>
+              <Button
+                mode="contained-tonal"
+                icon="arrow-collapse-left"
                 onPress={() => {
                   currentProgramm?.setProgrammByID(section.id);
                   navigation.navigate("DailyHome", { screen: "Daily" });
                 }}
-              />
+              >
+                Начать
+              </Button>
             </View>
             {section.description && (
-              <P disable style={styles.description}>
-                {section.description}
-              </P>
+              <Text style={styles.description}>{section.description}</Text>
             )}
           </View>
         )}
@@ -101,6 +100,7 @@ const styles = StyleSheet.create({
     borderColor: "#444",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   nameProgramm: {
     marginBottom: 10,

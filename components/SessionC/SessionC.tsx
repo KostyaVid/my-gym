@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { TrainingDataProps, programmsData } from "../../data/programms";
 import { observer } from "mobx-react-lite";
-import P from "../P/P";
+import { Text } from "react-native-paper";
 
 export type SessionProps = {
   id: string;
@@ -20,12 +20,12 @@ const SessionC: React.FC<SessionProps> = observer(({ id }) => {
   if (data)
     return (
       <View>
-        <P>{data.name}</P>
+        <Text>{data.name}</Text>
       </View>
     );
   return (
     <View>
-      <P>Training section with id: {id} not found</P>
+      <Text>Training section with id: {id} not found</Text>
     </View>
   );
 });

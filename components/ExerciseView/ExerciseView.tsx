@@ -1,11 +1,9 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import P from "../P/P";
 import { useStore } from "../../store/rootStore.store";
 import { observer } from "mobx-react-lite";
-import { useTheme } from "@react-navigation/native";
 import ExerciseThumb from "../ExerciseThumb/ExerciseThumb";
-import Touch from "../Touch/Touch";
+import { Text, TouchableRipple } from "react-native-paper";
 
 type ExerciseViewProps = {
   order?: number;
@@ -20,11 +18,11 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
     const exercise = useStore().getExercise(exerciseID);
     if (!exercise)
       return (
-        <Touch onPress={onPress} style={style.touch}>
+        <TouchableRipple onPress={onPress} style={style.touch}>
           <View>
-            <P>Упражнение не найдено</P>
+            <Text>Упражнение не найдено</Text>
           </View>
-        </Touch>
+        </TouchableRipple>
       );
 
     const isFinish: boolean | undefined = sessionID
@@ -34,15 +32,15 @@ const ExerciseView: React.FC<ExerciseViewProps> = observer(
     const styles: StyleProp<ViewStyle> = [style.container];
     if (isFinish) styles.push(style.disable);
     return (
-      <Touch onPress={onPress} style={style.touch}>
+      <TouchableRipple onPress={onPress} style={style.touch}>
         <View style={styles}>
           <ExerciseThumb thumbImg={exercise.thumbImg} />
-          <P>
+          <Text style={style.text}>
             {(order !== undefined ? order.toString() + ". " : "") +
               exercise?.name}
-          </P>
+          </Text>
         </View>
-      </Touch>
+      </TouchableRipple>
     );
   }
 );
@@ -62,5 +60,8 @@ const style = StyleSheet.create({
   },
   disable: {
     opacity: 0.5,
+  },
+  text: {
+    flexShrink: 1,
   },
 });

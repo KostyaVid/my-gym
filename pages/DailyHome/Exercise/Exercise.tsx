@@ -1,19 +1,16 @@
-import { View, FlatList, StyleSheet, ViewStyle } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import React from "react";
 import { DailyStackList, RootStackParamList } from "../../../types";
-import { RouteProp, useTheme } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
-import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
 import ExerciseResultByData from "../../../components/ExerciseResultByData/ExerciseResultByData";
-import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
-import { StyleProp } from "react-native";
-import HR from "../../../components/HR/HR";
+import { Button, DataTable, Divider, Surface, Text } from "react-native-paper";
 
 type ExerciseScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -33,162 +30,135 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const exerciseSession = exerciseResult?.results.findLast(
     (item) => item.sessionID === sessionID
   );
-  const { colors } = useTheme();
 
-  const styleRow: (index: number) => StyleProp<ViewStyle> = (index) => [
-    style.containerSet,
-    { borderColor: colors.border },
-    index % 2 === 1
-      ? { backgroundColor: colors.card }
-      : index === 0
-      ? { borderTopWidth: 1 }
-      : {},
-  ];
-
+  const hasComment = exerciseSession?.sets.find(
+    (set) => set.comment !== undefined
+  );
   return (
     <View style={globalStyle.container}>
-      <Container>
-        <ExerciseView
-          exerciseID={exerciseID}
-          onPress={() => {
-            navigation.navigate("ProgrammsHome", {
-              screen: "Exercise",
-              params: {
-                exerciseID: exerciseID,
-              },
-            });
-          }}
-        />
-      </Container>
-      <HR />
-      <Container style={style.results}>
-        {exerciseSession ? (
-          <>
-            <P size="h1" textAlign="center">
-              Результаты:
-            </P>
-            <View style={[style.set, style.headerSet]}>
-              <View style={style.dataNumber}>
-                <P weight="500" textAlign="center">
-                  №:
-                </P>
-              </View>
-              <View style={style.data}>
-                <P weight="500" textAlign="center">
-                  Вес (кг):
-                </P>
-              </View>
-              <View style={style.data}>
-                <P weight="500" textAlign="center">
-                  Количество:
-                </P>
-              </View>
-            </View>
-            <FlatList
-              data={exerciseSession.sets}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item, index }) => (
-                <View style={styleRow(index)}>
-                  <View style={style.set}>
-                    <View style={style.dataNumber}>
-                      <P textAlign="center">{index + 1}</P>
-                    </View>
-                    <View style={style.data}>
-                      <P textAlign="center">{item.weight} кг</P>
-                    </View>
-                    <View style={style.data}>
-                      <P textAlign="center">{item.count}</P>
-                    </View>
-                  </View>
-                  {item.comment && (
-                    <View style={style.comment}>
-                      <P disable>{item.comment}</P>
-                    </View>
-                  )}
-                </View>
-              )}
-            />
-          </>
-        ) : (
-          <P disable>Еще не выполнялось</P>
-        )}
-        <P disable>
-          Средняя предыдущая интенсивность:
-          {store.exercisesResults.getValueWorkSetsLastSession(exerciseID)}
-        </P>
-      </Container>
-      <Container>
-        {exerciseSession?.isFinish || (
-          <BasicButton
-            title="Завершить"
+      <ScrollView>
+        <Container>
+          <ExerciseView
+            exerciseID={exerciseID}
             onPress={() => {
-              store.exercisesResults.finishSetsBySessionID(
-                exerciseID,
-                sessionID
-              );
-              navigation.navigate("DailyHome", {
-                screen: "Session",
-                params: { trainingID, sessionID },
+              navigation.navigate("ProgrammsHome", {
+                screen: "Exercise",
+                params: {
+                  exerciseID: exerciseID,
+                },
               });
             }}
           />
-        )}
+        </Container>
+        <Divider />
+        <Container style={style.results}>
+          {exerciseSession ? (
+            <>
+              <Text variant="displaySmall">Результаты:</Text>
+              <Surface style={style.dataContainer}>
+                <DataTable>
+                  <DataTable.Header>
+                    <DataTable.Title sortDirection="descending">
+                      №:
+                    </DataTable.Title>
+                    <DataTable.Title>Вес (кг)</DataTable.Title>
+                    <DataTable.Title>Кол-во:</DataTable.Title>
+                    {hasComment && (
+                      <DataTable.Title>Комментарии:</DataTable.Title>
+                    )}
+                  </DataTable.Header>
+                  {exerciseSession.sets.map((item, index) => (
+                    <DataTable.Row key={item.id}>
+                      <DataTable.Cell>{index}</DataTable.Cell>
+                      <DataTable.Cell>{item.weight + " кг"}</DataTable.Cell>
+                      <DataTable.Cell>{item.count}</DataTable.Cell>
+                      {hasComment && (
+                        <DataTable.Cell>{item.comment}</DataTable.Cell>
+                      )}
+                    </DataTable.Row>
+                  ))}
+                </DataTable>
+              </Surface>
+            </>
+          ) : (
+            <Text variant="titleMedium">Еще не выполнялось.</Text>
+          )}
+          <Text style={style.averagerResult}>
+            Средняя интенсивность на прошлой тренировке:
+            {" " +
+              store.exercisesResults.getValueWorkSetsLastSession(exerciseID) +
+              "кг"}
+          </Text>
+        </Container>
+        <Container>
+          {exerciseSession?.isFinish || (
+            <Button
+              icon="stop-circle"
+              mode="contained-tonal"
+              onPress={() => {
+                store.exercisesResults.finishSetsBySessionID(
+                  exerciseID,
+                  sessionID
+                );
+                navigation.navigate("DailyHome", {
+                  screen: "Session",
+                  params: { trainingID, sessionID },
+                });
+              }}
+            >
+              Завершить
+            </Button>
+          )}
 
-        <PlusButton
-          onPress={() => {
-            navigation.navigate("DailyHome", {
-              screen: "NewSet",
-              params: {
-                exerciseID,
-                trainingID,
-                sessionID,
-              },
-            });
-          }}
-        />
-        {exerciseResult && (
-          <View style={{ marginTop: 20 }}>
-            <ExerciseResultByData exerciseID={exerciseID} order={1} />
-            <ExerciseResultByData exerciseID={exerciseID} order={2} />
-            <ExerciseResultByData exerciseID={exerciseID} order={3} />
+          {exerciseResult && (
             <View style={{ marginTop: 20 }}>
-              <BasicButton
-                title="Посмотреть все результаты"
-                onPress={() => {
-                  navigation.navigate("DailyHome", {
-                    screen: "AllResults",
-                    params: { exerciseID },
-                  });
-                }}
-              />
+              <ExerciseResultByData exerciseID={exerciseID} order={1} />
+              <ExerciseResultByData exerciseID={exerciseID} order={2} />
+              <ExerciseResultByData exerciseID={exerciseID} order={3} />
+              <View style={{ marginTop: 20 }}>
+                <Button
+                  icon="eye-outline"
+                  mode="contained-tonal"
+                  onPress={() => {
+                    navigation.navigate("DailyHome", {
+                      screen: "AllResults",
+                      params: { exerciseID },
+                    });
+                  }}
+                >
+                  Посмотреть все результаты
+                </Button>
+              </View>
             </View>
-          </View>
-        )}
-      </Container>
+          )}
+        </Container>
+      </ScrollView>
+      <PlusButton
+        onPress={() => {
+          navigation.navigate("DailyHome", {
+            screen: "NewSet",
+            params: {
+              exerciseID,
+              trainingID,
+              sessionID,
+            },
+          });
+        }}
+      />
     </View>
   );
 });
 
 const style = StyleSheet.create({
-  containerSet: {
-    borderBottomWidth: 1,
-  },
-  set: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  headerSet: {
-    marginVertical: 10,
-  },
-  data: { flex: 1, padding: 5 },
-  dataNumber: { flex: 0.5, padding: 5 },
   results: {
     flex: 1,
   },
-  comment: {
-    paddingHorizontal: 15,
-    paddingBottom: 5,
-    alignItems: "flex-end",
+  dataContainer: {
+    marginTop: 20,
+    paddingHorizontal: 10,
+  },
+  averagerResult: {
+    marginTop: 20,
   },
 });
 

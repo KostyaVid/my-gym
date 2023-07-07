@@ -1,10 +1,10 @@
-import { View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../types";
-import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
-import Touch from "../../../components/Touch/Touch";
+import { Button, Divider } from "react-native-paper";
+import Container from "../../../components/Container/Container";
 
 type ElseNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -17,16 +17,22 @@ type Props = {
 
 const Else: React.FC<Props> = ({ navigation }) => {
   return (
-    <View style={globalStyle.container}>
-      <Touch
-        onPress={() => {
-          navigation.navigate("ElseHome", { screen: "Settings" });
-        }}
-      >
-        <P>Настройки</P>
-      </Touch>
-    </View>
+    <ScrollView style={globalStyle.container}>
+      <Container style={styles.container}>
+        <Button
+          onPress={() => {
+            navigation.navigate("ElseHome", { screen: "Settings" });
+          }}
+        >
+          Настройки
+        </Button>
+        <Divider />
+      </Container>
+    </ScrollView>
   );
 };
+const styles = StyleSheet.create({
+  container: { marginTop: 20 },
+});
 
 export default Else;

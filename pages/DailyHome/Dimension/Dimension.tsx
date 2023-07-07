@@ -1,12 +1,12 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React from "react";
-import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
+import { Text } from "react-native-paper";
 
 const Dimension = () => {
   return (
     <View style={globalStyle.container}>
-      <P>Dimension</P>
+      <Text>Dimension</Text>
     </View>
   );
 };

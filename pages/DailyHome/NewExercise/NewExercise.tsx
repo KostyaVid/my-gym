@@ -7,9 +7,8 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import SelectDropdown from "react-native-select-dropdown";
 import { ExerciseFullProps, ExerciseType } from "../../../data/exercises";
-import P from "../../../components/P/P";
 import globalStyle from "../../../utils/styles";
-import BasicButton from "../../../components/Buttons/BasicButton/BasicButton";
+import { Button, Text } from "react-native-paper";
 
 const exerciseTypeData: ExerciseType[] = [
   "cardio",
@@ -40,7 +39,7 @@ const NewExercise = observer(({ navigation, route }: Props) => {
   return (
     <View style={globalStyle.container}>
       <View style={style.label}>
-        <P>Название: </P>
+        <Text>Название: </Text>
         <TextInput
           placeholder="Упражнение 1"
           onChangeText={nameHandle}
@@ -48,7 +47,7 @@ const NewExercise = observer(({ navigation, route }: Props) => {
         />
       </View>
       <View style={style.label}>
-        <P>Вид: </P>
+        <Text>Вид: </Text>
         <SelectDropdown
           data={exerciseTypeData}
           defaultButtonText="Не выбран"
@@ -67,8 +66,8 @@ const NewExercise = observer(({ navigation, route }: Props) => {
           }}
         />
       </View>
-      <BasicButton
-        title="Создать"
+      <Button
+        mode="contained"
         onPress={() => {
           const exercise: ExerciseFullProps = {
             id: "c" + Date.now().toString(),
@@ -79,7 +78,9 @@ const NewExercise = observer(({ navigation, route }: Props) => {
           store.customExercises.addCustomExercise(exercise);
           navigation.goBack();
         }}
-      />
+      >
+        Создать
+      </Button>
     </View>
   );
 });

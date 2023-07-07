@@ -1,8 +1,8 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import React from "react";
-import P from "../P/P";
 import Container from "../Container/Container";
 import { useTheme } from "@react-navigation/native";
+import { Text } from "react-native-paper";
 
 type InputCommentProps = {
   title: string;
@@ -20,7 +20,7 @@ const InputComment: React.FC<InputCommentProps> = ({
   const { colors } = useTheme();
   return (
     <Container>
-      <P size="h3">{title}</P>
+      <Text variant="headlineSmall">{title}</Text>
       <TextInput
         value={value}
         onChangeText={setValue}

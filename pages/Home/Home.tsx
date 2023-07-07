@@ -6,8 +6,7 @@ import Calendar from "../../components/Calendar/Calendar";
 import globalStyle from "../../utils/styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { Surface, Text } from "react-native-paper";
-import Touch from "../../components/Touch/Touch";
+import { Surface, Text, TouchableRipple } from "react-native-paper";
 import Container from "../../components/Container/Container";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
@@ -36,14 +35,16 @@ const Home: React.FC<Props> = observer(({ navigation }) => {
     <View style={globalStyle.container}>
       <Calendar />
       <Surface style={styles.card} elevation={3}>
-        <Touch onPress={currentProgramm ? goToProgramm : goToChooseProgramm}>
+        <TouchableRipple
+          onPress={currentProgramm ? goToProgramm : goToChooseProgramm}
+        >
           <Container>
             <Text variant="titleLarge">Выбранная программа:</Text>
             <Text variant="bodyMedium">
               {currentProgramm ? currentProgramm.name : "Не выбрана"}
             </Text>
           </Container>
-        </Touch>
+        </TouchableRipple>
       </Surface>
     </View>
   );
