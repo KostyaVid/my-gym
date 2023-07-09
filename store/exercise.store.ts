@@ -35,6 +35,15 @@ export default class ExerciseStore {
   getExercise(exerciseID: string) {
     return this.exercises.findLast((item) => item.id === exerciseID);
   }
+  getSet(exerciseID: string, sessionID: string, setID: string) {
+    let exercise = this.getExercise(exerciseID);
+    if (!exercise) return;
+    const resultsInSession = exercise.results.find(
+      (result) => result.sessionID === sessionID
+    );
+    if (!resultsInSession) return;
+    return resultsInSession.sets.find((localSet) => localSet.id === setID);
+  }
 
   async loadStorage() {
     this.state = "pending";
@@ -114,6 +123,21 @@ export default class ExerciseStore {
         isFinish: false,
       });
     }
+    yield this.saveStore(exerciseID, exercise);
+  }
+
+  *changeExerciseResult(exerciseID: string, sessionID: string, set: Set) {
+    let exercise = this.getExercise(exerciseID);
+    if (!exercise) return;
+    const resultsInSession = exercise.results.find(
+      (result) => result.sessionID === sessionID
+    );
+    if (!resultsInSession) return;
+    const setInSessionIndex = resultsInSession.sets.findIndex(
+      (localSet) => localSet.id === set.id
+    );
+    if (setInSessionIndex === -1) return;
+    resultsInSession.sets[setInSessionIndex] = set;
     yield this.saveStore(exerciseID, exercise);
   }
 

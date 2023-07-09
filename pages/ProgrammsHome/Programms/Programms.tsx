@@ -1,4 +1,4 @@
-import { SectionList, StyleSheet, View } from "react-native";
+import { SafeAreaView, SectionList, StyleSheet, View } from "react-native";
 import React from "react";
 import { programmsData } from "../../../data/programms";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -6,7 +6,7 @@ import { RootStackParamList } from "../../../types";
 import { useStore } from "../../../store/rootStore.store";
 import globalStyle from "../../../utils/styles";
 import Container from "../../../components/Container/Container";
-import { Button, Text, TouchableRipple } from "react-native-paper";
+import { Button, Surface, Text, TouchableRipple } from "react-native-paper";
 
 type ProgrammsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,14 +29,16 @@ const data = programmsData.map((elem) => {
 const Programms = ({ navigation }: Props) => {
   const currentProgramm = useStore().currentProgramm;
   return (
-    <Container style={globalStyle.container}>
-      <Text variant="headlineMedium">Выберите программу:</Text>
+    <SafeAreaView style={globalStyle.container}>
+      <Container>
+        <Text variant="headlineMedium">Выберите программу:</Text>
+      </Container>
       <SectionList
         style={styles.sectionList}
         sections={data}
-        renderItem={({ item, section }) => (
+        renderItem={({ item, section, index }) => (
           <TouchableRipple
-            style={styles.training}
+            style={[styles.training, globalStyle.padding10]}
             onPress={() => {
               navigation.navigate("ProgrammsHome", {
                 screen: "Training",
@@ -44,12 +46,12 @@ const Programms = ({ navigation }: Props) => {
               });
             }}
           >
-            <Text>{item.name}</Text>
+            <Text>{index + 1 + ". " + item.name}</Text>
           </TouchableRipple>
         )}
         renderSectionHeader={({ section }) => (
           <View>
-            <View style={styles.sectionHeader}>
+            <Surface style={[styles.sectionHeader, globalStyle.padding10]}>
               <TouchableRipple
                 style={styles.nameProgramm}
                 onPress={() => {
@@ -59,10 +61,10 @@ const Programms = ({ navigation }: Props) => {
                   });
                 }}
               >
-                <Text variant="headlineSmall">{section.title}</Text>
+                <Text variant="titleLarge">{section.title}</Text>
               </TouchableRipple>
               <Button
-                mode="contained-tonal"
+                mode="outlined"
                 icon="arrow-collapse-left"
                 onPress={() => {
                   currentProgramm?.setProgrammByID(section.id);
@@ -71,15 +73,17 @@ const Programms = ({ navigation }: Props) => {
               >
                 Начать
               </Button>
-            </View>
+            </Surface>
             {section.description && (
-              <Text style={styles.description}>{section.description}</Text>
+              <Text style={[styles.description, globalStyle.padding10]}>
+                {section.description}
+              </Text>
             )}
           </View>
         )}
         keyExtractor={(item) => item.id}
       />
-    </Container>
+    </SafeAreaView>
   );
 };
 
@@ -95,17 +99,18 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     marginTop: 10,
-    paddingTop: 10,
     borderTopWidth: 1,
     borderColor: "#444",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 10,
   },
   nameProgramm: {
     marginBottom: 10,
+    flexShrink: 1,
   },
   description: {
-    marginTop: 10,
+    opacity: 0.6,
   },
 });

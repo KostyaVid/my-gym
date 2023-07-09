@@ -46,15 +46,14 @@ const Session = observer(({ navigation, route }: Props) => {
       return (
         <View style={styles.row}>
           <ExerciseView
-            key={item}
             order={index + 1}
             sessionID={sessionID}
-            exerciseID={item}
+            exerciseID={item[1]}
             onPress={() => {
               navigation.navigate("DailyHome", {
                 screen: "Exercise",
                 params: {
-                  exerciseID: item,
+                  exerciseID: item[1],
                   trainingID: training.id,
                   sessionID,
                 },
@@ -84,7 +83,12 @@ const Session = observer(({ navigation, route }: Props) => {
         <Container>
           <Text variant="displaySmall">{training.name}</Text>
           {session?.dateEnd ? (
-            <Text>"Завершена"</Text>
+            <Text
+              variant="headlineSmall"
+              style={[globalStyle.mt20, { opacity: 0.6 }]}
+            >
+              "Завершена"
+            </Text>
           ) : (
             <View style={styles.time}>
               <Text>Время тренировки:</Text>
@@ -94,17 +98,17 @@ const Session = observer(({ navigation, route }: Props) => {
             </View>
           )}
         </Container>
-        <Surface style={styles.exercises}>
+        <Surface style={globalStyle.mt20}>
           <DragList
-            data={training.exerciseIDs}
+            data={training.exerciseIDs.map((tr, index) => [index, tr])}
             onReordered={onReordered}
-            keyExtractor={(item: string) => item}
+            keyExtractor={(item: [number, string]) => item[0] + item[1]}
             renderItem={renderExersice}
           />
         </Surface>
         <Container style={styles.buttons}>
           <Button
-            mode="contained-tonal"
+            mode="elevated"
             icon="plus"
             onPress={() => {
               navigation.navigate("DailyHome", {
@@ -155,9 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 20,
   },
-  exercises: {
-    marginTop: 20,
-  },
+
   grid: { alignItems: "flex-end", justifyContent: "center" },
   row: {
     flexDirection: "row",

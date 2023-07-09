@@ -51,66 +51,89 @@ const Exercise = observer(({ navigation, route }: Props) => {
           />
         </Container>
         <Divider />
-        <Container style={style.results}>
-          {exerciseSession ? (
-            <>
+        {exerciseSession ? (
+          <>
+            <Container style={style.results}>
               <Text variant="displaySmall">Результаты:</Text>
-              <Surface style={style.dataContainer}>
-                <DataTable>
-                  <DataTable.Header>
-                    <DataTable.Title sortDirection="descending">
-                      №:
-                    </DataTable.Title>
-                    <DataTable.Title>Вес (кг)</DataTable.Title>
-                    <DataTable.Title>Кол-во:</DataTable.Title>
+            </Container>
+            <Surface style={style.dataContainer}>
+              <DataTable>
+                <DataTable.Header>
+                  <DataTable.Title sortDirection="descending">
+                    №:
+                  </DataTable.Title>
+                  <DataTable.Title>Вес (кг)</DataTable.Title>
+                  <DataTable.Title>Кол-во:</DataTable.Title>
+                  {hasComment && (
+                    <DataTable.Title>Комментарии:</DataTable.Title>
+                  )}
+                </DataTable.Header>
+                {exerciseSession.sets.map((item, index) => (
+                  <DataTable.Row
+                    key={item.id}
+                    onPress={() => {
+                      navigation.navigate("DailyHome", {
+                        screen: "ChangeSet",
+                        params: {
+                          exerciseID,
+                          sessionID,
+                          trainingID,
+                          setID: item.id,
+                        },
+                      });
+                    }}
+                  >
+                    <DataTable.Cell>{index}</DataTable.Cell>
+                    <DataTable.Cell>{item.weight + " кг"}</DataTable.Cell>
+                    <DataTable.Cell>{item.count}</DataTable.Cell>
                     {hasComment && (
-                      <DataTable.Title>Комментарии:</DataTable.Title>
+                      <DataTable.Cell>{item.comment}</DataTable.Cell>
                     )}
-                  </DataTable.Header>
-                  {exerciseSession.sets.map((item, index) => (
-                    <DataTable.Row key={item.id}>
-                      <DataTable.Cell>{index}</DataTable.Cell>
-                      <DataTable.Cell>{item.weight + " кг"}</DataTable.Cell>
-                      <DataTable.Cell>{item.count}</DataTable.Cell>
-                      {hasComment && (
-                        <DataTable.Cell>{item.comment}</DataTable.Cell>
-                      )}
-                    </DataTable.Row>
-                  ))}
-                </DataTable>
-              </Surface>
-            </>
-          ) : (
+                  </DataTable.Row>
+                ))}
+              </DataTable>
+            </Surface>
+          </>
+        ) : (
+          <Container>
             <Text variant="titleMedium">Еще не выполнялось.</Text>
-          )}
-          <Text style={style.averagerResult}>
+          </Container>
+        )}
+        <Container>
+          <Text style={globalStyle.mt20}>
             Средняя интенсивность на прошлой тренировке:
             {" " +
               store.exercisesResults.getValueWorkSetsLastSession(exerciseID) +
               "кг"}
           </Text>
         </Container>
-        <Container>
-          {exerciseSession?.isFinish || (
-            <Button
-              icon="stop-circle"
-              mode="contained-tonal"
-              onPress={() => {
-                store.exercisesResults.finishSetsBySessionID(
-                  exerciseID,
-                  sessionID
-                );
-                navigation.navigate("DailyHome", {
-                  screen: "Session",
-                  params: { trainingID, sessionID },
-                });
-              }}
-            >
-              Завершить
-            </Button>
-          )}
+        {exerciseSession?.isFinish || (
+          <>
+            <Divider style={globalStyle.mt20} />
+            <Container>
+              <Button
+                icon="stop-circle"
+                mode="elevated"
+                style={globalStyle.mt20}
+                onPress={() => {
+                  store.exercisesResults.finishSetsBySessionID(
+                    exerciseID,
+                    sessionID
+                  );
+                  navigation.navigate("DailyHome", {
+                    screen: "Session",
+                    params: { trainingID, sessionID },
+                  });
+                }}
+              >
+                Завершить
+              </Button>
+            </Container>
+          </>
+        )}
 
-          {exerciseResult && (
+        {exerciseResult && (
+          <Container>
             <View style={{ marginTop: 20 }}>
               <ExerciseResultByData exerciseID={exerciseID} order={1} />
               <ExerciseResultByData exerciseID={exerciseID} order={2} />
@@ -118,7 +141,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
               <View style={{ marginTop: 20 }}>
                 <Button
                   icon="eye-outline"
-                  mode="contained-tonal"
+                  mode="elevated"
                   onPress={() => {
                     navigation.navigate("DailyHome", {
                       screen: "AllResults",
@@ -130,8 +153,8 @@ const Exercise = observer(({ navigation, route }: Props) => {
                 </Button>
               </View>
             </View>
-          )}
-        </Container>
+          </Container>
+        )}
       </ScrollView>
       <PlusButton
         onPress={() => {
@@ -156,9 +179,6 @@ const style = StyleSheet.create({
   dataContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
-  },
-  averagerResult: {
-    marginTop: 20,
   },
 });
 

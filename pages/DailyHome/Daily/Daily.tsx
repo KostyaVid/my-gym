@@ -64,17 +64,13 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
         </TouchableRipple>
         {currentTrainingID === item.id &&
         store.currentProgramm.currentSessionID ? (
-          <Button
-            mode="contained-tonal"
-            icon="backup-restore"
-            onPress={goSessionPage}
-          >
+          <Button mode="outlined" icon="backup-restore" onPress={goSessionPage}>
             Продолжить
           </Button>
         ) : (
           <Button
             icon="plus"
-            mode="contained-tonal"
+            mode="outlined"
             onPress={() => {
               if (store.currentProgramm.currentSessionID) {
                 Alert.alert("Начать", "Завершить прошлую тренировку?", [
@@ -112,7 +108,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
         <Container>
           <Text variant="titleLarge">Текущая программа: {programm.name}</Text>
         </Container>
-        <Surface style={style.containerSessions}>
+        <Surface style={globalStyle.mt20}>
           <Container>
             <FlatList
               data={programm.trainings}
@@ -122,17 +118,17 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
             ></FlatList>
           </Container>
         </Surface>
-        <View style={style.dimension}>
-          <Text variant="titleLarge">Замеры </Text>
+        <Divider style={globalStyle.mt20} />
+        <Container style={globalStyle.mt20}>
           <Button
-            mode="contained-tonal"
+            mode="elevated"
             onPress={() => {
               navigation.navigate("DailyHome", { screen: "Dimension" });
             }}
           >
             Замеры
           </Button>
-        </View>
+        </Container>
       </View>
     );
   return (
@@ -152,17 +148,13 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
   },
-  containerSessions: {
-    marginTop: 20,
-  },
+
   session: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  dimension: {
-    marginTop: 20,
-  },
+
   training: {
     flexGrow: 1,
     paddingVertical: 20,

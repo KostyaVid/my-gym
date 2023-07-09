@@ -23,6 +23,12 @@ export type DailyStackList = {
   ChooseSession: { date: number };
   Exercise: { exerciseID: string; trainingID: string; sessionID: string };
   NewSet: { exerciseID: string; trainingID: string; sessionID: string };
+  ChangeSet: {
+    exerciseID: string;
+    trainingID: string;
+    sessionID: string;
+    setID: string;
+  };
   AddExercise: { trainingID: string; sessionID: string };
   AllResults: { exerciseID: string };
   NewExercise: undefined;
@@ -32,4 +38,5 @@ export type DailyStackList = {
 export type ElseStackList = {
   Else: undefined;
   Settings: undefined;
+  Rights: undefined;
 };

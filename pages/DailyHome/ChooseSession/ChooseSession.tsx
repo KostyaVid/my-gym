@@ -7,7 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import moment from "moment";
 import globalStyle from "../../../utils/styles";
-import { Surface, Text, TouchableRipple } from "react-native-paper";
+import { Divider, Surface, Text, TouchableRipple } from "react-native-paper";
 import Container from "../../../components/Container/Container";
 
 type ChooseSessionScreenNavigationProp = NativeStackNavigationProp<
@@ -41,8 +41,10 @@ const ChooseSession = observer(({ navigation, route }: Props) => {
         <FlatList
           data={sessions}
           keyExtractor={(item) => item.sessionID}
+          ItemSeparatorComponent={Divider}
           renderItem={({ item, index }) => (
             <TouchableRipple
+              style={globalStyle.padding10}
               onPress={() => {
                 navigation.navigate("DailyHome", {
                   screen: "Session",
@@ -58,10 +60,10 @@ const ChooseSession = observer(({ navigation, route }: Props) => {
                   1 +
                   ". " +
                   new Date(item.dateStart).toTimeString().split(" ")[0] +
+                  " - " +
                   (item.dateEnd
-                    ? " - " +
-                      new Date(item.dateEnd).toTimeString().split(" ")[0]
-                    : "")}
+                    ? new Date(item.dateEnd).toTimeString().split(" ")[0]
+                    : "не завершена")}
               </Text>
             </TouchableRipple>
           )}
@@ -74,7 +76,6 @@ const ChooseSession = observer(({ navigation, route }: Props) => {
 const styles = StyleSheet.create({
   containerSessions: {
     marginTop: 20,
-    padding: 10,
   },
 });
 

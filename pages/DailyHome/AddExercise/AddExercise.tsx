@@ -49,7 +49,7 @@ const AddExercise = observer(({ navigation, route }: Props) => {
                 exerciseID={item.id}
               />
               <IconButton
-                mode="contained-tonal"
+                mode="outlined"
                 icon="plus"
                 size={30}
                 onPress={() => {

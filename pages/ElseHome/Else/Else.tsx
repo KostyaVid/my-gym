@@ -18,7 +18,7 @@ type Props = {
 const Else: React.FC<Props> = ({ navigation }) => {
   return (
     <ScrollView style={globalStyle.container}>
-      <Container style={styles.container}>
+      <Container>
         <Button
           onPress={() => {
             navigation.navigate("ElseHome", { screen: "Settings" });
@@ -27,12 +27,19 @@ const Else: React.FC<Props> = ({ navigation }) => {
           Настройки
         </Button>
         <Divider />
+
+        <Button
+          onPress={() => {
+            navigation.navigate("ElseHome", { screen: "Rights" });
+          }}
+        >
+          Правовые обязательства
+        </Button>
+        <Divider />
       </Container>
     </ScrollView>
   );
 };
-const styles = StyleSheet.create({
-  container: { marginTop: 20 },
-});
+const styles = StyleSheet.create({});
 
 export default Else;

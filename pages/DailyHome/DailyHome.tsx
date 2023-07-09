@@ -12,6 +12,7 @@ import ChooseSession from "./ChooseSession/ChooseSession";
 import NewExercise from "./NewExercise/NewExercise";
 import NestingStackNavigator from "../../components/NestingStackNavigator/NestingStackNavigator";
 import AllResults from "./AllResults/AllResults";
+import ChangeSet from "./ChangeSet/ChangeSet";
 
 const Stack = createNativeStackNavigator<DailyStackList>();
 
@@ -52,6 +53,11 @@ export default function DailyHome() {
         component={NewSet}
         initialParams={{ exerciseID: "e0", sessionID: "s0_0" }}
         options={{ presentation: "modal", title: "Новый подход" }}
+      />
+      <Stack.Screen
+        name="ChangeSet"
+        component={ChangeSet}
+        options={{ presentation: "modal", title: "Изменить результат" }}
       />
       <Stack.Screen
         name="AddExercise"

@@ -40,8 +40,8 @@ const Calendar = observer(() => {
         maxDate={new Date()}
         textStyle={{ color: theme.colors.onBackground }}
         disabledDatesTextStyle={{ color: theme.colors.outlineVariant }}
-        todayBackgroundColor="#ff8888"
-        selectedDayColor="#999933"
+        todayBackgroundColor={theme.colors.tertiaryContainer}
+        selectedDayColor={theme.colors.primaryContainer}
         onDateChange={(date) => {
           const session = sessions.filter((el) =>
             moment(el.dateStart).startOf("day").isSame(date.startOf("day"))

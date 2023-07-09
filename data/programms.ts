@@ -8,18 +8,18 @@ export type ProgrammDataProps = ProgrammProps & {
 export const programmsData: ProgrammDataProps[] = [
   {
     id: "0",
-    name: "Базовая1",
+    name: "Силовая программа для новичков",
     description:
       "Программа предназначенна исключительно для нужд тестирования приложения для разработчиков",
     trainings: [
-      { id: "t0_0", name: "Тренировка 1", exerciseIDs: ["e0", "e1", "e2"] },
-      { id: "t0_1", name: "Тренировка 2", exerciseIDs: ["e2", "e3"] },
-      { id: "t0_2", name: "Тренировка 3", exerciseIDs: ["e0", "e2"] },
+      { id: "t0_0", name: "День тяг", exerciseIDs: ["e0", "e1", "e2"] },
+      { id: "t0_1", name: "День ног", exerciseIDs: ["e2", "e3"] },
+      { id: "t0_2", name: "День жимов", exerciseIDs: ["e0", "e2"] },
     ],
   },
   {
     id: "1",
-    name: "Базовая2",
+    name: "Силовая программа по Мейцнеру",
     description:
       "Другая программа предназначенна исключительно для нужд тестирования приложения для разработчиков",
     trainings: [
@@ -30,7 +30,7 @@ export const programmsData: ProgrammDataProps[] = [
   },
   {
     id: "2",
-    name: "Базовая3",
+    name: "Силовая программа для опытных",
     trainings: [
       { id: "t2_1", name: "Тренировка 2", exerciseIDs: ["e0", "e1", "e2"] },
       { id: "t2_0", name: "Тренировка 1", exerciseIDs: ["e0", "e1", "e2"] },
@@ -39,7 +39,7 @@ export const programmsData: ProgrammDataProps[] = [
   },
   {
     id: "3",
-    name: "Базовая4",
+    name: "Программа для развития выносливости",
     description:
       "Другая программа предназначенна исключительно для нужд тестирования приложения для разработчиков",
     trainings: [

@@ -4,7 +4,12 @@ const globalStyle = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 10,
-    paddingBottom: 10,
+  },
+  padding10: {
+    padding: 10,
+  },
+  mt20: {
+    marginTop: 20,
   },
 });
 
