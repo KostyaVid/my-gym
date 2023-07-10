@@ -9,7 +9,7 @@ import globalStyle from "../../../utils/styles";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import { LineChart } from "react-native-chart-kit";
 import Container from "../../../components/Container/Container";
-import { DataTable, Surface, Text } from "react-native-paper";
+import { DataTable, Surface, Text, useTheme } from "react-native-paper";
 
 type AllResultsScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -25,6 +25,7 @@ const AllResults = observer(({ navigation, route }: Props) => {
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
+  const { colors } = useTheme();
 
   React.useEffect(() => {
     setPage(0);
@@ -85,7 +86,7 @@ const AllResults = observer(({ navigation, route }: Props) => {
       {data.length > 1 ? (
         <LineChart
           data={{
-            labels: data.map((item) => item.date),
+            labels: [data[0].date, data[Math.trunc(data.length / 2)].date],
             datasets: [
               {
                 data: data.map((exer) => exer.maxWeght),
@@ -93,29 +94,27 @@ const AllResults = observer(({ navigation, route }: Props) => {
             ],
           }}
           width={Dimensions.get("window").width}
-          height={Dimensions.get("window").height * 0.3}
+          height={Dimensions.get("window").height * 0.5}
           yAxisSuffix="кг"
-          yAxisInterval={1} // optional, defaults to 1
+          yAxisInterval={1}
           chartConfig={{
-            backgroundColor: "#e26a00",
-            backgroundGradientFrom: "#fb8c00",
-            backgroundGradientTo: "#ffa726",
-            decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            backgroundColor: colors.elevation.level1,
+            backgroundGradientFrom: colors.elevation.level1,
+            backgroundGradientTo: colors.elevation.level1,
+            decimalPlaces: 0,
+            color: (opacity) => colors.onBackground,
+            labelColor: (opacity) => colors.onBackground,
             style: {
               borderRadius: 16,
             },
             propsForDots: {
               r: "6",
               strokeWidth: "2",
-              stroke: "#ffa726",
+              stroke: colors.primary,
             },
           }}
-          bezier
           style={{
-            marginVertical: 8,
-            borderRadius: 16,
+            marginVertical: 10,
           }}
         />
       ) : undefined}

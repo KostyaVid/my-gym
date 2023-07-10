@@ -1,13 +1,14 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useStore } from "../../store/rootStore.store";
 import Calendar from "../../components/Calendar/Calendar";
 import globalStyle from "../../utils/styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { Surface, Text, TouchableRipple } from "react-native-paper";
+import { Text, TouchableRipple } from "react-native-paper";
 import Container from "../../components/Container/Container";
+import BackgroundImageSurface from "../../components/BackgoundImageSurface/BackgroundImageSurface";
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,21 +33,22 @@ const Home: React.FC<Props> = observer(({ navigation }) => {
   }
 
   return (
-    <View style={globalStyle.container}>
+    <ScrollView style={globalStyle.container}>
       <Calendar />
-      <Surface style={styles.card} elevation={3}>
-        <TouchableRipple
-          onPress={currentProgramm ? goToProgramm : goToChooseProgramm}
-        >
+      <TouchableRipple
+        style={globalStyle.mt20}
+        onPress={currentProgramm ? goToProgramm : goToChooseProgramm}
+      >
+        <BackgroundImageSurface img={currentProgramm?.thumbImg}>
           <Container>
-            <Text variant="titleLarge">Выбранная программа:</Text>
-            <Text variant="bodyMedium">
+            <Text variant="headlineMedium">Выбранная программа:</Text>
+            <Text variant="labelLarge">
               {currentProgramm ? currentProgramm.name : "Не выбрана"}
             </Text>
           </Container>
-        </TouchableRipple>
-      </Surface>
-    </View>
+        </BackgroundImageSurface>
+      </TouchableRipple>
+    </ScrollView>
   );
 });
 

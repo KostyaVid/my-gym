@@ -7,7 +7,8 @@ import { observer } from "mobx-react-lite";
 import globalStyle from "../../../utils/styles";
 import { programmsData } from "../../../data/programms";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
-import { Surface, Text } from "react-native-paper";
+import { Divider, Surface, Text } from "react-native-paper";
+import Container from "../../../components/Container/Container";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -32,10 +33,13 @@ const Training = observer(({ navigation, route }: Props) => {
     );
   return (
     <View style={globalStyle.container}>
-      <Text variant="displaySmall">{training.name}</Text>
+      <Text variant="displaySmall" style={globalStyle.padding10}>
+        {training.name}
+      </Text>
       <Surface style={styles.containerExercises}>
         <FlatList
           data={training.exerciseIDs}
+          ItemSeparatorComponent={Divider}
           renderItem={({ item, index }) => (
             <ExerciseView
               order={index + 1}
@@ -56,7 +60,7 @@ const Training = observer(({ navigation, route }: Props) => {
 
 const styles = StyleSheet.create({
   containerExercises: {
-    marginTop: 20,
+    marginTop: 10,
   },
 });
 

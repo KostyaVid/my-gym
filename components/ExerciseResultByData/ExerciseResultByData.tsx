@@ -13,7 +13,7 @@ const ExerciseResultByData: React.FC<Props> = observer(
   ({ exerciseID, order }) => {
     const store = useStore();
     const exercise = store.exercisesResults.getExercise(exerciseID);
-    if (!exercise) return <Text>прошлых результатов не найдено</Text>;
+    if (!exercise) return <Text>Прошлых результатов не найдено</Text>;
     let position = exercise.results.length - 1 - order;
     if (position < 0) return null;
 
@@ -23,6 +23,7 @@ const ExerciseResultByData: React.FC<Props> = observer(
     return (
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         {date && <Text>{new Date(date).toLocaleDateString()}</Text>}
+        <Text>Максимальный вес:</Text>
         <Text>
           {Math.max(...exerciseResult.sets.map((el) => el.weight))} кг
         </Text>

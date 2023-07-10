@@ -9,6 +9,7 @@ export const programmsData: ProgrammDataProps[] = [
   {
     id: "0",
     name: "Силовая программа для новичков",
+    thumbImg: require("./../data/imgExercises/close-up-on-man-doing-crossfit-workout.jpg"),
     description:
       "Программа предназначенна исключительно для нужд тестирования приложения для разработчиков",
     trainings: [
@@ -20,6 +21,8 @@ export const programmsData: ProgrammDataProps[] = [
   {
     id: "1",
     name: "Силовая программа по Мейцнеру",
+    thumbImg: require("./../data/imgExercises/young-muscular-shirtless-caucasian-man-doing-pull-ups-on-horizontal-bar-at-playground-in-sunny-summer-s-day.jpg"),
+
     description:
       "Другая программа предназначенна исключительно для нужд тестирования приложения для разработчиков",
     trainings: [

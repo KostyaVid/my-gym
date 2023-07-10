@@ -5,6 +5,7 @@ import {
   View,
   Alert,
   ListRenderItem,
+  ImageBackground,
 } from "react-native";
 import { observer } from "mobx-react-lite";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -20,7 +21,9 @@ import {
   Surface,
   Text,
   TouchableRipple,
+  useTheme,
 } from "react-native-paper";
+import BackgroundImageSurface from "../../../components/BackgoundImageSurface/BackgroundImageSurface";
 
 type TrainingScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -32,6 +35,7 @@ type Props = {
 
 const Daily: React.FC<Props> = observer(({ navigation }) => {
   const store = useStore();
+  const { dark } = useTheme();
   const programm = store.currentProgramm.currentProgramm;
   const currentTrainingID = store.currentProgramm.currentTrainingID;
 
@@ -60,7 +64,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
             });
           }}
         >
-          <Text>{item.name}</Text>
+          <Text variant="bodyLarge">{item.name}</Text>
         </TouchableRipple>
         {currentTrainingID === item.id &&
         store.currentProgramm.currentSessionID ? (
@@ -102,21 +106,27 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
     );
   };
 
-  if (programm)
+  if (programm) {
     return (
       <View style={globalStyle.container}>
-        <Container>
-          <Text variant="titleLarge">Текущая программа: {programm.name}</Text>
-        </Container>
-        <Surface style={globalStyle.mt20}>
+        <BackgroundImageSurface img={programm.thumbImg}>
           <Container>
-            <FlatList
-              data={programm.trainings}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-              ItemSeparatorComponent={Divider}
-            ></FlatList>
+            <Text variant="headlineMedium">Текущая программа:</Text>
+            <Text variant="titleMedium">{programm.name}</Text>
           </Container>
+        </BackgroundImageSurface>
+
+        <Divider />
+        <Text variant="headlineMedium" style={globalStyle.padding10}>
+          Тренировки:
+        </Text>
+        <Surface>
+          <FlatList
+            data={programm.trainings}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={Divider}
+          ></FlatList>
         </Surface>
         <Divider style={globalStyle.mt20} />
         <Container style={globalStyle.mt20}>
@@ -131,6 +141,7 @@ const Daily: React.FC<Props> = observer(({ navigation }) => {
         </Container>
       </View>
     );
+  }
   return (
     <Container>
       <Button
@@ -153,6 +164,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    padding: 10,
   },
 
   training: {

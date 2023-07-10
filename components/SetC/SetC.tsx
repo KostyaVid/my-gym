@@ -24,7 +24,7 @@ const SetC: React.FC<Props> = observer(
     FinishHandle,
     initWeight = "0",
     initCount = "0",
-    initComment = "0",
+    initComment = "",
   }) => {
     const [weight, setWeight] = useState(initWeight);
     const [count, setCount] = useState(initCount);

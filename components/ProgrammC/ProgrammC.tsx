@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { ImageSourcePropType, StyleSheet, View } from "react-native";
 import React from "react";
 import { programmsData } from "../../data/programms";
 import { observer } from "mobx-react-lite";
@@ -7,7 +7,7 @@ import { Text } from "react-native-paper";
 export type ProgrammProps = {
   id: string;
   name?: string;
-  thumbImg?: string;
+  thumbImg?: ImageSourcePropType;
   description?: string;
 };
 

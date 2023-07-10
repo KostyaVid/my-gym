@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import React from "react";
 import { ProgrammStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
@@ -8,7 +8,7 @@ import { useStore } from "../../../store/rootStore.store";
 import globalStyle from "../../../utils/styles";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
-import { Text } from "react-native-paper";
+import { Divider, Text } from "react-native-paper";
 
 type ExerciseScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -29,13 +29,27 @@ const Exercise = observer(({ navigation, route }: Props) => {
     </View>;
 
   return (
-    <View style={globalStyle.container}>
-      <Container>
-        <ExerciseView exerciseID={exerciseID} />
-        {exercise?.description && <Text>Описание: {exercise.description}</Text>}
-        {exercise?.exerciseType && <Text>Тип: {exercise.exerciseType}</Text>}
-      </Container>
-    </View>
+    <ScrollView style={globalStyle.container}>
+      <ExerciseView exerciseID={exerciseID} />
+      {exercise?.description && (
+        <>
+          <Divider />
+          <Container>
+            <Text variant="titleMedium">Описание:</Text>
+            <Text>{exercise.description}</Text>
+          </Container>
+        </>
+      )}
+      {exercise?.exerciseType && (
+        <>
+          <Divider />
+          <Container>
+            <Text variant="titleMedium">Тип:</Text>
+            <Text>{exercise.exerciseType}</Text>
+          </Container>
+        </>
+      )}
+    </ScrollView>
   );
 });
 

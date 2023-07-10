@@ -10,7 +10,14 @@ import globalStyle from "../../../utils/styles";
 import ExerciseResultByData from "../../../components/ExerciseResultByData/ExerciseResultByData";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
-import { Button, DataTable, Divider, Surface, Text } from "react-native-paper";
+import {
+  Button,
+  DataTable,
+  Divider,
+  Surface,
+  Text,
+  useTheme,
+} from "react-native-paper";
 
 type ExerciseScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -25,6 +32,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const exerciseID = route.params.exerciseID;
   const trainingID = route.params.trainingID;
   const store = useStore();
+  const { colors } = useTheme();
   const exerciseResult = store.exercisesResults.getExercise(exerciseID);
 
   const exerciseSession = exerciseResult?.results.findLast(
@@ -34,6 +42,13 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const hasComment = exerciseSession?.sets.find(
     (set) => set.comment !== undefined
   );
+
+  const lastIntensity =
+    store.exercisesResults.getValueWorkSetsLastSession(exerciseID);
+
+  const currentIntensity =
+    store.exercisesResults.getValueWorkSetsCurrentSession(exerciseID);
+
   return (
     <View style={globalStyle.container}>
       <ScrollView>
@@ -63,7 +78,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
                     №:
                   </DataTable.Title>
                   <DataTable.Title>Вес (кг)</DataTable.Title>
-                  <DataTable.Title>Кол-во:</DataTable.Title>
+                  <DataTable.Title>Повторы:</DataTable.Title>
                   {hasComment && (
                     <DataTable.Title>Комментарии:</DataTable.Title>
                   )}
@@ -83,9 +98,15 @@ const Exercise = observer(({ navigation, route }: Props) => {
                       });
                     }}
                   >
-                    <DataTable.Cell>{index}</DataTable.Cell>
-                    <DataTable.Cell>{item.weight + " кг"}</DataTable.Cell>
-                    <DataTable.Cell>{item.count}</DataTable.Cell>
+                    <DataTable.Cell textStyle={style.dataCell}>
+                      {index}
+                    </DataTable.Cell>
+                    <DataTable.Cell textStyle={style.dataCell}>
+                      {item.weight + " кг"}
+                    </DataTable.Cell>
+                    <DataTable.Cell textStyle={style.dataCell}>
+                      {item.count}
+                    </DataTable.Cell>
                     {hasComment && (
                       <DataTable.Cell>{item.comment}</DataTable.Cell>
                     )}
@@ -99,17 +120,35 @@ const Exercise = observer(({ navigation, route }: Props) => {
             <Text variant="titleMedium">Еще не выполнялось.</Text>
           </Container>
         )}
-        <Container>
-          <Text style={globalStyle.mt20}>
-            Средняя интенсивность на прошлой тренировке:
-            {" " +
-              store.exercisesResults.getValueWorkSetsLastSession(exerciseID) +
-              "кг"}
-          </Text>
-        </Container>
+        {exerciseSession && (
+          <Container style={style.intensitySection}>
+            <View style={style.intensityCell}>
+              <Text style={globalStyle.mt20}>
+                Средняя интенсивность на текущей тренировке:
+              </Text>
+              <Text
+                variant="headlineSmall"
+                style={{
+                  color:
+                    currentIntensity < lastIntensity
+                      ? colors.error
+                      : colors.onBackground,
+                }}
+              >
+                {currentIntensity + "кг"}
+              </Text>
+            </View>
+            <View style={style.intensityCell}>
+              <Text style={globalStyle.mt20}>
+                Средняя интенсивность на прошлой тренировке:
+              </Text>
+              <Text variant="headlineSmall">{lastIntensity + "кг"}</Text>
+            </View>
+          </Container>
+        )}
         {exerciseSession?.isFinish || (
           <>
-            <Divider style={globalStyle.mt20} />
+            <Divider />
             <Container>
               <Button
                 icon="stop-circle"
@@ -133,27 +172,30 @@ const Exercise = observer(({ navigation, route }: Props) => {
         )}
 
         {exerciseResult && (
-          <Container>
-            <View style={{ marginTop: 20 }}>
-              <ExerciseResultByData exerciseID={exerciseID} order={1} />
-              <ExerciseResultByData exerciseID={exerciseID} order={2} />
-              <ExerciseResultByData exerciseID={exerciseID} order={3} />
+          <>
+            <Divider style={globalStyle.mt20} />
+            <Container>
               <View style={{ marginTop: 20 }}>
-                <Button
-                  icon="eye-outline"
-                  mode="elevated"
-                  onPress={() => {
-                    navigation.navigate("DailyHome", {
-                      screen: "AllResults",
-                      params: { exerciseID },
-                    });
-                  }}
-                >
-                  Посмотреть все результаты
-                </Button>
+                <ExerciseResultByData exerciseID={exerciseID} order={1} />
+                <ExerciseResultByData exerciseID={exerciseID} order={2} />
+                <ExerciseResultByData exerciseID={exerciseID} order={3} />
+                <View style={{ marginTop: 20 }}>
+                  <Button
+                    icon="eye-outline"
+                    mode="elevated"
+                    onPress={() => {
+                      navigation.navigate("DailyHome", {
+                        screen: "AllResults",
+                        params: { exerciseID },
+                      });
+                    }}
+                  >
+                    Посмотреть все результаты
+                  </Button>
+                </View>
               </View>
-            </View>
-          </Container>
+            </Container>
+          </>
         )}
       </ScrollView>
       <PlusButton
@@ -179,6 +221,13 @@ const style = StyleSheet.create({
   dataContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
+  },
+  dataCell: {
+    fontSize: 20,
+  },
+  intensitySection: { flexDirection: "row" },
+  intensityCell: {
+    flexShrink: 1,
   },
 });
 

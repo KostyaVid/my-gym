@@ -6,6 +6,7 @@ import {
 
 export const GymDefaultTheme: MD3Theme = {
   ...MD3DarkTheme,
+  dark: false,
   colors: {
     ...MD3DarkTheme.colors,
     primary: "rgb(0, 103, 131)",
@@ -53,6 +54,7 @@ export const GymDefaultTheme: MD3Theme = {
 
 export const GymDarkTheme: MD3Theme = {
   ...MD3DarkTheme,
+  dark: true,
   colors: {
     primary: "rgb(150, 204, 255)",
     onPrimary: "rgb(0, 51, 83)",
