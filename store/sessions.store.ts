@@ -23,6 +23,13 @@ export default class SessionStore {
     makeAutoObservable(this);
   }
 
+  getPrevSessionIDByCurrentSessionID(sessionID: string) {
+    for (let i = this.sessions.length - 1; i > 0; i--) {
+      if (this.sessions[i].sessionID === sessionID)
+        return this.sessions[i - 1].sessionID;
+    }
+  }
+
   *loadStorage() {
     this.state = "pending";
     try {

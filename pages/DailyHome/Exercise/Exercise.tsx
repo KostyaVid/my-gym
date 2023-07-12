@@ -18,6 +18,7 @@ import {
   Text,
   useTheme,
 } from "react-native-paper";
+import TableResults from "../../../components/TableResults/TableResults";
 
 type ExerciseScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -33,21 +34,34 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const trainingID = route.params.trainingID;
   const store = useStore();
   const { colors } = useTheme();
-  const exerciseResult = store.exercisesResults.getExercise(exerciseID);
 
-  const exerciseSession = exerciseResult?.results.findLast(
-    (item) => item.sessionID === sessionID
+  const exerciseSession = store.exercisesResults.getExerciseResult(
+    exerciseID,
+    sessionID
   );
-
-  const hasComment = exerciseSession?.sets.find(
-    (set) => set.comment !== undefined
-  );
+  const prevSessionID =
+    store.sessions.getPrevSessionIDByCurrentSessionID(sessionID);
+  const exercisePrevSession = prevSessionID
+    ? store.exercisesResults.getExerciseResult(exerciseID, prevSessionID)
+    : undefined;
 
   const lastIntensity =
     store.exercisesResults.getValueWorkSetsLastSession(exerciseID);
 
   const currentIntensity =
     store.exercisesResults.getValueWorkSetsCurrentSession(exerciseID);
+
+  const handlePressRow = (id: string) => {
+    navigation.navigate("DailyHome", {
+      screen: "ChangeSet",
+      params: {
+        exerciseID,
+        sessionID,
+        trainingID,
+        setID: id,
+      },
+    });
+  };
 
   return (
     <View style={globalStyle.container}>
@@ -66,55 +80,12 @@ const Exercise = observer(({ navigation, route }: Props) => {
           />
         </Container>
         <Divider />
-        {exerciseSession ? (
-          <>
-            <Container style={style.results}>
-              <Text variant="displaySmall">Результаты:</Text>
-            </Container>
-            <Surface style={style.dataContainer}>
-              <DataTable>
-                <DataTable.Header>
-                  <DataTable.Title sortDirection="descending">
-                    №:
-                  </DataTable.Title>
-                  <DataTable.Title>Вес (кг)</DataTable.Title>
-                  <DataTable.Title>Повторы:</DataTable.Title>
-                  {hasComment && (
-                    <DataTable.Title>Комментарии:</DataTable.Title>
-                  )}
-                </DataTable.Header>
-                {exerciseSession.sets.map((item, index) => (
-                  <DataTable.Row
-                    key={item.id}
-                    onPress={() => {
-                      navigation.navigate("DailyHome", {
-                        screen: "ChangeSet",
-                        params: {
-                          exerciseID,
-                          sessionID,
-                          trainingID,
-                          setID: item.id,
-                        },
-                      });
-                    }}
-                  >
-                    <DataTable.Cell textStyle={style.dataCell}>
-                      {index}
-                    </DataTable.Cell>
-                    <DataTable.Cell textStyle={style.dataCell}>
-                      {item.weight + " кг"}
-                    </DataTable.Cell>
-                    <DataTable.Cell textStyle={style.dataCell}>
-                      {item.count}
-                    </DataTable.Cell>
-                    {hasComment && (
-                      <DataTable.Cell>{item.comment}</DataTable.Cell>
-                    )}
-                  </DataTable.Row>
-                ))}
-              </DataTable>
-            </Surface>
-          </>
+        {exerciseSession || exercisePrevSession ? (
+          <TableResults
+            sets={exerciseSession?.sets}
+            prevSets={exercisePrevSession?.sets}
+            handlePressRow={handlePressRow}
+          />
         ) : (
           <Container>
             <Text variant="titleMedium">Еще не выполнялось.</Text>
@@ -171,7 +142,7 @@ const Exercise = observer(({ navigation, route }: Props) => {
           </>
         )}
 
-        {exerciseResult && (
+        {exerciseSession && (
           <>
             <Divider style={globalStyle.mt20} />
             <Container>
@@ -215,16 +186,6 @@ const Exercise = observer(({ navigation, route }: Props) => {
 });
 
 const style = StyleSheet.create({
-  results: {
-    flex: 1,
-  },
-  dataContainer: {
-    marginTop: 20,
-    paddingHorizontal: 10,
-  },
-  dataCell: {
-    fontSize: 20,
-  },
   intensitySection: { flexDirection: "row" },
   intensityCell: {
     flexShrink: 1,

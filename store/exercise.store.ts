@@ -35,12 +35,14 @@ export default class ExerciseStore {
   getExercise(exerciseID: string) {
     return this.exercises.findLast((item) => item.id === exerciseID);
   }
-  getSet(exerciseID: string, sessionID: string, setID: string) {
+
+  getExerciseResult(exerciseID: string, sessionID: string) {
     let exercise = this.getExercise(exerciseID);
     if (!exercise) return;
-    const resultsInSession = exercise.results.find(
-      (result) => result.sessionID === sessionID
-    );
+    return exercise.results.find((result) => result.sessionID === sessionID);
+  }
+  getSet(exerciseID: string, sessionID: string, setID: string) {
+    const resultsInSession = this.getExerciseResult(exerciseID, sessionID);
     if (!resultsInSession) return;
     return resultsInSession.sets.find((localSet) => localSet.id === setID);
   }
@@ -212,7 +214,7 @@ export default class ExerciseStore {
           (prev, curr) => prev + curr.weight * curr.count,
           0
         ) / exerciseResult.length
-      );
+      ).toFixed(0);
     }
     return 0;
   }
@@ -226,7 +228,7 @@ export default class ExerciseStore {
           (prev, curr) => prev + curr.weight * curr.count,
           0
         ) / exerciseResult.length
-      );
+      ).toFixed(0);
     }
     return 0;
   }
