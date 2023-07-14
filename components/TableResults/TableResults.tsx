@@ -37,7 +37,7 @@ const TableResults: React.FC<Props> = observer(
     return (
       <>
         <Container style={style.results}>
-          <Text variant="displaySmall">Результаты:</Text>
+          <Text variant="headlineMedium">Результаты:</Text>
         </Container>
         <Surface style={style.dataContainer}>
           <DataTable>

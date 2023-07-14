@@ -1,5 +1,12 @@
-import type { ProgrammProps } from "../components/ProgrammC/ProgrammC";
+import { ImageSourcePropType } from "react-native";
 import type { SessionProps } from "../components/SessionC/SessionC";
+
+export type ProgrammProps = {
+  id: string;
+  name?: string;
+  thumbImg?: ImageSourcePropType;
+  description?: string;
+};
 
 export type TrainingDataProps = SessionProps & { exerciseIDs: string[] };
 export type ProgrammDataProps = ProgrammProps & {

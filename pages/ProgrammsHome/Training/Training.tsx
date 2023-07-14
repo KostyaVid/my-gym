@@ -1,14 +1,14 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import React from "react";
 import { ProgrammStackList, RootStackParamList } from "../../../types";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
 import globalStyle from "../../../utils/styles";
-import { programmsData } from "../../../data/programms";
+import { TrainingDataProps, programmsData } from "../../../data/programms";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import { Divider, Surface, Text } from "react-native-paper";
-import Container from "../../../components/Container/Container";
+import { useStore } from "../../../store/rootStore.store";
 
 type TrainingScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -22,9 +22,10 @@ type Props = {
 
 const Training = observer(({ navigation, route }: Props) => {
   const { trainingID, programmID } = route.params;
-  const training = programmsData
-    .find((programm) => programm.id === programmID)
-    ?.trainings.find((train) => train.id === trainingID);
+  const store = useStore();
+  let training = store
+    .getProgramm(programmID)
+    ?.trainings.find((data) => (data.id = trainingID));
   if (!training)
     return (
       <View>
@@ -36,7 +37,7 @@ const Training = observer(({ navigation, route }: Props) => {
       <Text variant="displaySmall" style={globalStyle.padding10}>
         {training.name}
       </Text>
-      <Surface style={styles.containerExercises}>
+      <Surface style={globalStyle.mt20}>
         <FlatList
           data={training.exerciseIDs}
           ItemSeparatorComponent={Divider}
@@ -58,10 +59,6 @@ const Training = observer(({ navigation, route }: Props) => {
   );
 });
 
-const styles = StyleSheet.create({
-  containerExercises: {
-    marginTop: 10,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default Training;

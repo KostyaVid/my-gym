@@ -5,7 +5,6 @@ import {
   View,
   Alert,
   ListRenderItem,
-  ImageBackground,
 } from "react-native";
 import { observer } from "mobx-react-lite";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -21,7 +20,6 @@ import {
   Surface,
   Text,
   TouchableRipple,
-  useTheme,
 } from "react-native-paper";
 import BackgroundImageSurface from "../../../components/BackgoundImageSurface/BackgroundImageSurface";
 
@@ -35,7 +33,6 @@ type Props = {
 
 const Daily: React.FC<Props> = observer(({ navigation }) => {
   const store = useStore();
-  const { dark } = useTheme();
   const programm = store.currentProgramm.currentProgramm;
   const currentTrainingID = store.currentProgramm.currentTrainingID;
 

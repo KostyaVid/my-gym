@@ -6,6 +6,7 @@ import SessionStore from "./sessions.store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { exerciseData } from "../data/exercises";
 import ThemeStore from "./theme.store";
+import { programmsData } from "../data/programms";
 
 export default class RootStore {
   currentProgramm: CurrentProgrammStore;
@@ -34,6 +35,13 @@ export default class RootStore {
     let exercise = exerciseData.find((item) => item.id === exerciseID);
     if (!exercise) exercise = this.customExercises.getExercise(exerciseID);
     return exercise;
+  }
+  getProgramm(programmID: string) {
+    if (programmID === this.currentProgramm.currentProgramm?.id) {
+      return this.currentProgramm.currentProgramm;
+    } else {
+      return programmsData.find((data) => (data.id = programmID));
+    }
   }
 }
 

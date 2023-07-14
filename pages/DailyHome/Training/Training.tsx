@@ -9,6 +9,7 @@ import { TrainingDataProps, programmsData } from "../../../data/programms";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
 import { Divider, Surface, Text } from "react-native-paper";
+import { useStore } from "../../../store/rootStore.store";
 
 type TrainingScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -20,12 +21,8 @@ type TrainingProps = {
 
 const Training = observer(({ route, navigation }: TrainingProps) => {
   const trainingID = route.params.trainingID;
-  let training: TrainingDataProps | undefined;
-  for (let i = 0; i < programmsData.length; i++) {
-    training = programmsData[i].trainings.find((el) => el.id === trainingID);
-    if (training) break;
-  }
-
+  const { currentProgramm } = useStore();
+  let training = currentProgramm.getTraining(trainingID);
   if (!training)
     return <Text variant="headlineSmall">Такая тренировка не найдена</Text>;
 

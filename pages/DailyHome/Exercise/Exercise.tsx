@@ -7,18 +7,11 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../../store/rootStore.store";
 import PlusButton from "../../../components/Buttons/PlusButton/PlusButton";
 import globalStyle from "../../../utils/styles";
-import ExerciseResultByData from "../../../components/ExerciseResultByData/ExerciseResultByData";
 import ExerciseView from "../../../components/ExerciseView/ExerciseView";
 import Container from "../../../components/Container/Container";
-import {
-  Button,
-  DataTable,
-  Divider,
-  Surface,
-  Text,
-  useTheme,
-} from "react-native-paper";
+import { Button, Divider, Text, useTheme } from "react-native-paper";
 import TableResults from "../../../components/TableResults/TableResults";
+import TotalWeights from "../../../components/TotalWeights/TotalWeights";
 
 type ExerciseScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
@@ -33,7 +26,6 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const exerciseID = route.params.exerciseID;
   const trainingID = route.params.trainingID;
   const store = useStore();
-  const { colors } = useTheme();
 
   const exerciseSession = store.exercisesResults.getExerciseResult(
     exerciseID,
@@ -44,12 +36,6 @@ const Exercise = observer(({ navigation, route }: Props) => {
   const exercisePrevSession = prevSessionID
     ? store.exercisesResults.getExerciseResult(exerciseID, prevSessionID)
     : undefined;
-
-  const lastIntensity =
-    store.exercisesResults.getValueWorkSetsLastSession(exerciseID);
-
-  const currentIntensity =
-    store.exercisesResults.getValueWorkSetsCurrentSession(exerciseID);
 
   const handlePressRow = (id: string) => {
     navigation.navigate("DailyHome", {
@@ -91,35 +77,14 @@ const Exercise = observer(({ navigation, route }: Props) => {
             <Text variant="titleMedium">Еще не выполнялось.</Text>
           </Container>
         )}
-        {exerciseSession && (
-          <Container style={style.intensitySection}>
-            <View style={style.intensityCell}>
-              <Text style={globalStyle.mt20}>
-                Средняя интенсивность на текущей тренировке:
-              </Text>
-              <Text
-                variant="headlineSmall"
-                style={{
-                  color:
-                    currentIntensity < lastIntensity
-                      ? colors.error
-                      : colors.onBackground,
-                }}
-              >
-                {currentIntensity + "кг"}
-              </Text>
-            </View>
-            <View style={style.intensityCell}>
-              <Text style={globalStyle.mt20}>
-                Средняя интенсивность на прошлой тренировке:
-              </Text>
-              <Text variant="headlineSmall">{lastIntensity + "кг"}</Text>
-            </View>
-          </Container>
-        )}
+        <TotalWeights
+          sessionID={sessionID}
+          exerciseID={exerciseID}
+          style={globalStyle.mt20}
+        />
+
         {exerciseSession?.isFinish || (
           <>
-            <Divider />
             <Container>
               <Button
                 icon="stop-circle"
@@ -141,33 +106,6 @@ const Exercise = observer(({ navigation, route }: Props) => {
             </Container>
           </>
         )}
-
-        {exerciseSession && (
-          <>
-            <Divider style={globalStyle.mt20} />
-            <Container>
-              <View style={{ marginTop: 20 }}>
-                <ExerciseResultByData exerciseID={exerciseID} order={1} />
-                <ExerciseResultByData exerciseID={exerciseID} order={2} />
-                <ExerciseResultByData exerciseID={exerciseID} order={3} />
-                <View style={{ marginTop: 20 }}>
-                  <Button
-                    icon="eye-outline"
-                    mode="elevated"
-                    onPress={() => {
-                      navigation.navigate("DailyHome", {
-                        screen: "AllResults",
-                        params: { exerciseID },
-                      });
-                    }}
-                  >
-                    Посмотреть все результаты
-                  </Button>
-                </View>
-              </View>
-            </Container>
-          </>
-        )}
       </ScrollView>
       <PlusButton
         onPress={() => {
@@ -185,11 +123,6 @@ const Exercise = observer(({ navigation, route }: Props) => {
   );
 });
 
-const style = StyleSheet.create({
-  intensitySection: { flexDirection: "row" },
-  intensityCell: {
-    flexShrink: 1,
-  },
-});
+const style = StyleSheet.create({});
 
 export default Exercise;

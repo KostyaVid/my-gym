@@ -154,15 +154,13 @@ export default class ExerciseStore {
   *finishSetsBySessionID(exerciseID: string, sessionID: string) {
     let exercise = this.getExercise(exerciseID);
 
-    if (exercise) {
-      const sessionSests = exercise.results.find(
-        (item) => item.sessionID === sessionID
-      );
-      if (sessionSests) {
-        sessionSests.isFinish = true;
-        yield this.saveStore(exerciseID, exercise);
-      }
-    }
+    if (!exercise) return;
+    const sessionSests = exercise.results.find(
+      (item) => item.sessionID === sessionID
+    );
+    if (!sessionSests) return;
+    sessionSests.isFinish = true;
+    yield this.saveStore(exerciseID, exercise);
   }
 
   *finishSetsLastInTheArray(exerciseID: string) {
@@ -191,17 +189,23 @@ export default class ExerciseStore {
   }
 
   getValueWork(exerciseID: string, sessionID: string, numberSet: number) {
-    let exercise = this.getExercise(exerciseID);
-    if (exercise) {
-      const sessionSests = exercise.results.find(
-        (item) => item.sessionID === sessionID
+    const sessionSests = this.getExerciseResult(exerciseID, sessionID);
+    if (!sessionSests) return 0;
+    const set = sessionSests.sets[numberSet];
+    return set.weight * set.count;
+  }
+
+  getValueWorkLastSession(
+    exerciseID: string,
+    currentSessionID: string,
+    numberSet: number
+  ) {
+    const sessionID =
+      this.rootStore.sessions.getPrevSessionIDByCurrentSessionID(
+        currentSessionID
       );
-      if (sessionSests) {
-        const set = sessionSests.sets[numberSet];
-        return set.weight * set.count;
-      }
-    }
-    return 0;
+    if (!sessionID) return 0;
+    this.getValueWork(exerciseID, sessionID, numberSet);
   }
 
   getValueWorkSetsLastSession(exerciseID: string) {
@@ -231,5 +235,23 @@ export default class ExerciseStore {
       ).toFixed(0);
     }
     return 0;
+  }
+
+  getTotalWeightInSession(exerciseID: string, sessionID: string) {
+    const sessionSets = this.getExerciseResult(exerciseID, sessionID);
+    if (!sessionSets) return 0;
+    return sessionSets.sets.reduce(
+      (acc, set) => acc + set.weight * set.count,
+      0
+    );
+  }
+
+  getTotalWeightInLastSession(exerciseID: string, currentSessionID: string) {
+    const sessionID =
+      this.rootStore.sessions.getPrevSessionIDByCurrentSessionID(
+        currentSessionID
+      );
+    if (!sessionID) return 0;
+    return this.getTotalWeightInSession(exerciseID, sessionID);
   }
 }

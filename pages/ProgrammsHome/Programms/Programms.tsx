@@ -1,6 +1,5 @@
 import {
   DefaultSectionT,
-  ImageBackground,
   SafeAreaView,
   SectionList,
   SectionListData,
@@ -15,13 +14,7 @@ import { RootStackParamList } from "../../../types";
 import { useStore } from "../../../store/rootStore.store";
 import globalStyle from "../../../utils/styles";
 import Container from "../../../components/Container/Container";
-import {
-  Button,
-  Surface,
-  Text,
-  TouchableRipple,
-  useTheme,
-} from "react-native-paper";
+import { Button, Text, TouchableRipple, useTheme } from "react-native-paper";
 import BackgroundImageSurface from "../../../components/BackgoundImageSurface/BackgroundImageSurface";
 
 type ProgrammsScreenNavigationProp = NativeStackNavigationProp<
@@ -45,7 +38,6 @@ const data = programmsData.map((elem) => {
 
 const Programms = ({ navigation }: Props) => {
   const currentProgramm = useStore().currentProgramm;
-  const { colors } = useTheme();
 
   const sectionRender: SectionListRenderItem<TrainingDataProps> = ({
     item,
